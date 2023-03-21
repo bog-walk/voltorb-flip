@@ -9,7 +9,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.*
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.inset
 import androidx.compose.ui.semantics.Role
@@ -17,6 +16,7 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.style.*
+import dev.bogwalk.ui.util.drawBorder
 
 enum class TileState {
     STATIC_INFO, NOT_FLIPPED, FLIPPED
@@ -88,7 +88,6 @@ private fun DrawScope.drawTileBorder(
     isInner: Boolean,
     memoIsOpen: Boolean
 ) {
-    val cap = StrokeCap.Round
     val (stroke, extra, color) = when {
         isOuter && !isInFocus -> Triple(6.6f, 0.8f, greenWhite)
         isOuter && isInFocus -> if (memoIsOpen) {
@@ -102,13 +101,7 @@ private fun DrawScope.drawTileBorder(
         else -> Triple(3f, 7.8f, mediumRed)
     }
 
-    drawLine(color, Offset(extra, extra), Offset(size.width - extra, extra), stroke, cap)
-    drawLine(color, Offset(size.width - extra, extra),
-        Offset(size.width - extra, size.height - extra), stroke, cap)
-    drawLine(color, Offset(extra, extra),
-        Offset(extra, size.height - extra), stroke, cap)
-    drawLine(color, Offset(extra, size.height - extra),
-        Offset(size.width - extra, size.height - extra), stroke, cap)
+    drawBorder(stroke, extra, color)
 }
 
 private fun DrawScope.drawInsetBackground() {

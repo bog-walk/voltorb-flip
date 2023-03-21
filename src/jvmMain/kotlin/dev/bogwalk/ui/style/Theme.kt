@@ -98,12 +98,12 @@ private val VoltorbFlipTypography = Typography(
         fontFamily = FontFamily.SansSerif,
         textAlign = TextAlign.Center
     ),
-    labelLarge = TextStyle(  // buttons
+    labelLarge = TextStyle(  // buttons [REPLACE with pixelated font]
         color = offWhite,
-        fontSize = 14.sp,
+        fontSize = 24.sp,
         fontFamily = FontFamily.Monospace,
         letterSpacing = 1.sp,
-        shadow = Shadow(slateGrey1, blurRadius = .5f),
+        shadow = Shadow(slateGrey1, blurRadius = 1f),
         textAlign = TextAlign.Center
     ),
     labelMedium = TextStyle(  // info tile
