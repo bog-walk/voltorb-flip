@@ -47,6 +47,7 @@ val memoBrown = Color(0xff785820)
 val memoPink = Color(0xffe89880)
 val memoPurple = Color(0xff906860)
 val memoRed = Color(0xffc07050)
+val memoGreen = Color(0xff609060)
 val disabledBlue1 = Color(0xff98b8b8)
 val disabledBlue2 = Color(0xff88a8a8)
 val disabledBlue3 = Color(0xff707070)
@@ -67,28 +68,28 @@ private val VoltorbFlipColorScheme = lightColorScheme(
 private val VoltorbFlipTypography = Typography(
     titleLarge = TextStyle(  // coin counter
         color = darkGrey,
-        fontSize = 18.sp,
-        fontFamily = FontFamily.Monospace,
+        fontSize = 40.sp,
+        fontWeight = FontWeight.ExtraBold,
+        fontFamily = FontFamily.SansSerif,
         letterSpacing = 2.sp,
-        shadow = Shadow(greenWhite2, blurRadius = .7f),
         textAlign = TextAlign.Center
     ),
     titleMedium = TextStyle(  // info text (on green)
         color = offWhite,
-        fontSize = 14.sp,
+        fontSize = 24.sp,
         fontWeight = FontWeight.Light,
         fontFamily = FontFamily.Monospace,
         letterSpacing = 1.sp,
-        shadow = Shadow(mediumGrey, Offset(.5f, .5f),.2f),
+        shadow = Shadow(mediumGrey, Offset(.7f, .7f),.2f),
         textAlign = TextAlign.Center
     ),
     bodyMedium = TextStyle(  // text box text
         color = mediumGrey,
-        fontSize = 14.sp,
+        fontSize = 20.sp,
         fontWeight = FontWeight.Light,
         fontFamily = FontFamily.Monospace,
         letterSpacing = 1.sp,
-        shadow = Shadow(blueGrey, Offset(.5f, .5f),.2f),
+        shadow = Shadow(blueGrey, Offset(.6f, .6f),.1f),
         textAlign = TextAlign.Center
     ),
     bodySmall = TextStyle(  // unflipped tile with memo

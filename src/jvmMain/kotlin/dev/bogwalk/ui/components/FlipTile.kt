@@ -24,11 +24,12 @@ fun FlipTile(
     isInFocus: Boolean = false,
     isFlipped: Boolean = false,
     isMemoOpen: Boolean = false,
+    inGameGrid: Boolean = true,
     onFlipRequest: () -> Unit = {}
 ) {
     Tile(rowIndex, colIndex,
         if (isFlipped) TileState.FLIPPED else TileState.NOT_FLIPPED,
-        isInFocus, isMemoOpen, onFlipRequest) {
+        isInFocus, isMemoOpen, inGameGrid, onFlipRequest) {
         if (isFlipped) {
             if (value == 0) {
                 Icon(

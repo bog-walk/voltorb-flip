@@ -30,6 +30,7 @@ fun Tile(
     tileState: TileState,
     isInFocus: Boolean = false,
     memoIsOpen: Boolean = false,
+    inGameGrid: Boolean = true,
     onFlipRequest: () -> Unit = {},
     content: @Composable (BoxScope.() -> Unit)
 ) {
@@ -68,7 +69,7 @@ fun Tile(
                                 drawTileBorder(true, true, false, false)
                             } else {
                                 drawTileBorder(false, true, false, false)
-                                drawConnectors(rowIndex, colIndex)
+                                if (inGameGrid) drawConnectors(rowIndex, colIndex)
                             }
                             drawTileBorder(isInFocus, false, true, false)
                             drawTileBorder(false, false, false, false)
