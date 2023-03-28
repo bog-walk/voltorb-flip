@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
@@ -22,46 +23,51 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.style.*
-import dev.bogwalk.ui.util.drawButtonBorder
+import dev.bogwalk.ui.util.drawLineBorder
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MemoButton(
-    onOpenMemoRequest: () -> Unit
+    isMemoOpen: Boolean,
+    onSelectRequest: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .semantics(mergeDescendants = true) {
                 role = Role.Button
             }
-            .padding(horizontal = 8.dp, vertical = 10.dp)
-            .requiredSize(width = 120.dp, height = 140.dp)
-            .background(color = lightGreen)
+            .padding(horizontal = 3.dp, vertical = 12.dp)
+            .requiredSize(90.dp, 100.dp)
+            .background(lightGreen)
             .drawBehind {
-                drawRect(
+                drawRoundRect(
                     Brush.verticalGradient(
-                        0.6f to offWhite, 0.65f to lightGrey1,
-                        0.7f to lightGrey2, 0.75f to lightGrey3
+                        .57f to offWhite, .6f to lightGrey1,
+                        .63f to lightGrey2, .66f to lightGrey3
                     ),
-                    Offset(x = 0f, y = size.height / 4),
-                    Size(size.width, size.height / 4 * 2.5f)
+                    Offset(x = 4.dp.toPx(), y = size.height / 4),
+                    Size(size.width - 8.dp.toPx(), size.height / 4 * 3 - 10.dp.toPx()),
+                    CornerRadius(2.dp.toPx())
                 )
-                drawButtonBorder()
-                drawButtonBorder(darkGreen)
+                drawLineBorder(outerColor = darkGrey)
+                drawLineBorder(innerColor = darkGreen)
             }
-            .onClick { onOpenMemoRequest() }
+            .onClick { onSelectRequest() }
     ) {
         Icon(
             painter = painterResource("memo_x.svg"),
-            contentDescription = "Memo X",
-            modifier = Modifier.requiredSize(29.dp)
-                .align(Alignment.TopCenter).offset(y = 20.dp),
+            contentDescription = null,
+            modifier = Modifier
+                .requiredSize(23.dp)
+                .align(Alignment.TopCenter)
+                .offset(y = 10.dp),
             tint = Color.Unspecified
         )
         Text(
-            "Open Memo",
-            modifier = Modifier.fillMaxWidth(0.5f)
-                .align(Alignment.Center).offset(y = 20.dp),
+            text = "${if (isMemoOpen) "Close" else "Open"} Memo",
+            modifier = Modifier
+                .align(Alignment.Center)
+                .offset(y = 10.dp),
             style = MaterialTheme.typography.labelLarge
         )
     }
@@ -71,6 +77,9 @@ fun MemoButton(
 @Composable
 private fun MemoButtonPreview() {
     VoltorbFlipTheme {
-        MemoButton {}
+        Column {
+            MemoButton(isMemoOpen = false) {}
+            MemoButton(isMemoOpen = true) {}
+        }
     }
 }

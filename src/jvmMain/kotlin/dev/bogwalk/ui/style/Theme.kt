@@ -76,40 +76,41 @@ private val VoltorbFlipTypography = Typography(
     ),
     titleMedium = TextStyle(  // info text (on green)
         color = offWhite,
-        fontSize = 24.sp,
+        fontSize = 20.sp,
         fontWeight = FontWeight.Light,
         fontFamily = FontFamily.Monospace,
-        letterSpacing = 1.sp,
-        shadow = Shadow(mediumGrey, Offset(.7f, .7f),.2f),
+        shadow = Shadow(mediumGrey, Offset(.7f, .7f),.5f),
         textAlign = TextAlign.Center
     ),
     bodyMedium = TextStyle(  // text box text
         color = mediumGrey,
-        fontSize = 20.sp,
+        fontSize = 16.sp,
         fontWeight = FontWeight.Light,
         fontFamily = FontFamily.Monospace,
         letterSpacing = 1.sp,
-        shadow = Shadow(blueGrey, Offset(.6f, .6f),.1f),
-        textAlign = TextAlign.Center
+        shadow = Shadow(blueGrey, Offset(.6f, .6f),.3f),
+        textAlign = TextAlign.Start,
+        lineHeight = 20.sp
     ),
     bodySmall = TextStyle(  // unflipped tile with memo
         color = memoBrightYellow,
-        fontSize = 15.sp,
+        fontSize = 12.sp,
         fontWeight = FontWeight.ExtraBold,
         fontFamily = FontFamily.SansSerif,
         textAlign = TextAlign.Center
     ),
     labelLarge = TextStyle(  // buttons [REPLACE with pixelated font]
         color = offWhite,
-        fontSize = 24.sp,
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Bold,
         fontFamily = FontFamily.Monospace,
         letterSpacing = 1.sp,
-        shadow = Shadow(slateGrey1, blurRadius = 1f),
+        shadow = Shadow(slateGrey1, blurRadius = .5f),
         textAlign = TextAlign.Center
     ),
     labelMedium = TextStyle(  // info tile
         color = darkGrey,
-        fontSize = 18.sp,
+        fontSize = 15.sp,
         fontWeight = FontWeight.ExtraBold,
         fontFamily = FontFamily.SansSerif,
         letterSpacing = 1.sp,

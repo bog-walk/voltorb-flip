@@ -1,20 +1,18 @@
 package dev.bogwalk.ui.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.onClick
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.disabled
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
@@ -27,91 +25,106 @@ import dev.bogwalk.ui.util.drawBorder
 
 @Composable
 fun MemoPad(
-    memoData: BooleanArray,
-    onEditMemoRequest: (Int) -> Unit,
-    onReturnRequest: () -> Unit
+    memoData: BooleanArray?,
+    onEditRequest: (Int) -> Unit,
+    onQuitRequest: () -> Unit
 ) {
     Box(
         modifier = Modifier
-            .padding(horizontal = 8.dp, vertical = 10.dp)
-            .requiredSize(width = 120.dp, height = 170.dp)
-            .background(color = memoRed)
+            .padding(horizontal = 3.dp)
+            .requiredWidth(90.dp)
+            .background(memoRed)
             .drawBehind {
-                drawBorder(3f, 0f, darkGrey)
-                drawBorder(3f, 3.8f, memoPurple)
-                drawBorder(3f, 6f, memoPink)
-            }
-            .offset(10.dp, 10.dp)
+                drawBorder(2.dp.toPx(), 0f, darkGrey, StrokeCap.Butt)
+                drawBorder(2.dp.toPx(), 2.2.dp.toPx(), memoPurple)
+                drawBorder(2.dp.toPx(), 3.8.dp.toPx(), memoPink)
+            },
+        contentAlignment = Alignment.Center
     ) {
         Column(
-            Modifier.requiredSize(100.dp, 150.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(6.dp),
             horizontalAlignment = Alignment.End
         ) {
-            Row(Modifier.fillMaxWidth().padding(bottom = 2.dp)) {
-                MemoButton(0, memoData[0],
-                    Modifier.fillMaxWidth(0.5f).aspectRatio(1f),
-                    onEditMemoRequest)
-                MemoButton(1, memoData[1],
-                    Modifier.aspectRatio(1f),
-                    onEditMemoRequest)
+            Row(Modifier.fillMaxWidth()) {
+                MemoPadButton(Modifier.weight(.5f, true).aspectRatio(1f),
+                    0, memoData?.get(0), onEditRequest = onEditRequest)
+                MemoPadButton(Modifier.weight(.5f, true).aspectRatio(1f),
+                    1, memoData?.get(1), onEditRequest = onEditRequest)
             }
-            Row(Modifier.fillMaxWidth().padding(bottom = 2.dp)) {
-                MemoButton(2, memoData[2],
-                    Modifier.fillMaxWidth(.5f).aspectRatio(1f),
-                    onEditMemoRequest)
-                MemoButton(3, memoData[3],
-                    Modifier.aspectRatio(1f),
-                    onEditMemoRequest)
+            Row(Modifier.fillMaxWidth()) {
+                MemoPadButton(Modifier.weight(.5f).aspectRatio(1f),
+                    2, memoData?.get(2), onEditRequest = onEditRequest)
+                MemoPadButton(Modifier.weight(.5f).aspectRatio(1f),
+                    3, memoData?.get(3), onEditRequest = onEditRequest)
             }
-            IconButton(
-                onClick = { onReturnRequest() }
-            ) {
-                Icon(
-                    painter = painterResource("memo_arrow.svg"),
-                    contentDescription = "Close memo",
-                    modifier = Modifier.requiredSize(45.dp),
-                    tint = Color.Unspecified
-                )
-            }
+            MemoPadButton(Modifier.fillMaxWidth(.5f).aspectRatio(1f),
+                -1, null, onQuitRequest = onQuitRequest)
         }
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun MemoButton(
-    value: Int,
-    hasBeenAdded: Boolean,
+private fun MemoPadButton(
     modifier: Modifier,
-    onEditRequest: (Int) -> Unit
+    value: Int,
+    hasBeenAdded: Boolean?,
+    onEditRequest: (Int) -> Unit = {},
+    onQuitRequest: () -> Unit = {}
 ) {
     Box(
         modifier = modifier
             .semantics(mergeDescendants = true) {
                 role = Role.Button
+                if (value > -1 && hasBeenAdded == null) disabled()
             }
-            .background(if (hasBeenAdded) darkGreen else disabledBlue2)
+            .padding(2.dp)
+            .background(when (hasBeenAdded) {
+                true -> darkGreen
+                false -> disabledBlue2
+                else -> Color.Transparent
+            })
+            .border(2.dp, when (hasBeenAdded) {
+                true -> lightGreen
+                false -> disabledBlue1
+                else -> memoPink
+            })
             .drawBehind {
-                drawBorder(3f, 0f, if (hasBeenAdded) darkGrey else disabledBlue3)
-                drawBorder(3f, 3.8f, if (hasBeenAdded) lightGreen else disabledBlue1)
+                if (value != -1 && hasBeenAdded != null) {
+                    drawBorder(2.dp.toPx(), (-1).dp.toPx(),
+                        if (hasBeenAdded) darkGrey else disabledBlue3, StrokeCap.Round)
+                }
             }
-            .onClick { onEditRequest(value) },
+            .onClick { if (value == -1) onQuitRequest() else onEditRequest(value) },
         contentAlignment = Alignment.Center
     ) {
-        if (value == 0) {
-            Icon(
-                painter = painterResource("voltorb_memo.svg"),
-                contentDescription = "Voltorb",
+        when (value) {
+            -1 -> Icon(
+                painter = painterResource("memo_arrow.svg"),
+                contentDescription = null,
                 modifier = Modifier.requiredSize(27.dp),
-                tint = Color.Unspecified  // should its color not change based on added or not
+                tint = Color.Unspecified
             )
-        } else {
-            Text(value.toString(),
-                color = if (hasBeenAdded) memoYellow else memoGreen,
-                fontSize = 20.sp,
+            0 -> Icon(
+                painter = painterResource("memo_zero.svg"),
+                contentDescription = null,
+                modifier = Modifier.requiredSize(18.dp),
+                tint = Color.Unspecified
+            )
+            else -> Text(
+                text = value.toString(),
+                color = when (hasBeenAdded) {
+                    true -> memoYellow
+                    false -> memoGreen
+                    else -> memoPink
+                },
+                fontSize = 15.sp,
                 fontWeight = FontWeight.ExtraBold,
-                fontFamily = FontFamily.SansSerif,
-                textAlign = TextAlign.Center)
+                fontFamily = FontFamily.Monospace,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
@@ -120,6 +133,15 @@ private fun MemoButton(
 @Composable
 private fun MemoPadPreview() {
     VoltorbFlipTheme {
-        MemoPad(booleanArrayOf(true, true, false, false), {}) {}
+        Column {
+            // fully disabled
+            MemoPad(memoData = null, onEditRequest = {}) {}
+            // enabled with nothing cached
+            MemoPad(memoData = booleanArrayOf(false, false, false, false), onEditRequest = {}) {}
+            // enabled with half cached
+            MemoPad(memoData = booleanArrayOf(true, true, false, false), onEditRequest = {}) {}
+            // enabled with all cached
+            MemoPad(memoData = booleanArrayOf(true, true, true, true), onEditRequest = {}) {}
+        }
     }
 }

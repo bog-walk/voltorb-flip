@@ -15,30 +15,36 @@ import dev.bogwalk.ui.style.VoltorbFlipTheme
 
 @Composable
 fun InfoTile(
+    rowIndex: Int,
     points: Int,
-    mines: Int,
-    rowIndex: Int
+    mines: Int
 ) {
-    Tile(rowIndex, 0, TileState.STATIC_INFO) {
+    Tile(
+        rowIndex to -1,
+        TileState.STATIC_INFO
+    ) {
         Text(
-            points.toString().padStart(2, '0'),
-            modifier = Modifier.align(Alignment.TopEnd).offset(y = (-2).dp).padding(end=3.dp),
+            text = points.toString().padStart(2, '0'),
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .offset(x = (-2).dp, y = (-3).dp),
             style = MaterialTheme.typography.labelMedium
         )
         Row(
             modifier = Modifier
-                .align(Alignment.BottomStart).fillMaxWidth()
-                .padding(start=4.dp, end=4.dp, bottom=3.dp),
+                .align(Alignment.BottomStart)
+                .fillMaxWidth()
+                .padding(start = 2.dp, end = 3.dp, bottom = 2.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Icon(
-                painter = painterResource("voltorb.svg"),
-                contentDescription = "Voltorb",
-                modifier = Modifier.requiredSize(29.dp),
+                painter = painterResource("zero.svg"),
+                contentDescription = null,
+                modifier = Modifier.requiredSize(23.dp),
                 tint = Color.Unspecified
             )
             Text(
-                mines.toString(),
+                text = mines.toString(),
                 style = MaterialTheme.typography.labelMedium
             )
         }
@@ -50,11 +56,11 @@ fun InfoTile(
 private fun InfoTilePreview() {
     VoltorbFlipTheme {
         Column {
-            InfoTile(5, 1, 0)
-            InfoTile(3, 2, 1)
-            InfoTile(5, 3, 2)
-            InfoTile(4, 1, 3)
-            InfoTile(8, 1, 4)
+            InfoTile(0, 10, 1)
+            InfoTile(1, 2, 3)
+            InfoTile(2, 3, 2)
+            InfoTile(3, 4, 2)
+            InfoTile(4, 8, 1)
         }
     }
 }

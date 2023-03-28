@@ -3,9 +3,7 @@ package dev.bogwalk.ui.components
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.onClick
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,11 +17,14 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.style.*
-import dev.bogwalk.ui.util.drawButtonBorder
+import dev.bogwalk.ui.util.drawInFocusBorders
+import dev.bogwalk.ui.util.drawLineBorder
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun QuitButton(
+    currentPosition: Pair<Int, Int>,
+    isMemoOpen: Boolean,
     onQuitRequest: () -> Unit
 ) {
     Box(
@@ -31,19 +32,26 @@ fun QuitButton(
             .semantics(mergeDescendants = true) {
                 role = Role.Button
             }
-            .padding(start=5.dp, end=2.dp, top=5.dp, bottom=5.dp)
-            .requiredSize(width = 120.dp, height = 48.dp)
-            .background(brush = Brush.verticalGradient(
-                0.4f to lightBlue1, 0.5f to lightBlue2, 0.6f to lightBlue3
+            .padding(horizontal = 2.dp, vertical = 15.dp)
+            .requiredSize(92.dp, 38.dp)
+            .background(Brush.verticalGradient(
+                .45f to lightBlue1, .55f to lightBlue2, .6f to lightBlue3
             ))
             .drawBehind {
-                drawButtonBorder()
-                drawButtonBorder(lightBlue3)
+                if (currentPosition == -1 to -1) {
+                    drawInFocusBorders(isMemoOpen)
+                } else {
+                    drawLineBorder(outerColor = darkGrey)
+                    drawLineBorder(innerColor = lightBlue3)
+                }
             }
             .onClick { onQuitRequest() },
         contentAlignment = Alignment.Center
     ) {
-        Text("Quit", style = MaterialTheme.typography.labelLarge)
+        Text(
+            text = "Quit",
+            style = MaterialTheme.typography.labelLarge
+        )
     }
 }
 
@@ -51,6 +59,10 @@ fun QuitButton(
 @Composable
 private fun QuitButtonPreview() {
     VoltorbFlipTheme {
-        QuitButton {}
+        Column {
+            QuitButton(currentPosition = 0 to 0, isMemoOpen = false) {}
+            QuitButton(currentPosition = -1 to -1, isMemoOpen = false) {}
+            QuitButton(currentPosition = -1 to -1, isMemoOpen = true) {}
+        }
     }
 }
