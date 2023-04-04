@@ -1,4 +1,4 @@
-package dev.bogwalk.ui.components
+package dev.bogwalk.ui.components.tiles
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*

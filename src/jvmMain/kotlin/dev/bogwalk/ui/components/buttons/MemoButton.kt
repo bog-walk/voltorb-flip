@@ -1,4 +1,4 @@
-package dev.bogwalk.ui.components
+package dev.bogwalk.ui.components.buttons
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.disabled
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -29,12 +30,14 @@ import dev.bogwalk.ui.util.drawLineBorder
 @Composable
 fun MemoButton(
     isMemoOpen: Boolean,
-    onSelectRequest: () -> Unit
+    inGameUse: Boolean = true,
+    onSelectRequest: () -> Unit = {}
 ) {
     Box(
-        modifier = Modifier
+        Modifier
             .semantics(mergeDescendants = true) {
                 role = Role.Button
+                if (!inGameUse) disabled()  // in info screen
             }
             .padding(horizontal = 3.dp, vertical = 12.dp)
             .requiredSize(90.dp, 100.dp)
@@ -52,7 +55,7 @@ fun MemoButton(
                 drawLineBorder(outerColor = darkGrey)
                 drawLineBorder(innerColor = darkGreen)
             }
-            .onClick { onSelectRequest() }
+            .onClick(enabled = inGameUse) { onSelectRequest() }
     ) {
         Icon(
             painter = painterResource("memo_x.svg"),
@@ -78,8 +81,8 @@ fun MemoButton(
 private fun MemoButtonPreview() {
     VoltorbFlipTheme {
         Column {
-            MemoButton(isMemoOpen = false) {}
-            MemoButton(isMemoOpen = true) {}
+            MemoButton(isMemoOpen = false)
+            MemoButton(isMemoOpen = true)
         }
     }
 }

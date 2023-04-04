@@ -1,4 +1,4 @@
-package dev.bogwalk.ui.components
+package dev.bogwalk.ui.components.buttons
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.disabled
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -25,12 +26,13 @@ import dev.bogwalk.ui.util.drawLineBorder
 fun QuitButton(
     currentPosition: Pair<Int, Int>,
     isMemoOpen: Boolean,
-    onQuitRequest: () -> Unit
+    onQuitRequest: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
             .semantics(mergeDescendants = true) {
                 role = Role.Button
+                if (currentPosition == -2 to -2) disabled()  // in info screen
             }
             .padding(horizontal = 2.dp, vertical = 15.dp)
             .requiredSize(92.dp, 38.dp)
@@ -45,7 +47,7 @@ fun QuitButton(
                     drawLineBorder(innerColor = lightBlue3)
                 }
             }
-            .onClick { onQuitRequest() },
+            .onClick(enabled = currentPosition != -2 to -2) { onQuitRequest() },
         contentAlignment = Alignment.Center
     ) {
         Text(

@@ -1,4 +1,4 @@
-package dev.bogwalk.ui.components
+package dev.bogwalk.ui.components.tiles
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Canvas
@@ -54,7 +54,7 @@ fun FlipTile(
 
             if (memo[0]) {
                 Canvas(
-                    modifier = Modifier
+                    Modifier
                         .requiredSize(10.dp)
                         .align(alignments[0])
                         .offset(x = 5.dp, y = 5.dp)

@@ -1,4 +1,4 @@
-package dev.bogwalk.ui.components
+package dev.bogwalk.ui.components.buttons
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.*
@@ -26,8 +26,9 @@ import dev.bogwalk.ui.util.drawBorder
 @Composable
 fun MemoPad(
     memoData: BooleanArray?,
-    onEditRequest: (Int) -> Unit,
-    onQuitRequest: () -> Unit
+    inGameUse: Boolean = true,
+    onEditRequest: (Int) -> Unit = {},
+    onQuitRequest: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
@@ -48,19 +49,24 @@ fun MemoPad(
             horizontalAlignment = Alignment.End
         ) {
             Row(Modifier.fillMaxWidth()) {
-                MemoPadButton(Modifier.weight(.5f, true).aspectRatio(1f),
-                    0, memoData?.get(0), onEditRequest = onEditRequest)
-                MemoPadButton(Modifier.weight(.5f, true).aspectRatio(1f),
-                    1, memoData?.get(1), onEditRequest = onEditRequest)
+                MemoPadButton(Modifier.weight(.5f),
+                    0, memoData?.get(0), inGameUse,
+                    onEditRequest = onEditRequest) {}
+                MemoPadButton(Modifier.weight(.5f),
+                    1, memoData?.get(1), inGameUse,
+                    onEditRequest = onEditRequest) {}
             }
             Row(Modifier.fillMaxWidth()) {
-                MemoPadButton(Modifier.weight(.5f).aspectRatio(1f),
-                    2, memoData?.get(2), onEditRequest = onEditRequest)
-                MemoPadButton(Modifier.weight(.5f).aspectRatio(1f),
-                    3, memoData?.get(3), onEditRequest = onEditRequest)
+                MemoPadButton(Modifier.weight(.5f),
+                    2, memoData?.get(2), inGameUse,
+                    onEditRequest = onEditRequest) {}
+                MemoPadButton(Modifier.weight(.5f),
+                    3, memoData?.get(3), inGameUse,
+                    onEditRequest = onEditRequest) {}
             }
-            MemoPadButton(Modifier.fillMaxWidth(.5f).aspectRatio(1f),
-                -1, null, onQuitRequest = onQuitRequest)
+            MemoPadButton(Modifier.fillMaxWidth(.5f),
+                -1, null, inGameUse, {},
+                onQuitRequest = onQuitRequest)
         }
     }
 }
@@ -71,15 +77,17 @@ private fun MemoPadButton(
     modifier: Modifier,
     value: Int,
     hasBeenAdded: Boolean?,
-    onEditRequest: (Int) -> Unit = {},
-    onQuitRequest: () -> Unit = {}
+    inGameUse: Boolean,
+    onEditRequest: (Int) -> Unit,
+    onQuitRequest: () -> Unit
 ) {
     Box(
         modifier = modifier
             .semantics(mergeDescendants = true) {
                 role = Role.Button
-                if (value > -1 && hasBeenAdded == null) disabled()
+                if (!inGameUse || value > -1 && hasBeenAdded == null) disabled()
             }
+            .aspectRatio(1f)
             .padding(2.dp)
             .background(when (hasBeenAdded) {
                 true -> darkGreen
@@ -97,7 +105,9 @@ private fun MemoPadButton(
                         if (hasBeenAdded) darkGrey else disabledBlue3, StrokeCap.Round)
                 }
             }
-            .onClick { if (value == -1) onQuitRequest() else onEditRequest(value) },
+            .onClick(enabled = inGameUse) {
+                if (value == -1) onQuitRequest() else onEditRequest(value)
+            },
         contentAlignment = Alignment.Center
     ) {
         when (value) {

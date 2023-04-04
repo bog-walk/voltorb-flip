@@ -1,12 +1,5 @@
 package dev.bogwalk.ui.util
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -35,36 +28,6 @@ fun DrawScope.drawInsetBackground() {
             Size(size.height / 3, size.width / 3)
         )
     }
-}
-
-@Composable
-fun InsetPattern(rows: Int) {
-    val size = 42.dp / 3
-
-    Box(
-        Modifier
-        .requiredHeight(4.dp + size * rows)
-        .fillMaxWidth()
-        .background(darkGreen)
-        .drawBehind {
-            var yStart = 4.dp.toPx()
-            var alpha = 1f
-            for (i in 1..rows) {
-                var xStart = if (i % 2 == 0) 0f else size.toPx()
-                while (xStart < this.size.width) {
-                    drawRect(
-                        lightGreen,
-                        Offset(xStart, yStart),
-                        Size(size.toPx(), size.toPx()),
-                        alpha
-                    )
-                    xStart += size.toPx() * 2
-                }
-                yStart += size.toPx()
-                alpha -= .1f
-            }
-        }
-    )
 }
 
 fun DrawScope.drawLineBorder(

@@ -1,4 +1,4 @@
-package dev.bogwalk.ui.components
+package dev.bogwalk.ui.components.screens
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
@@ -11,14 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.bogwalk.ui.components.tiles.FlipTile
 import dev.bogwalk.ui.style.*
-import dev.bogwalk.ui.util.InsetPattern
-import dev.bogwalk.ui.util.drawBorder
 
 @Composable
 fun InfoScreen(
@@ -26,15 +23,10 @@ fun InfoScreen(
     totalCoins: Int,
     currentCoins: Int
 ) {
-    Column(Modifier
-        .fillMaxWidth()
-        .padding(bottom = 5.dp)
-    ) {
-        LevelHeader(level)
-        RulesBox()
-        CoinTextBox("Player's\nCollected Coins", totalCoins)
-        CoinTextBox("Coins Collected in\nCurrent Game", currentCoins)
-    }
+    LevelHeader(level)
+    RulesBox()
+    CoinsBox("Player's\nCollected Coins", totalCoins)
+    CoinsBox("Coins Collected in\nCurrent Game", currentCoins)
 }
 
 @Composable
@@ -42,33 +34,32 @@ private fun LevelHeader(level: Int) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(top = 10.dp)
             .background(darkGreen)
             .drawWithContent {  // are these colours correct?
                 drawContent()
                 drawLine(darkGrey,
-                    Offset(0f, (42.dp / 3).toPx()),
-                    Offset(size.width, (42.dp / 3).toPx()),
+                    Offset.Zero,
+                    Offset(size.width, 0f),
                     2.dp.toPx())
                 drawLine(darkGrey,
                     Offset(0f, size.height),
                     Offset(size.width, size.height),
                     2.dp.toPx())
                 drawLine(offWhite,
-                    Offset(0f, (3.1.dp + 42.dp / 3).toPx()),
-                    Offset(size.width, (3.1.dp + 42.dp / 3).toPx()),
+                    Offset(0f, 3.1.dp.toPx()),
+                    Offset(size.width, 3.1.dp.toPx()),
                     4.dp.toPx())
                 drawLine(offWhite,
                     Offset(0f, size.height - 3.1.dp.toPx()),
                     Offset(size.width, size.height - 3.1.dp.toPx()),
                     4.dp.toPx())
-            }
+            },
+        contentAlignment = Alignment.Center
     ) {
-        InsetPattern(1)
         Text(
             text = "VOLTORB Flip Lv. $level\nFlip the Cards and Collect Coins!",
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(top = 20.dp, bottom = 7.dp),
+            modifier = Modifier.padding(vertical = 8.dp),
             style = MaterialTheme.typography.titleMedium
         )
     }
@@ -77,7 +68,7 @@ private fun LevelHeader(level: Int) {
 @Composable
 private fun RulesBox() {
     Column(
-        modifier = Modifier
+        Modifier
             .fillMaxWidth()
             .padding(horizontal = 6.dp, vertical = 4.dp)
     ) {
@@ -125,32 +116,31 @@ private fun DrawScope.drawUnderLine() {
 }
 
 @Composable
-private fun CoinTextBox(
+private fun CoinsBox(
     text: String,
-    coins: Int
+    coins: Int? = null
 ) {
-    Row(
-        modifier = Modifier
-            .requiredHeight(70.dp)
-            .fillMaxWidth()
-            .padding(horizontal = 7.dp, vertical = 3.dp)
-            .background(Color.White)
-            .drawBehind {
-                drawBorder(2.dp.toPx(), 0f, darkGrey, StrokeCap.Butt)
-                drawBorder(4.dp.toPx(), 3.1.dp.toPx(), greenWhite2)
-                        },
-        verticalAlignment = Alignment.CenterVertically
+    InfoTextBox(
+        Modifier.fillMaxWidth()
     ) {
-        Text(
-            text = text,
-            modifier = Modifier.weight(.6f),
-            style = MaterialTheme.typography.bodyMedium
-        )
-        Text(
-            text = coins.toString().padStart(5, '0'),
-            modifier = Modifier.padding(end = 7.dp),
-            style = MaterialTheme.typography.titleLarge
-        )
+        Row(
+            modifier = Modifier
+                .requiredHeight(70.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = text,
+                modifier = Modifier.weight(.6f),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Text(
+                text = coins.toString().padStart(5, '0'),
+                style = MaterialTheme.typography.titleLarge
+            )
+        }
     }
 }
 
@@ -159,7 +149,7 @@ private fun CoinTextBox(
 private fun InfoScreenPreview() {
     VoltorbFlipTheme {
         Box(Modifier.requiredWidth(445.dp)) {
-            InfoScreen(1, 0, 0)
+            TopScreen { InfoScreen(1, 0, 0) }
         }
     }
 }

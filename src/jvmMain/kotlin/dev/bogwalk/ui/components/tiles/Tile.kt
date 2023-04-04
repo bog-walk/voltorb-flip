@@ -1,4 +1,4 @@
-package dev.bogwalk.ui.components
+package dev.bogwalk.ui.components.tiles
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.*
@@ -70,7 +70,9 @@ fun Tile(
                     }
                 }
             }
-            .onClick(enabled = tileState == TileState.NOT_FLIPPED) { onSelectRequest(position) },
+            .onClick(
+                enabled = tileState == TileState.NOT_FLIPPED && position != -1 to -1
+            ) { onSelectRequest(position) },
         contentAlignment = Alignment.Center,
         content = content
     )
@@ -83,24 +85,29 @@ fun Tile(
 // Draw on top of all tiles, but then in-focus border drawn over top of normal border???
 private fun DrawScope.drawConnectors(position: Pair<Int, Int>) {
     val colorSize = 3.5.dp.toPx()
-    drawRect(greenWhite,
-        Offset(x = size.width, y = size.height / 3),
-        Size(size.width / 3, size.height / 3)
-    )
-    drawRect(greenWhite,
-        Offset(x = size.width / 3, y = size.height),
-        Size(size.width / 3, size.height / 3)
-    )
-    drawRect(
-        rowColors[position.first],
-        Offset(x = size.width, y = size.height / 2 - colorSize),
-        Size(size.width / 3, colorSize * 2)
-    )
-    drawRect(
-        rowColors[position.second],
-        Offset(x = size.width / 2 - colorSize, y = size.height),
-        Size(colorSize * 2, size.height / 3)
-    )
+
+    if (position.first != -1) {
+        drawRect(greenWhite,
+            Offset(x = size.width, y = size.height / 3),
+            Size(size.width / 3, size.height / 3)
+        )
+        drawRect(
+            rowColors[position.first],
+            Offset(x = size.width, y = size.height / 2 - colorSize),
+            Size(size.width / 3, colorSize * 2)
+        )
+    }
+    if (position.second != -1) {
+        drawRect(greenWhite,
+            Offset(x = size.width / 3, y = size.height),
+            Size(size.width / 3, size.height / 3)
+        )
+        drawRect(
+            rowColors[position.second],
+            Offset(x = size.width / 2 - colorSize, y = size.height),
+            Size(colorSize * 2, size.height / 3)
+        )
+    }
 }
 
 @Preview
