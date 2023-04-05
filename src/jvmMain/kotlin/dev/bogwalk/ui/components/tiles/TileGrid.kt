@@ -20,7 +20,7 @@ fun TileGrid(
     onSelectRequest: (Pair<Int, Int>) -> Unit
 ) {
     Column(
-        Modifier.padding(vertical = 5.dp)
+        Modifier.padding(start = 8.dp, top = 8.dp, end = 4.dp, bottom = 8.dp)
     ) {
         for ((i, row) in grid.withIndex()) {
             Row {

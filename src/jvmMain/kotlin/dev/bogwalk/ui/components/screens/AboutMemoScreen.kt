@@ -53,8 +53,8 @@ fun AboutMemoScreen() {
 @Composable
 private fun AboutMemoScreenPreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredWidth(445.dp)) {
-            TopScreen { AboutMemoScreen() }
+        Box(Modifier.requiredSize(450.dp)) {
+            TopScreen(Modifier) { AboutMemoScreen() }
         }
     }
 }

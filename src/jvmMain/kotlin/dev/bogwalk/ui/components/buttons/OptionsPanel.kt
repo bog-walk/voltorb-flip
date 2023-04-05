@@ -36,13 +36,12 @@ fun OptionsPanel(
     Box(
         Modifier
             .requiredWidth(190.dp)
-            .padding(5.dp)
+            .padding(end = 6.dp)
             .background(darkGrey)
             .drawBehind {
                 drawBorder(2.dp.toPx(), 0f, darkGrey, StrokeCap.Butt)
                 drawBorder(2.dp.toPx(), 3.1.dp.toPx(), Color(0xff888888))
-            }
-        ,
+            },
         contentAlignment = Alignment.Center
     ) {
         Column(

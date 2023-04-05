@@ -17,16 +17,15 @@ import dev.bogwalk.ui.util.drawBorder
 
 @Composable
 fun TopScreen(
+    modifier: Modifier,
     content: @Composable() (ColumnScope.() -> Unit)
 ) {
     Column(
-        modifier= Modifier
-            .fillMaxWidth()
-            .padding(bottom = 5.dp)
-            .fillMaxHeight(.5f)
+        modifier = modifier
+            .fillMaxSize()
             .background(lightGreen)
             .drawBehind {
-                val top = 4.dp.toPx()
+                val top = 6.dp.toPx()
                 val patternSize = (42.dp / 3).toPx()
                 drawRect(darkGreen, Offset.Zero, Size(size.width, top))
 
@@ -47,7 +46,7 @@ fun TopScreen(
                     alpha -= .25f
                 }
             },
-        verticalArrangement = Arrangement.SpaceBetween,
+        verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally,
         content = content
     )
@@ -60,7 +59,7 @@ fun InfoTextBox(
 ) {
     Box(
         modifier
-            .padding(horizontal = 7.dp, vertical = 3.dp)
+            .padding(start = 7.dp, end = 7.dp, bottom = 7.dp)
             .background(Color.White)
             .drawBehind {
                 drawBorder(2.dp.toPx(), 0f, darkGrey, StrokeCap.Butt)
@@ -75,8 +74,8 @@ fun InfoTextBox(
 @Composable
 private fun TopScreenPreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredWidth(445.dp)) {
-            TopScreen {}
+        Box(Modifier.requiredSize(450.dp)) {
+            TopScreen(Modifier) {}
         }
     }
 }

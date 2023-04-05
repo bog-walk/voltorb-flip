@@ -101,8 +101,8 @@ private fun DrawScope.drawOutlinedLine(isOutline: Boolean) {
 @Composable
 private fun HintScreenPreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredWidth(445.dp)) {
-            TopScreen { HintScreen() }
+        Box(Modifier.requiredSize(450.dp)) {
+            TopScreen(Modifier) { HintScreen() }
         }
     }
 }

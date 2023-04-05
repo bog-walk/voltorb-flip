@@ -39,7 +39,7 @@ fun MemoButton(
                 role = Role.Button
                 if (!inGameUse) disabled()  // in info screen
             }
-            .padding(horizontal = 3.dp, vertical = 12.dp)
+            .padding(vertical = 12.dp)
             .requiredSize(90.dp, 100.dp)
             .background(lightGreen)
             .drawBehind {

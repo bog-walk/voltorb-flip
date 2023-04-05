@@ -125,7 +125,7 @@ private fun CoinsBox(
     ) {
         Row(
             modifier = Modifier
-                .requiredHeight(70.dp)
+                .requiredHeight(65.dp)
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -148,8 +148,8 @@ private fun CoinsBox(
 @Composable
 private fun InfoScreenPreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredWidth(445.dp)) {
-            TopScreen { InfoScreen(1, 0, 0) }
+        Box(Modifier.requiredSize(450.dp)) {
+            TopScreen(Modifier) { InfoScreen(1, 0, 0) }
         }
     }
 }

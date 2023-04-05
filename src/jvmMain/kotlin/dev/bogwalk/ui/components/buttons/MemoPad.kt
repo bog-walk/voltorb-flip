@@ -32,7 +32,6 @@ fun MemoPad(
 ) {
     Box(
         modifier = Modifier
-            .padding(horizontal = 3.dp)
             .requiredWidth(90.dp)
             .background(memoRed)
             .drawBehind {

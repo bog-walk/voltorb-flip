@@ -40,6 +40,16 @@ abstract class LevelGenerator {
     abstract fun getLevelData(level: Int): List<Int>
     protected abstract fun assignLevelData(data: List<Int>): List<Int>
 
+    fun generateEmptyLevel(): List<List<GameTile>> {
+        return List(5) { row ->
+            List(5) { col ->
+                GameTile(row to col, 1)
+            }
+        }
+    }
+
+    fun getEmptySummary(): List<Pair<Int, Int>> = List(10) { 0 to 0 }
+
     fun generateLevelTiles(data: List<Int>): List<List<GameTile>> {
         val values = assignLevelData(data)
 
