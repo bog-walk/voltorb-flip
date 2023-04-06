@@ -12,6 +12,8 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.components.tiles.FlipTile
@@ -25,8 +27,8 @@ fun InfoScreen(
 ) {
     LevelHeader(level)
     RulesBox()
-    CoinsBox("Player's\nCollected Coins", totalCoins)
-    CoinsBox("Coins Collected in\nCurrent Game", currentCoins)
+    CoinsBox(PLAYER_COINS, totalCoins)
+    CoinsBox(CURRENT_COINS, currentCoins)
 }
 
 @Composable
@@ -58,7 +60,7 @@ private fun LevelHeader(level: Int) {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "VOLTORB Flip Lv. $level\nFlip the Cards and Collect Coins!",
+            text = "$HEADER_START$level$HEADER_END",
             modifier = Modifier.padding(vertical = 8.dp),
             style = MaterialTheme.typography.titleMedium
         )
@@ -82,7 +84,7 @@ private fun RulesBox() {
             FlipTile(-1 to -1, 2, isFlipped = true)
             FlipTile(-1 to -1, 3, isFlipped = true)
             Text(
-                text = "...x1! ...x2! ...x3!",
+                text = INFO_POINTS,
                 modifier = Modifier.weight(.6f).padding(start = 5.dp),
                 textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.titleMedium
@@ -97,7 +99,7 @@ private fun RulesBox() {
         ) {
             FlipTile(-1 to -1, 0, isFlipped = true)
             Text(
-                text = "Game Over! 0!",
+                text = GAME_OVER,
                 modifier = Modifier.padding(start = 5.dp),
                 textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.titleMedium
@@ -125,6 +127,7 @@ private fun CoinsBox(
     ) {
         Row(
             modifier = Modifier
+                .semantics { testTag = COIN_TAG }
                 .requiredHeight(65.dp)
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp),

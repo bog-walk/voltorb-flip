@@ -29,7 +29,8 @@ fun TileGrid(
                         FlipTile(
                             tile.position, tile.value, tile.memoData,
                             isInFocus = tile.position == currentPosition,
-                            isFlipped = tile.isFlipped, isMemoOpen = isMemoOpen,
+                            isFlipped = tile.isFlipped,
+                            isMemoOpen = isMemoOpen,
                             onSelectRequest = onSelectRequest
                         )
                     }

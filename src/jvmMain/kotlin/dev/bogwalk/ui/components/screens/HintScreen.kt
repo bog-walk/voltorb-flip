@@ -33,8 +33,8 @@ fun HintScreen() {
         InfoTile(0, 7, 2)
     }
     Icon(
-        painter = painterResource("info_arrow.svg"),
-        contentDescription = null,
+        painter = painterResource(INFO_ARROW),
+        contentDescription = INFO_ARROW_DESCR,
         modifier = Modifier.requiredSize(30.dp))
     Row(
         Modifier
@@ -56,9 +56,7 @@ fun HintScreen() {
         Modifier.fillMaxWidth()
     ) {
         Text(
-            text = "By looking at the numbers on the sides of\n" +
-                        "the cards, you can see the hidden number\n" +
-                        "and VOLTORB totals.",
+            text = HINT_TEXT,
             modifier = Modifier.padding(vertical = 10.dp),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium

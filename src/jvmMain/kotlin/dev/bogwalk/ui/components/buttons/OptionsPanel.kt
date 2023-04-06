@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.drawBorder
@@ -27,54 +28,69 @@ fun OptionsPanel(
     onQuitRequest: () -> Unit,
     onInfoRequest: (Int) -> Unit
 ) {
-    val mainOptions = listOf("Play", "Game Info", "Quit")
-    val infoOptions = listOf("How to Play", "Hint!", "About Memos", "Return")
+    val mainOptions = listOf(PLAY, INFO, QUIT)
+    val infoOptions = listOf(HOW_TO, HINT, ABOUT, RETURN)
 
-    var showInfoOptions by mutableStateOf(false)
-    var optionInFocus by mutableStateOf(0)
+    var showInfoOptions by remember { mutableStateOf(false) }
+    var optionInFocus by remember { mutableStateOf(0) }
 
-    Box(
-        Modifier
+    Column(
+        modifier = Modifier
             .requiredWidth(190.dp)
             .padding(end = 6.dp)
             .background(darkGrey)
             .drawBehind {
                 drawBorder(2.dp.toPx(), 0f, darkGrey, StrokeCap.Butt)
                 drawBorder(2.dp.toPx(), 3.1.dp.toPx(), Color(0xff888888))
-            },
-        contentAlignment = Alignment.Center
+            }
+            .padding(horizontal = 10.dp, vertical = 12.dp)
+            .background(disabledBlue3),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 10.dp, vertical = 12.dp)
-                .background(disabledBlue3),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            if (showInfoOptions) {
-                for ((i, option) in infoOptions.withIndex()) {
-                    key(i) {
-                        OptionsButton(option,
-                            optionNum = if (i == 3) null else i,
-                            isInFocus = optionInFocus == i,
-                            onActionRequest = { showInfoOptions = false },
-                            onInfoRequest = onInfoRequest)
-                    }
+        if (showInfoOptions) {
+            for ((i, option) in infoOptions.withIndex()) {
+                key(i) {
+                    OptionsButton(
+                        text = option,
+                        optionNum = i,
+                        isInInfo = showInfoOptions,
+                        isInFocus = optionInFocus == i,
+                        onActionRequest = {
+                            optionInFocus = 0
+                            showInfoOptions = false
+                        },
+                        onInfoRequest = {
+                            optionInFocus = it
+                            onInfoRequest(it)
+                        }
+                    )
                 }
-            } else {
-                for ((i, option) in mainOptions.withIndex()) {
-                    key(i) {
-                        OptionsButton(option, null,
-                            isInFocus = optionInFocus == i,
-                            onActionRequest = {
-                                optionInFocus = i
-                                when (i) {
-                                    0 -> onPlayRequest()
-                                    1 -> showInfoOptions = true
-                                    2 -> onQuitRequest()
+            }
+        } else {
+            for ((i, option) in mainOptions.withIndex()) {
+                key(i) {
+                    OptionsButton(
+                        text = option,
+                        optionNum = i,
+                        isInInfo = showInfoOptions,
+                        isInFocus = optionInFocus == i,
+                        onActionRequest = {
+                            when (it) {
+                                0 -> {
+                                    optionInFocus = 0
+                                    onPlayRequest()
                                 }
-                            })
-                    }
+                                1 -> {
+                                    optionInFocus = 0
+                                    showInfoOptions = true
+                                }
+                                2 -> {
+                                    optionInFocus = 2
+                                    onQuitRequest()
+                                }
+                            }
+                        }
+                    )
                 }
             }
         }
@@ -85,15 +101,17 @@ fun OptionsPanel(
 @Composable
 private fun OptionsButton(
     text: String,
-    optionNum: Int?,
+    optionNum: Int,
+    isInInfo: Boolean,
     isInFocus: Boolean,
-    onActionRequest: () -> Unit = {},
+    onActionRequest: (Int) -> Unit = {},
     onInfoRequest: (Int) -> Unit = {}
 ) {
     Box(
-        Modifier
+        modifier = Modifier
             .semantics(mergeDescendants = true) {
                 role = Role.Button
+                testTag = OPTIONS_TAG
             }
             .fillMaxWidth()
             .padding(horizontal = 2.dp)
@@ -103,7 +121,7 @@ private fun OptionsButton(
                 drawLineBorder(outerColor = if (isInFocus) brightRed else offWhite)
                 drawLineBorder(innerColor = darkGrey)
             }
-            .onClick { if (optionNum == null) onActionRequest() else onInfoRequest(optionNum) },
+            .onClick { if (isInInfo) onInfoRequest(optionNum) else onActionRequest(optionNum) },
         contentAlignment = Alignment.Center
     ) {
         Text(

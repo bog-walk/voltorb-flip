@@ -56,7 +56,7 @@ fun QuitButton(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Quit",
+            text = QUIT,
             style = MaterialTheme.typography.labelLarge
         )
     }
@@ -115,8 +115,8 @@ private fun QuitButtonPreview() {
 private fun QuitOptionsPreview() {
     VoltorbFlipTheme {
         Column {
-            QuitOption("YES", isInFocus = true) {}
-            QuitOption("NO", isInFocus = false) {}
+            QuitOption(YES, isInFocus = true) {}
+            QuitOption(NO, isInFocus = false) {}
         }
     }
 }

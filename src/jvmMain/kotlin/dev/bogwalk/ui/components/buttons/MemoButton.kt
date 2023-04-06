@@ -5,6 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.onClick
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -12,16 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.disabled
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.*
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.drawLineBorder
@@ -34,44 +29,41 @@ fun MemoButton(
     onSelectRequest: () -> Unit = {}
 ) {
     Box(
-        Modifier
+        modifier = Modifier
             .semantics(mergeDescendants = true) {
                 role = Role.Button
+                testTag = MEMO_TAG
                 if (!inGameUse) disabled()  // in info screen
             }
-            .padding(vertical = 12.dp)
+            .padding(vertical = 12.dp, horizontal = 10.dp)
             .requiredSize(90.dp, 100.dp)
             .background(lightGreen)
             .drawBehind {
-                drawRoundRect(
-                    Brush.verticalGradient(
-                        .57f to offWhite, .6f to lightGrey1,
-                        .63f to lightGrey2, .66f to lightGrey3
-                    ),
-                    Offset(x = 4.dp.toPx(), y = size.height / 4),
-                    Size(size.width - 8.dp.toPx(), size.height / 4 * 3 - 10.dp.toPx()),
-                    CornerRadius(2.dp.toPx())
-                )
                 drawLineBorder(outerColor = darkGrey)
                 drawLineBorder(innerColor = darkGreen)
             }
-            .onClick(enabled = inGameUse) { onSelectRequest() }
+            .offset(y = 10.dp)
+            .onClick(enabled = inGameUse) { onSelectRequest() },
+        contentAlignment = Alignment.TopCenter
     ) {
-        Icon(
-            painter = painterResource("memo_x.svg"),
-            contentDescription = null,
-            modifier = Modifier
-                .requiredSize(23.dp)
-                .align(Alignment.TopCenter)
-                .offset(y = 10.dp),
-            tint = Color.Unspecified
-        )
         Text(
-            text = "${if (isMemoOpen) "Close" else "Open"} Memo",
+            text = if (isMemoOpen) CLOSE else OPEN,
             modifier = Modifier
-                .align(Alignment.Center)
-                .offset(y = 10.dp),
+                .padding(top = 15.dp)
+                .width(82.dp)
+                .fillMaxHeight(.75f)
+                .background(Brush.verticalGradient(
+                    .57f to offWhite, .6f to lightGrey1,
+                    .63f to lightGrey2, .66f to lightGrey3
+                ), RoundedCornerShape(2.dp))
+                .padding(top = 10.dp),
             style = MaterialTheme.typography.labelLarge
+        )
+        Icon(
+            painter = painterResource(PIXEL_X),
+            contentDescription = PIXEL_X_DESCR,
+            modifier = Modifier.requiredSize(23.dp),
+            tint = Color.Unspecified
         )
     }
 }

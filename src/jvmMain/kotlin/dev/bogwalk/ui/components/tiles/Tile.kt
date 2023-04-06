@@ -35,7 +35,9 @@ fun Tile(
         modifier = Modifier
             .semantics(mergeDescendants = true) {
                 role = Role.Button
-                if (tileState != TileState.NOT_FLIPPED) disabled()
+                testTag = TILE_TAG
+                if (tileState != TileState.NOT_FLIPPED || position.first == -1 ||
+                    position.second == -1) disabled()
             }
             .padding(7.dp)
             .requiredSize(42.dp)
@@ -71,7 +73,8 @@ fun Tile(
                 }
             }
             .onClick(
-                enabled = tileState == TileState.NOT_FLIPPED && position != -1 to -1
+                enabled = tileState == TileState.NOT_FLIPPED &&
+                        position.first != -1 && position.second != -1
             ) { onSelectRequest(position) },
         contentAlignment = Alignment.Center,
         content = content

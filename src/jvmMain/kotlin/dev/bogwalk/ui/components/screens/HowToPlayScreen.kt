@@ -13,7 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.components.tiles.FlipTile
 import dev.bogwalk.ui.components.buttons.QuitButton
-import dev.bogwalk.ui.style.VoltorbFlipTheme
+import dev.bogwalk.ui.style.*
 
 @Composable
 fun HowToPlayScreen() {
@@ -24,23 +24,23 @@ fun HowToPlayScreen() {
     ) {
         FlipTile(-1 to -1, 3, isFlipped = true)
         Icon(
-            painter = painterResource("info_arrow.svg"),
-            contentDescription = null,
+            painter = painterResource(INFO_ARROW),
+            contentDescription = INFO_ARROW_DESCR,
             modifier = Modifier.requiredSize(30.dp))
         FlipTile(-1 to -1, 1, isFlipped = true)
         Icon(
-            painter = painterResource("info_arrow.svg"),
-            contentDescription = null,
+            painter = painterResource(INFO_ARROW),
+            contentDescription = INFO_ARROW_DESCR,
             modifier = Modifier.requiredSize(30.dp))
         FlipTile(-1 to -1, 2, isFlipped = true)
         Icon(
-            painter = painterResource("info_arrow.svg"),
-            contentDescription = null,
+            painter = painterResource(INFO_ARROW),
+            contentDescription = INFO_ARROW_DESCR,
             modifier = Modifier.requiredSize(30.dp))
         FlipTile(-1 to -1, 1, isFlipped = true)
         Icon(
-            painter = painterResource("info_arrow.svg"),
-            contentDescription = null,
+            painter = painterResource(INFO_ARROW),
+            contentDescription = INFO_ARROW_DESCR,
             modifier = Modifier.requiredSize(30.dp))
         FlipTile(-1 to -1, 3, isFlipped = true)
     }
@@ -48,17 +48,15 @@ fun HowToPlayScreen() {
         Modifier.fillMaxWidth()
     ) {
         Text(
-            text = "If you flip the cards in this order,\n" +
-                    "you'll collect: 3 x 1 x 2 x 1 x 3...\n" +
-                    "A total of 18 Coins! And then...",
+            text = HOW_TO_TEXT_1,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium
         )
     }
     Icon(
-        painter = painterResource("info_arrow.svg"),
-        contentDescription = null,
+        painter = painterResource(INFO_ARROW),
+        contentDescription = INFO_ARROW_DESCR,
         modifier = Modifier.requiredSize(30.dp))
     Row(
         modifier = Modifier.fillMaxWidth().padding(start = 7.dp),
@@ -74,7 +72,7 @@ fun HowToPlayScreen() {
             Modifier.weight(.7f)
         ) {
             Text(
-                text = "If you select \"Quit,\"\nyou'll keep those 18 Coins.",
+                text = HOW_TO_TEXT_2,
                 modifier = Modifier.padding(vertical = 10.dp),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium
@@ -95,7 +93,7 @@ fun HowToPlayScreen() {
             Modifier.weight(.7f)
         ) {
             Text(
-                text = "But if you find VOLTORB\nyou'll lose all your Coins!",
+                text = HOW_TO_TEXT_3,
                 modifier = Modifier.padding(vertical = 10.dp),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium

@@ -11,10 +11,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.disabled
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.*
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -49,22 +46,23 @@ fun MemoPad(
         ) {
             Row(Modifier.fillMaxWidth()) {
                 MemoPadButton(Modifier.weight(.5f),
-                    0, memoData?.get(0), inGameUse,
+                    inGameUse, 0, memoData?.get(0),
                     onEditRequest = onEditRequest) {}
                 MemoPadButton(Modifier.weight(.5f),
-                    1, memoData?.get(1), inGameUse,
+                    inGameUse, 1, memoData?.get(1),
                     onEditRequest = onEditRequest) {}
             }
             Row(Modifier.fillMaxWidth()) {
                 MemoPadButton(Modifier.weight(.5f),
-                    2, memoData?.get(2), inGameUse,
+                    inGameUse, 2, memoData?.get(2),
                     onEditRequest = onEditRequest) {}
                 MemoPadButton(Modifier.weight(.5f),
-                    3, memoData?.get(3), inGameUse,
+                    inGameUse, 3, memoData?.get(3),
                     onEditRequest = onEditRequest) {}
             }
+            // return arrow should always be enabled unless used in info screen
             MemoPadButton(Modifier.fillMaxWidth(.5f),
-                -1, null, inGameUse, {},
+                inGameUse, -1, null, {},
                 onQuitRequest = onQuitRequest)
         }
     }
@@ -74,9 +72,9 @@ fun MemoPad(
 @Composable
 private fun MemoPadButton(
     modifier: Modifier,
+    inGameUse: Boolean,
     value: Int,
     hasBeenAdded: Boolean?,
-    inGameUse: Boolean,
     onEditRequest: (Int) -> Unit,
     onQuitRequest: () -> Unit
 ) {
@@ -84,6 +82,7 @@ private fun MemoPadButton(
         modifier = modifier
             .semantics(mergeDescendants = true) {
                 role = Role.Button
+                testTag = MEMO_PAD_TAG
                 if (!inGameUse || value > -1 && hasBeenAdded == null) disabled()
             }
             .aspectRatio(1f)
@@ -104,21 +103,23 @@ private fun MemoPadButton(
                         if (hasBeenAdded) darkGrey else disabledBlue3, StrokeCap.Round)
                 }
             }
-            .onClick(enabled = inGameUse) {
+            .onClick(
+                enabled = inGameUse && (value == -1 || value > -1 && hasBeenAdded != null)
+            ) {
                 if (value == -1) onQuitRequest() else onEditRequest(value)
             },
         contentAlignment = Alignment.Center
     ) {
         when (value) {
             -1 -> Icon(
-                painter = painterResource("memo_arrow.svg"),
-                contentDescription = null,
+                painter = painterResource(PIXEL_ARROW),
+                contentDescription = PIXEL_ARROW_DESCR,
                 modifier = Modifier.requiredSize(27.dp),
                 tint = Color.Unspecified
             )
             0 -> Icon(
-                painter = painterResource("memo_zero.svg"),
-                contentDescription = null,
+                painter = painterResource(MEMO_ZERO),
+                contentDescription = MEMO_ZERO_DESCR,
                 modifier = Modifier.requiredSize(18.dp),
                 tint = Color.Unspecified
             )

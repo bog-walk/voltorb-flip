@@ -55,7 +55,11 @@ fun GameScreen(
         ) {
             MemoButton(isMemoOpen, onSelectRequest = onMemoRequest)
             if (isMemoOpen) {
-                MemoPad(grid[0][0].memoData, onEditRequest = onEditRequest,
+                MemoPad(
+                    memoData = if (currentPosition == -1 to -1) null else {
+                        grid[currentPosition.first][currentPosition.second].memoData
+                    },
+                    onEditRequest = onEditRequest,
                     onQuitRequest = onQuitRequest)
             }
             QuitButton(currentPosition, isMemoOpen, onQuitRequest)
