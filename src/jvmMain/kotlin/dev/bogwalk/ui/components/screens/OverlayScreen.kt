@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,11 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.components.buttons.OptionsPanel
 import dev.bogwalk.ui.components.buttons.QuitOption
-import dev.bogwalk.ui.style.VoltorbFlipTheme
-import dev.bogwalk.ui.style.darkGrey
+import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.Screen
 import dev.bogwalk.ui.util.drawLineBorder
 
@@ -28,8 +30,6 @@ fun OverlayScreen(
     onQuitRequest: () -> Unit,
     onInfoRequest: (Int) -> Unit
 ) {
-    var wantsToQuit by mutableStateOf(true)
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -38,14 +38,8 @@ fun OverlayScreen(
         horizontalAlignment = Alignment.End
     ) {
         if (screen == Screen.QUITTING) {
-            QuitOption("YES", wantsToQuit) {
-                wantsToQuit = true
-                onQuitRequest()
-            }
-            QuitOption("NO", !wantsToQuit) {
-                wantsToQuit = false
-                onPlayRequest()
-            }
+            QuitOption(YES) { onQuitRequest() }
+            QuitOption(NO) { onPlayRequest() }
         } else {
             OptionsPanel(onPlayRequest, onQuitRequest, onInfoRequest)
         }
@@ -66,16 +60,15 @@ fun OverlayScreen(
 private fun SpeechBox(
     text: String
 ) {
-    Box(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Max)
             .padding(horizontal = 8.dp, vertical = 10.dp)
             .background(
                 Brush.verticalGradient(
-                .7f to Color(0xff63636b),
-                .8f to Color(0xff5a5a63),
-                .85f to Color(0xff52525a)
+                    .7f to Color(0xff63636b), .8f to Color(0xff5a5a63),
+                    .85f to Color(0xff52525a)
                 )
             )
             .drawBehind {
@@ -83,7 +76,8 @@ private fun SpeechBox(
                 drawLineBorder(outerColor = darkGrey)
                 drawLineBorder(innerColor = Color(0xffffde6b))
             },
-        contentAlignment = Alignment.CenterStart
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = text,
@@ -91,11 +85,21 @@ private fun SpeechBox(
                 .fillMaxWidth(.9f)
                 .padding(horizontal = 15.dp, vertical = 10.dp)
                 .background(Color.White, RoundedCornerShape(2.dp))
-                .padding(horizontal = 10.dp, vertical = 5.dp)
-            ,
+                .padding(horizontal = 10.dp, vertical = 5.dp),
             maxLines = 2,
             style = MaterialTheme.typography.bodyMedium
         )
+        if (false) {  // this should be dependent on length of provided string (list of?)
+            IconButton(
+                onClick = {}
+            ) {
+                Icon(
+                    painter = painterResource(INFO_ARROW),
+                    contentDescription = INFO_ARROW_DESCR,
+                    modifier = Modifier.requiredSize(30.dp)
+                )
+            }
+        }
     }
 }
 

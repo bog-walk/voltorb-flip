@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.semantics.semantics
@@ -33,13 +32,13 @@ fun InfoScreen(
 
 @Composable
 private fun LevelHeader(level: Int) {
-    Box(
+    Text(
+        text = "$HEADER_START$level$HEADER_END",
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 10.dp)
             .background(darkGreen)
-            .drawWithContent {  // are these colours correct?
-                drawContent()
+            .drawBehind {  // are these colours correct?
                 drawLine(darkGrey,
                     Offset.Zero,
                     Offset(size.width, 0f),
@@ -56,15 +55,10 @@ private fun LevelHeader(level: Int) {
                     Offset(0f, size.height - 3.1.dp.toPx()),
                     Offset(size.width, size.height - 3.1.dp.toPx()),
                     4.dp.toPx())
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "$HEADER_START$level$HEADER_END",
-            modifier = Modifier.padding(vertical = 8.dp),
-            style = MaterialTheme.typography.titleMedium
-        )
-    }
+            }
+            .padding(vertical = 8.dp),
+        style = MaterialTheme.typography.titleMedium
+    )
 }
 
 @Composable

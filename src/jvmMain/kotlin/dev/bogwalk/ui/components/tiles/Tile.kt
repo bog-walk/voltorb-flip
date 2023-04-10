@@ -2,8 +2,8 @@ package dev.bogwalk.ui.components.tiles
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,7 +21,6 @@ enum class TileState {
     STATIC_INFO, NOT_FLIPPED, FLIPPED
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Tile(
     position: Pair<Int, Int>,
@@ -72,9 +71,12 @@ fun Tile(
                     }
                 }
             }
-            .onClick(
+            .clickable(
+                interactionSource = MutableInteractionSource(),
+                indication = null,  // this prevents mouse hover effect
                 enabled = tileState == TileState.NOT_FLIPPED &&
-                        position.first != -1 && position.second != -1
+                        position.first != -1 && position.second != -1,
+                role = Role.Button
             ) { onSelectRequest(position) },
         contentAlignment = Alignment.Center,
         content = content

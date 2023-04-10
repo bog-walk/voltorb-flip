@@ -12,7 +12,6 @@ class OptionsPanelTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    // currently failing due to local mutable states?
     @Test
     fun `OptionsPanel switches content when info requested`() {
         composeTestRule.setContent {

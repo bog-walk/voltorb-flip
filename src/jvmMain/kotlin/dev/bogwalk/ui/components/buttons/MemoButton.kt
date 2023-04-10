@@ -1,10 +1,10 @@
 package dev.bogwalk.ui.components.buttons
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.onClick
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.drawLineBorder
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MemoButton(
     isMemoOpen: Boolean,
@@ -31,7 +30,6 @@ fun MemoButton(
     Box(
         modifier = Modifier
             .semantics(mergeDescendants = true) {
-                role = Role.Button
                 testTag = MEMO_TAG
                 if (!inGameUse) disabled()  // in info screen
             }
@@ -43,7 +41,12 @@ fun MemoButton(
                 drawLineBorder(innerColor = darkGreen)
             }
             .offset(y = 10.dp)
-            .onClick(enabled = inGameUse) { onSelectRequest() },
+            .clickable(
+                interactionSource = MutableInteractionSource(),
+                indication = null,  // this prevents mouse hover effect
+                enabled = inGameUse,
+                role = Role.Button
+            ) { onSelectRequest() },
         contentAlignment = Alignment.TopCenter
     ) {
         Text(

@@ -1,17 +1,18 @@
 package dev.bogwalk.ui.components.buttons
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.onClick
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -19,24 +20,22 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.disabled
-import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.drawInFocusBorders
 import dev.bogwalk.ui.util.drawLineBorder
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun QuitButton(
     currentPosition: Pair<Int, Int>,
     isMemoOpen: Boolean,
     onQuitRequest: () -> Unit = {}
 ) {
-    Box(
+    Text(
+        text = QUIT,
         modifier = Modifier
             .semantics(mergeDescendants = true) {
-                role = Role.Button
                 if (currentPosition == -2 to -2) disabled()  // in info screen
             }
             .padding(vertical = 15.dp)
@@ -52,28 +51,27 @@ fun QuitButton(
                     drawLineBorder(innerColor = lightBlue3)
                 }
             }
-            .onClick(enabled = currentPosition != -2 to -2) { onQuitRequest() },
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = QUIT,
-            style = MaterialTheme.typography.labelLarge
-        )
-    }
+            .wrapContentHeight(Alignment.CenterVertically)
+            .clickable(
+                interactionSource = MutableInteractionSource(),
+                indication = null,  // this prevents mouse hover effect
+                enabled = currentPosition != -2 to -2,
+                role = Role.Button
+            ) { onQuitRequest() },
+        style = MaterialTheme.typography.labelLarge
+    )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun QuitOption(
     option: String,
-    isInFocus: Boolean,
     onSelect: () -> Unit = {}
 ) {
-    Box(
+    var isInFocus by remember { mutableStateOf(false) }
+
+    Text(
+        text = option,
         modifier = Modifier
-            .semantics(mergeDescendants = true) {
-                role = Role.Button
-            }
             .padding(4.dp)
             .requiredSize(80.dp, 50.dp)
             .background(Brush.verticalGradient(
@@ -88,14 +86,15 @@ fun QuitOption(
                     Stroke(4.dp.toPx())
                 )
             }
-            .onClick { onSelect() },
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = option,
-            style = MaterialTheme.typography.labelLarge
-        )
-    }
+            .wrapContentHeight(Alignment.CenterVertically)
+            .onFocusChanged { isInFocus = it.isFocused }
+            .clickable(
+                interactionSource = MutableInteractionSource(),
+                indication = null,  // this prevents mouse hover effect
+                role = Role.Button
+            ) { onSelect() },
+        style = MaterialTheme.typography.labelLarge
+    )
 }
 
 @Preview
@@ -115,8 +114,8 @@ private fun QuitButtonPreview() {
 private fun QuitOptionsPreview() {
     VoltorbFlipTheme {
         Column {
-            QuitOption(YES, isInFocus = true) {}
-            QuitOption(NO, isInFocus = false) {}
+            QuitOption(YES) {}
+            QuitOption(NO) {}
         }
     }
 }

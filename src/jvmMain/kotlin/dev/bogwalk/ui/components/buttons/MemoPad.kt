@@ -2,6 +2,7 @@ package dev.bogwalk.ui.components.buttons
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -68,7 +69,6 @@ fun MemoPad(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun MemoPadButton(
     modifier: Modifier,
@@ -81,7 +81,6 @@ private fun MemoPadButton(
     Box(
         modifier = modifier
             .semantics(mergeDescendants = true) {
-                role = Role.Button
                 testTag = MEMO_PAD_TAG
                 if (!inGameUse || value > -1 && hasBeenAdded == null) disabled()
             }
@@ -103,11 +102,14 @@ private fun MemoPadButton(
                         if (hasBeenAdded) darkGrey else disabledBlue3, StrokeCap.Round)
                 }
             }
-            .onClick(
-                enabled = inGameUse && (value == -1 || value > -1 && hasBeenAdded != null)
+            .clickable(
+                interactionSource = MutableInteractionSource(),
+                indication = null,  // this prevents mouse hover effect
+                enabled = inGameUse && (value == -1 || value > -1 && hasBeenAdded != null),
+                role = Role.Button
             ) {
                 if (value == -1) onQuitRequest() else onEditRequest(value)
-            },
+              },
         contentAlignment = Alignment.Center
     ) {
         when (value) {
