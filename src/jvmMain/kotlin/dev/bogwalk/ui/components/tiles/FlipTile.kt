@@ -34,19 +34,12 @@ fun FlipTile(
         onSelectRequest
     ) {
         if (isFlipped) {
-            if (value == 0) {
-                Icon(
-                    painter = painterResource(ZERO_OUTLINED),
-                    contentDescription = ZERO_OUTLINED_DESCR,
-                    modifier = Modifier.requiredSize(23.dp),
-                    tint = Color.Unspecified
-                )
-            } else {
-                Text(
-                    text = value.toString(),
-                    style = MaterialTheme.typography.labelSmall
-                )
-            }
+            Icon(
+                painter = painterResource("pixel_$value.svg"),
+                contentDescription = "Pixelated number $value",
+                modifier = Modifier.requiredSize(if (value == 0) 23.dp else 15.dp),
+                tint = Color.Unspecified
+            )
         }
         if (isMemoOpen) {  // flipped tiles still show memo pen even if all pad buttons disabled
             if (!isFlipped) {
@@ -78,8 +71,8 @@ fun FlipTile(
             }
             if (isInFocus) {
                 Icon(
-                    painter = painterResource(PIXEL_PENCIL),
-                    contentDescription = PIXEL_PENCIL_DESCR,
+                    painter = painterResource(MEMO_PENCIL),
+                    contentDescription = MEMO_PENCIL_DESCR,
                     modifier = Modifier.requiredSize(16.dp),
                     tint = Color.Unspecified
                 )

@@ -6,7 +6,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import dev.bogwalk.ui.style.CLOSE
 import dev.bogwalk.ui.style.MEMO_TAG
 import dev.bogwalk.ui.style.OPEN
-import dev.bogwalk.ui.style.PIXEL_X_DESCR
+import dev.bogwalk.ui.style.MEMO_X_DESCR
 import org.junit.Rule
 import kotlin.test.Test
 
@@ -46,7 +46,7 @@ class MemoButtonTest {
             .assertExists()
             .onChildren()
             .assertAny(hasTextExactly(OPEN))
-            .filterToOne(hasContentDescriptionExactly(PIXEL_X_DESCR))
+            .filterToOne(hasContentDescriptionExactly(MEMO_X_DESCR))
             .assertExists()
 
         isMemoOpen.value = true

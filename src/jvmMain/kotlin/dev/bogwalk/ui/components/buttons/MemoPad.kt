@@ -13,11 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.*
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.drawBorder
 
@@ -114,15 +110,23 @@ private fun MemoPadButton(
     ) {
         when (value) {
             -1 -> Icon(
-                painter = painterResource(PIXEL_ARROW),
-                contentDescription = PIXEL_ARROW_DESCR,
-                modifier = Modifier.requiredSize(27.dp),
+                painter = painterResource(MEMO_ARROW),
+                contentDescription = MEMO_ARROW_DESCR,
+                modifier = Modifier.requiredSize(32.dp),
                 tint = Color.Unspecified
             )
             0 -> Icon(
-                painter = painterResource(MEMO_ZERO),
-                contentDescription = MEMO_ZERO_DESCR,
-                modifier = Modifier.requiredSize(18.dp),
+                painter = painterResource(when (hasBeenAdded) {
+                    true -> MEMO_ZERO_ACTIVE
+                    false -> MEMO_ZERO_INACTIVE
+                    else -> MEMO_ZERO_DISABLED
+                }),
+                contentDescription = when (hasBeenAdded) {
+                    true -> MEMO_ZERO_ACTIVE_DESCR
+                    false -> MEMO_ZERO_INACTIVE_DESCR
+                    else -> MEMO_ZERO_DISABLED_DESCR
+                },
+                modifier = Modifier.requiredSize(20.dp),
                 tint = Color.Unspecified
             )
             else -> Text(
@@ -132,10 +136,7 @@ private fun MemoPadButton(
                     false -> memoGreen
                     else -> memoPink
                 },
-                fontSize = 15.sp,
-                fontWeight = FontWeight.ExtraBold,
-                fontFamily = FontFamily.Monospace,
-                textAlign = TextAlign.Center
+                style = MaterialTheme.typography.labelMedium
             )
         }
     }

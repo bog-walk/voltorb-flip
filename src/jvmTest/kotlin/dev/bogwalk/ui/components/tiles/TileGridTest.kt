@@ -81,7 +81,7 @@ class TileGridTest {
 
         composeTestRule.onAllNodesWithTag(TILE_TAG, useUnmergedTree = true)
             .assertCountEquals(35)
-            .filter(hasContentDescriptionExactly(PIXEL_PENCIL_DESCR))
+            .filter(hasContentDescriptionExactly(MEMO_PENCIL_DESCR))
             .assertCountEquals(0)
 
         padOpen.value = true
@@ -90,7 +90,7 @@ class TileGridTest {
         composeTestRule.onAllNodesWithTag(TILE_TAG, useUnmergedTree = true)
             .filter(hasAnyChild(hasTestTag(ZERO_TAG)))
             .assertCountEquals(5)
-            .filterToOne(hasContentDescriptionExactly(PIXEL_PENCIL_DESCR))
+            .filterToOne(hasContentDescriptionExactly(MEMO_PENCIL_DESCR))
 
         position.value = 1 to 0
         composeTestRule.waitForIdle()
@@ -98,6 +98,6 @@ class TileGridTest {
         composeTestRule.onAllNodesWithTag(TILE_TAG)
             .filter(hasTextExactly("1"))
             .assertCountEquals(5)
-            .filterToOne(hasContentDescriptionExactly(PIXEL_PENCIL_DESCR))
+            .filterToOne(hasContentDescriptionExactly(MEMO_PENCIL_DESCR))
     }
 }

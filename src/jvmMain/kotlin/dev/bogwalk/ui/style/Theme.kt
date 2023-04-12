@@ -12,6 +12,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 
 val lightGreen = Color(0xff28a068)
@@ -72,25 +73,24 @@ private val VoltorbFlipTypography = Typography(
         fontWeight = FontWeight.ExtraBold,
         fontFamily = FontFamily.SansSerif,
         letterSpacing = 2.sp,
+        shadow = Shadow(blueGrey, Offset(0f, 3f),1f),
         textAlign = TextAlign.Center
     ),
     titleMedium = TextStyle(  // info text (on green)
         color = offWhite,
         fontSize = 20.sp,
-        fontWeight = FontWeight.Light,
         fontFamily = FontFamily.Monospace,
-        shadow = Shadow(mediumGrey, Offset(.7f, .7f),.5f),
+        shadow = Shadow(mediumGrey, Offset(1f, 2f),0f),
         textAlign = TextAlign.Center
     ),
-    bodyMedium = TextStyle(  // text box text
+    bodyMedium = TextStyle(  // info box text (on white)
         color = mediumGrey,
-        fontSize = 16.sp,
+        fontSize = 18.sp,
         fontWeight = FontWeight.Light,
         fontFamily = FontFamily.Monospace,
-        letterSpacing = 1.sp,
-        shadow = Shadow(blueGrey, Offset(.6f, .6f),.3f),
-        textAlign = TextAlign.Start,
-        lineHeight = 20.sp
+        shadow = Shadow(blueGrey, Offset(1f, 1f),0f),
+        lineHeight = 1.2.em,
+        textAlign = TextAlign.Start
     ),
     bodySmall = TextStyle(  // unflipped tile with memo
         color = memoBrightYellow,
@@ -99,29 +99,27 @@ private val VoltorbFlipTypography = Typography(
         fontFamily = FontFamily.SansSerif,
         textAlign = TextAlign.Center
     ),
-    labelLarge = TextStyle(  // buttons [REPLACE with pixelated font]
+    labelLarge = TextStyle(  // buttons [replace with svg?]
         color = offWhite,
         fontSize = 20.sp,
         fontWeight = FontWeight.Bold,
         fontFamily = FontFamily.Monospace,
-        letterSpacing = 1.sp,
-        shadow = Shadow(slateGrey1, blurRadius = .5f),
+        shadow = Shadow(darkGrey, Offset(2f, 2f),0f),
         textAlign = TextAlign.Center
     ),
-    labelMedium = TextStyle(  // info tile
+    labelMedium = TextStyle(  // memo pad numbers
+        fontSize = 17.sp,
+        fontWeight = FontWeight.ExtraBold,
+        fontFamily = FontFamily.SansSerif,
+        textAlign = TextAlign.Center
+    ),
+    labelSmall = TextStyle(  // info tile
         color = darkGrey,
         fontSize = 15.sp,
         fontWeight = FontWeight.ExtraBold,
         fontFamily = FontFamily.SansSerif,
         letterSpacing = 1.sp,
         textAlign = TextAlign.Right
-    ),
-    labelSmall = TextStyle(  // flipped tile [REPLACE with pixelated font]
-        color = darkGrey,
-        fontSize = 18.sp,
-        fontWeight = FontWeight.ExtraBold,
-        fontFamily = FontFamily.SansSerif,
-        textAlign = TextAlign.Center
     )
 )
 

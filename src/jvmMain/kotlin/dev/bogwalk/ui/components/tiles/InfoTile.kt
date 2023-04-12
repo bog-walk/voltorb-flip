@@ -30,7 +30,7 @@ fun InfoTile(
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .offset(x = (-2).dp, y = (-3).dp),
-            style = MaterialTheme.typography.labelMedium
+            style = MaterialTheme.typography.labelSmall
         )
         Row(
             modifier = Modifier
@@ -47,7 +47,7 @@ fun InfoTile(
             )
             Text(
                 text = mines.toString(),
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.labelSmall
             )
         }
     }

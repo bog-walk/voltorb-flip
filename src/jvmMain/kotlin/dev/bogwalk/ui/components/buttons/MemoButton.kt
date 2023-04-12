@@ -49,7 +49,7 @@ fun MemoButton(
             ) { onSelectRequest() },
         contentAlignment = Alignment.TopCenter
     ) {
-        Text(
+        Text(  // drawStyle for outline font not yet available?
             text = if (isMemoOpen) CLOSE else OPEN,
             modifier = Modifier
                 .padding(top = 15.dp)
@@ -63,8 +63,8 @@ fun MemoButton(
             style = MaterialTheme.typography.labelLarge
         )
         Icon(
-            painter = painterResource(PIXEL_X),
-            contentDescription = PIXEL_X_DESCR,
+            painter = painterResource(MEMO_X),
+            contentDescription = MEMO_X_DESCR,
             modifier = Modifier.requiredSize(23.dp),
             tint = Color.Unspecified
         )

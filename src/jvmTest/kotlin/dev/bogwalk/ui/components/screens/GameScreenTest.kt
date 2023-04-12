@@ -67,7 +67,7 @@ class GameScreenTest {
             .assertAll(isEnabled())
 
         composeTestRule.onAllNodesWithTag(TILE_TAG)
-            .filterToOne(hasContentDescriptionExactly(PIXEL_PENCIL_DESCR))
+            .filterToOne(hasContentDescriptionExactly(MEMO_PENCIL_DESCR))
     }
 
     @Test
@@ -88,17 +88,17 @@ class GameScreenTest {
             .assertAll(isEnabled())
 
         composeTestRule.onAllNodesWithTag(TILE_TAG)
-            .filterToOne(hasContentDescriptionExactly(PIXEL_PENCIL_DESCR))
+            .filterToOne(hasContentDescriptionExactly(MEMO_PENCIL_DESCR))
 
         position.value = -1 to -1
         composeTestRule.waitForIdle()
 
         composeTestRule.onAllNodesWithTag(MEMO_PAD_TAG)
             .filterToOne(isEnabled())
-            .assertContentDescriptionEquals(PIXEL_ARROW_DESCR)
+            .assertContentDescriptionEquals(MEMO_ARROW_DESCR)
 
         composeTestRule.onAllNodesWithTag(TILE_TAG)
-            .filter(hasContentDescriptionExactly(PIXEL_PENCIL_DESCR))
+            .filter(hasContentDescriptionExactly(MEMO_PENCIL_DESCR))
             .assertCountEquals(0)
     }
 }

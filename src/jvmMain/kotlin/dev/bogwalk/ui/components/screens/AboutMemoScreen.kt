@@ -8,44 +8,67 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.components.buttons.MemoButton
 import dev.bogwalk.ui.components.buttons.MemoPad
 import dev.bogwalk.ui.components.tiles.FlipTile
-import dev.bogwalk.ui.style.ABOUT_TEXT
-import dev.bogwalk.ui.style.INFO_ARROW
-import dev.bogwalk.ui.style.INFO_ARROW_DESCR
-import dev.bogwalk.ui.style.VoltorbFlipTheme
+import dev.bogwalk.ui.style.*
 
 @Composable
 fun AboutMemoScreen() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 40.dp),
+            .padding(top = 50.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        MemoButton(isMemoOpen = false, inGameUse = false)
+        Box {
+            MemoButton(isMemoOpen = false, inGameUse = false)
+            Icon(
+                painter = painterResource(INFO_STYLUS),
+                contentDescription = INFO_STYLUS_DESCR,
+                modifier = Modifier
+                    .requiredSize(52.dp)
+                    .align(Alignment.TopEnd),
+                tint = Color.Unspecified
+            )
+        }
         Icon(
             painter = painterResource(INFO_ARROW),
             contentDescription = INFO_ARROW_DESCR,
-            modifier = Modifier.requiredSize(30.dp))
-        MemoPad(booleanArrayOf(true, true, true, false), inGameUse = false)
+            modifier = Modifier.requiredSize(26.dp),
+            tint = Color.Unspecified
+        )
+        Box {
+            MemoPad(booleanArrayOf(true, true, true, false), inGameUse = false)
+            Icon(
+                painter = painterResource(INFO_STYLUS),
+                contentDescription = INFO_STYLUS_DESCR,
+                modifier = Modifier
+                    .requiredSize(52.dp)
+                    .align(Alignment.TopEnd),
+                tint = Color.Unspecified
+            )
+        }
         Icon(
             painter = painterResource(INFO_ARROW),
             contentDescription = INFO_ARROW_DESCR,
-            modifier = Modifier.requiredSize(30.dp))
-        FlipTile(-1 to -1, 1, booleanArrayOf(true, true, true, false),
+            modifier = Modifier.requiredSize(26.dp),
+            tint = Color.Unspecified
+        )
+        FlipTile(-1 to -1, 1,
+            booleanArrayOf(true, true, true, false),
             isMemoOpen = true) {}
     }
     InfoTextBox(
         Modifier.fillMaxWidth()
     ) {
         Text(
-            text = ABOUT_TEXT,
+            text = ABOUT_INFO,
             modifier = Modifier.padding(vertical = 10.dp),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium
@@ -57,7 +80,7 @@ fun AboutMemoScreen() {
 @Composable
 private fun AboutMemoScreenPreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredSize(450.dp)) {
+        Box(Modifier.requiredSize(450.dp, 360.dp)) {
             TopScreen(Modifier) { AboutMemoScreen() }
         }
     }

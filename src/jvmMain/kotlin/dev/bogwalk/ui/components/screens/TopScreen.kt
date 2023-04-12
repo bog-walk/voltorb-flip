@@ -46,7 +46,7 @@ fun TopScreen(
                     alpha -= .25f
                 }
             },
-        verticalArrangement = Arrangement.SpaceEvenly,
+        verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
         content = content
     )

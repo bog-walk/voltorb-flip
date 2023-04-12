@@ -6,7 +6,7 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import dev.bogwalk.ui.style.MEMO_PAD_TAG
 import dev.bogwalk.ui.style.MEMO_ZERO_DESCR
-import dev.bogwalk.ui.style.PIXEL_ARROW_DESCR
+import dev.bogwalk.ui.style.MEMO_ARROW_DESCR
 import org.junit.Rule
 import kotlin.test.Test
 
@@ -22,7 +22,7 @@ class MemoPadTest {
 
         composeTestRule.onAllNodesWithTag(MEMO_PAD_TAG)
             .assertCountEquals(5)
-            .assertAny(hasContentDescriptionExactly(PIXEL_ARROW_DESCR))
+            .assertAny(hasContentDescriptionExactly(MEMO_ARROW_DESCR))
             .assertAny(hasContentDescriptionExactly(MEMO_ZERO_DESCR))
             .assertAny(hasTextExactly("1"))
             .assertAny(hasTextExactly("2"))
@@ -47,7 +47,7 @@ class MemoPadTest {
         composeTestRule.onAllNodesWithTag(MEMO_PAD_TAG)
             .assertCountEquals(5)
             .filterToOne(isEnabled())
-            .assertContentDescriptionEquals(PIXEL_ARROW_DESCR)
+            .assertContentDescriptionEquals(MEMO_ARROW_DESCR)
     }
 
     @Test

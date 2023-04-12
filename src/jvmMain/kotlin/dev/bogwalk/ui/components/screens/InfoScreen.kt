@@ -36,7 +36,7 @@ private fun LevelHeader(level: Int) {
         text = "$HEADER_START$level$HEADER_END",
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 10.dp)
+            .padding(top = 12.dp)
             .background(darkGreen)
             .drawBehind {  // are these colours correct?
                 drawLine(darkGrey,
@@ -122,14 +122,14 @@ private fun CoinsBox(
         Row(
             modifier = Modifier
                 .semantics { testTag = COIN_TAG }
-                .requiredHeight(65.dp)
+                //.requiredHeight(70.dp)
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = text,
-                modifier = Modifier.weight(.6f),
+                modifier = Modifier.weight(.6f).padding(vertical = 10.dp),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium
             )
@@ -145,7 +145,7 @@ private fun CoinsBox(
 @Composable
 private fun InfoScreenPreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredSize(450.dp)) {
+        Box(Modifier.requiredSize(450.dp, 360.dp)) {
             TopScreen(Modifier) { InfoScreen(1, 0, 0) }
         }
     }

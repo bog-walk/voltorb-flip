@@ -5,7 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import dev.bogwalk.ui.components.buttons.OptionsPanel
 import dev.bogwalk.ui.components.buttons.QuitOption
 import dev.bogwalk.ui.style.*
@@ -43,23 +44,29 @@ fun OverlayScreen(
         } else {
             OptionsPanel(onPlayRequest, onQuitRequest, onInfoRequest)
         }
-        SpeechBox(when (screen) {
-            Screen.ABOUT_GAME -> "Info about game..."
-            Screen.ABOUT_HINT -> "Here's a hint..."
-            Screen.ABOUT_MEMO -> "Info about memo..."
-            Screen.PRE_INFO -> "Which set of info?\n"
-            Screen.PRE_GAME -> "Play VOLTORB Flip Lv. 1?\n"
-            Screen.IN_GAME -> ""
-            Screen.QUITTING -> "You haven't found any Coins!\n" +
-                    "Are you sure you want to quit?"
-        })
+        SpeechBox(
+            when (screen) {
+                Screen.ABOUT_GAME -> "Info about game..."
+                Screen.ABOUT_HINT -> "Here's a hint..."
+                Screen.ABOUT_MEMO -> "Info about memo..."
+                Screen.PRE_INFO -> REQUEST_INFO
+                Screen.PRE_GAME -> START_GAME
+                Screen.IN_GAME -> ""
+                Screen.QUITTING -> QUIT_GAME
+            }
+        ) { onInfoRequest(4) }  // only 3 info screens will show next arrow
     }
 }
 
 @Composable
 private fun SpeechBox(
-    text: String
+    text: String,
+    onFinish: () -> Unit
 ) {
+    val groupedLines = text.split("|").map { it.split("\n") }
+    var group by remember { mutableStateOf(0) }
+    var line by remember { mutableStateOf(0) }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -76,27 +83,40 @@ private fun SpeechBox(
                 drawLineBorder(outerColor = darkGrey)
                 drawLineBorder(innerColor = Color(0xffffde6b))
             },
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically
+        horizontalArrangement = Arrangement.Start
     ) {
         Text(
-            text = text,
+            text = "${groupedLines[group][line]}\n${groupedLines[group][line + 1]}",
             modifier = Modifier
                 .fillMaxWidth(.9f)
-                .padding(horizontal = 15.dp, vertical = 10.dp)
+                .padding(start = 15.dp, top = 10.dp, end = 0.dp, bottom = 10.dp)
                 .background(Color.White, RoundedCornerShape(2.dp))
-                .padding(horizontal = 10.dp, vertical = 5.dp),
+                .padding(5.dp)
+                .align(Alignment.CenterVertically),
             maxLines = 2,
+            fontSize = 16.sp,
             style = MaterialTheme.typography.bodyMedium
         )
-        if (false) {  // this should be dependent on length of provided string (list of?)
+        if (groupedLines.size > 1) {
             IconButton(
-                onClick = {}
+                onClick = {
+                    if (group == groupedLines.lastIndex &&
+                        line + 1 == groupedLines[group].lastIndex) {
+                        onFinish()
+                    } else if (line + 1 == groupedLines[group].lastIndex) {
+                        group++
+                        line = 0
+                    } else  {
+                        line++
+                    }
+                },
+                modifier = Modifier.align(Alignment.Bottom)
             ) {
                 Icon(
-                    painter = painterResource(INFO_ARROW),
-                    contentDescription = INFO_ARROW_DESCR,
-                    modifier = Modifier.requiredSize(30.dp)
+                    painter = painterResource(NEXT_ARROW),
+                    contentDescription = NEXT_ARROW_DESCR,
+                    modifier = Modifier.requiredSize(20.dp),
+                    tint = Color.Unspecified
                 )
             }
         }
@@ -107,9 +127,11 @@ private fun SpeechBox(
 @Composable
 private fun SpeechBoxPreview() {
     VoltorbFlipTheme {
-        Column {
-            SpeechBox("Play VOLTORB Flip Lv. 1?\n")
-            SpeechBox("Here is an example of some long text that should break")
+        Box(Modifier.requiredSize(450.dp)) {
+            Column {
+                SpeechBox(START_GAME) {}
+                SpeechBox(ABOUT_TEXT) {}
+            }
         }
     }
 }

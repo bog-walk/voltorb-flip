@@ -3,7 +3,7 @@ package dev.bogwalk.ui.components.tiles
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
-import dev.bogwalk.ui.style.PIXEL_PENCIL_DESCR
+import dev.bogwalk.ui.style.MEMO_PENCIL_DESCR
 import dev.bogwalk.ui.style.TILE_TAG
 import dev.bogwalk.ui.style.ZERO_OUTLINED_DESCR
 import dev.bogwalk.ui.style.ZERO_TAG
@@ -126,7 +126,7 @@ class FlipTileTest {
         composeTestRule.onNodeWithTag(TILE_TAG, useUnmergedTree = true)
             .onChildren()
             .assertCountEquals(2)
-            .assertAny(hasContentDescriptionExactly(PIXEL_PENCIL_DESCR))
+            .assertAny(hasContentDescriptionExactly(MEMO_PENCIL_DESCR))
 
         state.value = true
         composeTestRule.waitForIdle()
@@ -134,7 +134,7 @@ class FlipTileTest {
         composeTestRule.onNodeWithTag(TILE_TAG, useUnmergedTree = true)
             .onChildren()
             .assertCountEquals(2)
-            .assertAny(hasContentDescriptionExactly(PIXEL_PENCIL_DESCR))
+            .assertAny(hasContentDescriptionExactly(MEMO_PENCIL_DESCR))
             .assertAny(hasTextExactly("1"))
     }
 }
