@@ -8,6 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -66,6 +69,7 @@ private val VoltorbFlipColorScheme = lightColorScheme(
     surface = lightGreen
 )
 
+@OptIn(ExperimentalTextApi::class)
 private val VoltorbFlipTypography = Typography(
     titleLarge = TextStyle(  // coin counter
         color = darkGrey,
@@ -99,12 +103,11 @@ private val VoltorbFlipTypography = Typography(
         fontFamily = FontFamily.SansSerif,
         textAlign = TextAlign.Center
     ),
-    labelLarge = TextStyle(  // buttons [replace with svg?]
-        color = offWhite,
+    labelLarge = TextStyle(  // buttons with stroke
+        color = darkGrey,
         fontSize = 20.sp,
-        fontWeight = FontWeight.Bold,
         fontFamily = FontFamily.Monospace,
-        shadow = Shadow(darkGrey, Offset(2f, 2f),0f),
+        drawStyle = Stroke(width = 4f, join = StrokeJoin.Round),
         textAlign = TextAlign.Center
     ),
     labelMedium = TextStyle(  // memo pad numbers

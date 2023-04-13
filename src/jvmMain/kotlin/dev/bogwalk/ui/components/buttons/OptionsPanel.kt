@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.style.*
@@ -78,6 +79,7 @@ fun OptionsPanel(
     }
 }
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 private fun OptionsButton(
     text: String,
@@ -86,9 +88,8 @@ private fun OptionsButton(
 ) {
     var isInFocus by remember { mutableStateOf(false) }
 
-    Text(
-        text = text,
-        modifier = Modifier
+    Box(
+        Modifier
             .semantics { testTag = OPTIONS_TAG }
             .fillMaxWidth()
             .padding(horizontal = 2.dp)
@@ -105,8 +106,20 @@ private fun OptionsButton(
                 indication = null,  // this prevents mouse hover effect
                 role = Role.Button
             ) { onActionRequest(optionNum) },
-        style = MaterialTheme.typography.labelLarge
-    )
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelLarge
+        )
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelLarge.copy(
+                color = offWhite,
+                drawStyle = null
+            )
+        )
+    }
 }
 
 @Preview

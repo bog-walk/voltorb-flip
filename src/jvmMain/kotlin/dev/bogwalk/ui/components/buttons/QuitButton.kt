@@ -17,16 +17,19 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.disabled
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.drawInFocusBorders
 import dev.bogwalk.ui.util.drawLineBorder
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun QuitButton(
     screen: Screen,
@@ -34,9 +37,8 @@ fun QuitButton(
     isMemoOpen: Boolean,
     onQuitRequest: () -> Unit = {}
 ) {
-    Text(
-        text = QUIT,
-        modifier = Modifier
+    Box(
+        Modifier
             .semantics(mergeDescendants = true) {
                 if (screen != Screen.IN_GAME) disabled()
             }
@@ -60,17 +62,29 @@ fun QuitButton(
                 enabled = screen == Screen.IN_GAME,
                 role = Role.Button
             ) { onQuitRequest() },
-        style = MaterialTheme.typography.labelLarge
-    )
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = QUIT,
+            style = MaterialTheme.typography.labelLarge
+        )
+        Text(
+            text = QUIT,
+            style = MaterialTheme.typography.labelLarge.copy(
+                color = offWhite,
+                drawStyle = null
+            )
+        )
+    }
 }
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun QuitOption(
     option: String,
     onSelect: () -> Unit = {}
 ) {
     var isInFocus by remember { mutableStateOf(false) }
-
     Text(
         text = option,
         modifier = Modifier
@@ -95,7 +109,9 @@ fun QuitOption(
                 indication = null,  // this prevents mouse hover effect
                 role = Role.Button
             ) { onSelect() },
-        style = MaterialTheme.typography.labelLarge
+        style = MaterialTheme.typography.labelLarge.copy(
+            drawStyle = Stroke(width = 1.5f, join = StrokeJoin.Round)
+        )
     )
 }
 

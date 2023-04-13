@@ -18,11 +18,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.*
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.drawLineBorder
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun MemoButton(
     screen: Screen,
@@ -51,9 +53,8 @@ fun MemoButton(
             ) { onSelectRequest() },
         contentAlignment = Alignment.TopCenter
     ) {
-        Text(  // drawStyle for outline font not yet available?
-            text = if (isMemoOpen) CLOSE else OPEN,
-            modifier = Modifier
+        Box(
+            Modifier
                 .padding(top = 15.dp)
                 .width(82.dp)
                 .fillMaxHeight(.75f)
@@ -62,8 +63,20 @@ fun MemoButton(
                     .63f to lightGrey2, .66f to lightGrey3
                 ), RoundedCornerShape(2.dp))
                 .padding(top = 10.dp),
-            style = MaterialTheme.typography.labelLarge
-        )
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = if (isMemoOpen) CLOSE else OPEN,
+                style = MaterialTheme.typography.labelLarge
+            )
+            Text(
+                text = if (isMemoOpen) CLOSE else OPEN,
+                style = MaterialTheme.typography.labelLarge.copy(
+                    color = offWhite,
+                    drawStyle = null
+                )
+            )
+        }
         Icon(
             painter = painterResource(MEMO_X),
             contentDescription = MEMO_X_DESCR,
