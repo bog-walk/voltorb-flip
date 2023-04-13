@@ -2,59 +2,68 @@ package dev.bogwalk.ui.components.screens
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.components.buttons.OptionsPanel
 import dev.bogwalk.ui.components.buttons.QuitOption
 import dev.bogwalk.ui.style.*
-import dev.bogwalk.ui.util.Screen
 import dev.bogwalk.ui.util.drawLineBorder
 
 @Composable
 fun OverlayScreen(
     screen: Screen,
     onPlayRequest: () -> Unit,
+    onClearRequest: () -> Unit,
     onQuitRequest: () -> Unit,
-    onInfoRequest: (Int) -> Unit
+    onChangeScreen: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0f,0f,0f,.3f)),
+            .background(
+                if (screen == Screen.REVEAL) Color.Transparent else Color(0f,0f,0f,.3f)
+            )
+            .clickable(enabled = screen == Screen.REVEAL) { onClearRequest },
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.End
     ) {
-        if (screen == Screen.QUITTING) {
-            QuitOption(YES) { onQuitRequest() }
-            QuitOption(NO) { onPlayRequest() }
-        } else {
-            OptionsPanel(onPlayRequest, onQuitRequest, onInfoRequest)
-        }
-        SpeechBox(
-            when (screen) {
-                Screen.ABOUT_GAME -> "Info about game..."
-                Screen.ABOUT_HINT -> "Here's a hint..."
-                Screen.ABOUT_MEMO -> "Info about memo..."
-                Screen.PRE_INFO -> REQUEST_INFO
-                Screen.PRE_GAME -> START_GAME
-                Screen.IN_GAME -> ""
-                Screen.QUITTING -> QUIT_GAME
+        when (screen) {
+            Screen.PRE_GAME, Screen.PRE_INFO -> {
+                OptionsPanel(screen, onPlayRequest, onQuitRequest, onChangeScreen)
             }
-        ) { onInfoRequest(4) }  // only 3 info screens will show next arrow
+            Screen.QUITTING -> {
+                QuitOption(YES) { onQuitRequest() }
+                QuitOption(NO) { onPlayRequest() }
+            }
+            else -> {}
+        }
+        if (screen != Screen.REVEAL) {
+            SpeechBox(
+                when (screen) {
+                    Screen.ABOUT_GAME -> HOW_TO_TEXT
+                    Screen.ABOUT_HINT -> HINT_TEXT
+                    Screen.ABOUT_MEMO -> ABOUT_TEXT
+                    Screen.PRE_GAME -> START_GAME
+                    Screen.PRE_INFO -> REQUEST_INFO
+                    Screen.QUITTING -> QUIT_GAME
+                    else -> ""
+                }
+            ) { onChangeScreen(Screen.PRE_INFO.ordinal) }
+        }  // only 3 info screens will show next arrow
     }
 }
 
@@ -72,6 +81,7 @@ private fun SpeechBox(
             .fillMaxWidth()
             .height(IntrinsicSize.Max)
             .padding(horizontal = 8.dp, vertical = 10.dp)
+            .testTag(SPEECH_TAG)
             .background(
                 Brush.verticalGradient(
                     .7f to Color(0xff63636b), .8f to Color(0xff5a5a63),
@@ -102,6 +112,8 @@ private fun SpeechBox(
                 onClick = {
                     if (group == groupedLines.lastIndex &&
                         line + 1 == groupedLines[group].lastIndex) {
+                        group = 0
+                        line = 0
                         onFinish()
                     } else if (line + 1 == groupedLines[group].lastIndex) {
                         group++
@@ -115,7 +127,7 @@ private fun SpeechBox(
                 Icon(
                     painter = painterResource(NEXT_ARROW),
                     contentDescription = NEXT_ARROW_DESCR,
-                    modifier = Modifier.requiredSize(20.dp),
+                    modifier = Modifier.requiredSize(16.dp),
                     tint = Color.Unspecified
                 )
             }
@@ -138,20 +150,40 @@ private fun SpeechBoxPreview() {
 
 @Preview
 @Composable
-private fun OverlayScreenPreview() {
+private fun OverlayScreenPreGamePreview() {
     VoltorbFlipTheme {
         Box(Modifier.requiredSize(450.dp)) {
-            OverlayScreen(Screen.PRE_GAME, {}, {}) {}
+            OverlayScreen(Screen.PRE_GAME, {}, {}, {}) {}
         }
     }
 }
 
 @Preview
 @Composable
-private fun OverlayScreenQuitPreview() {
+private fun OverlayScreenPreInfoPreview() {
     VoltorbFlipTheme {
         Box(Modifier.requiredSize(450.dp)) {
-            OverlayScreen(Screen.QUITTING, {}, {}) {}
+            OverlayScreen(Screen.PRE_INFO, {}, {}, {}) {}
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun OverlayScreenQuittingPreview() {
+    VoltorbFlipTheme {
+        Box(Modifier.requiredSize(450.dp)) {
+            OverlayScreen(Screen.QUITTING, {}, {}, {}) {}
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun OverlayScreenInInfoPreview() {
+    VoltorbFlipTheme {
+        Box(Modifier.requiredSize(450.dp)) {
+            OverlayScreen(Screen.ABOUT_GAME, {}, {}, {}) {}
         }
     }
 }

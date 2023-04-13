@@ -17,20 +17,21 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
+import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.drawBorder
 import dev.bogwalk.ui.util.drawLineBorder
 
 @Composable
 fun OptionsPanel(
+    screen: Screen,
     onPlayRequest: () -> Unit,
     onQuitRequest: () -> Unit,
-    onInfoRequest: (Int) -> Unit
+    onChangeScreen: (Int) -> Unit
 ) {
     val mainOptions = listOf(PLAY, INFO, QUIT)
     val infoOptions = listOf(HOW_TO, HINT, ABOUT, RETURN)
 
-    var showInfoOptions by remember { mutableStateOf(false) }
     // should buttons be highlighted on mouse hover or on focus change?
 
     Column(
@@ -46,22 +47,7 @@ fun OptionsPanel(
             .background(disabledBlue3),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        if (showInfoOptions) {
-            for (i in 0..2) {
-                key(i) {
-                    OptionsButton(
-                        text = infoOptions[i],
-                        optionNum = i,
-                        onInfoRequest = { onInfoRequest(it) }
-                    )
-                }
-            }
-            OptionsButton(
-                text = infoOptions[3],
-                optionNum = 3,
-                onActionRequest = { showInfoOptions = false }
-            )
-        } else {
+        if (screen == Screen.PRE_GAME) {
             for ((i, option) in mainOptions.withIndex()) {
                 key(i) {
                     OptionsButton(
@@ -70,10 +56,21 @@ fun OptionsPanel(
                         onActionRequest = {
                             when (it) {
                                 0 -> onPlayRequest()
-                                1 -> showInfoOptions = true
+                                1 -> onChangeScreen(Screen.PRE_INFO.ordinal)
                                 2 -> onQuitRequest()
                             }
                         }
+                    )
+                }
+            }
+        }
+        if (screen == Screen.PRE_INFO) {
+            for ((i, option) in infoOptions.withIndex()) {
+                key(i) {
+                    OptionsButton(
+                        text = option,
+                        optionNum = i,
+                        onActionRequest = { onChangeScreen(it) }
                     )
                 }
             }
@@ -85,8 +82,7 @@ fun OptionsPanel(
 private fun OptionsButton(
     text: String,
     optionNum: Int,
-    onActionRequest: ((Int) -> Unit)? = null,
-    onInfoRequest: ((Int) -> Unit)? = null
+    onActionRequest: (Int) -> Unit
 ) {
     var isInFocus by remember { mutableStateOf(false) }
 
@@ -108,9 +104,7 @@ private fun OptionsButton(
                 interactionSource = MutableInteractionSource(),
                 indication = null,  // this prevents mouse hover effect
                 role = Role.Button
-            ) {
-                onActionRequest?.invoke(optionNum) ?: onInfoRequest?.invoke(optionNum)
-            },
+            ) { onActionRequest(optionNum) },
         style = MaterialTheme.typography.labelLarge
     )
 }
@@ -119,6 +113,9 @@ private fun OptionsButton(
 @Composable
 private fun OptionsPanelPreview() {
     VoltorbFlipTheme {
-        OptionsPanel({}, {}, {})
+        Column {
+            OptionsPanel(Screen.PRE_GAME, {}, {}, {})
+            OptionsPanel(Screen.PRE_INFO, {}, {}, {})
+        }
     }
 }

@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.components.tiles.FlipTile
 import dev.bogwalk.ui.components.buttons.QuitButton
 import dev.bogwalk.ui.style.*
@@ -26,35 +27,35 @@ fun HowToPlayScreen() {
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        FlipTile(-1 to -1, 3, isFlipped = true)
+        FlipTile(Screen.ABOUT_GAME, -1 to -1, 3, isFlipped = true)
         Icon(
             painter = painterResource(INFO_ARROW),
             contentDescription = INFO_ARROW_DESCR,
             modifier = Modifier.requiredSize(26.dp),
             tint = Color.Unspecified
         )
-        FlipTile(-1 to -1, 1, isFlipped = true)
+        FlipTile(Screen.ABOUT_GAME, -1 to -1, 1, isFlipped = true)
         Icon(
             painter = painterResource(INFO_ARROW),
             contentDescription = INFO_ARROW_DESCR,
             modifier = Modifier.requiredSize(26.dp),
             tint = Color.Unspecified
         )
-        FlipTile(-1 to -1, 2, isFlipped = true)
+        FlipTile(Screen.ABOUT_GAME, -1 to -1, 2, isFlipped = true)
         Icon(
             painter = painterResource(INFO_ARROW),
             contentDescription = INFO_ARROW_DESCR,
             modifier = Modifier.requiredSize(26.dp),
             tint = Color.Unspecified
         )
-        FlipTile(-1 to -1, 1, isFlipped = true)
+        FlipTile(Screen.ABOUT_GAME, -1 to -1, 1, isFlipped = true)
         Icon(
             painter = painterResource(INFO_ARROW),
             contentDescription = INFO_ARROW_DESCR,
             modifier = Modifier.requiredSize(26.dp),
             tint = Color.Unspecified
         )
-        FlipTile(-1 to -1, 3, isFlipped = true)
+        FlipTile(Screen.ABOUT_GAME, -1 to -1, 3, isFlipped = true)
     }
     InfoTextBox(
         Modifier.fillMaxWidth()
@@ -82,7 +83,7 @@ fun HowToPlayScreen() {
             modifier = Modifier.weight(.25f),
             contentAlignment = Alignment.Center
         ) {
-            QuitButton(-2 to -2, false)
+            QuitButton(Screen.ABOUT_GAME, 0 to 0, false)
         }
         InfoTextBox(
             Modifier.weight(.75f)
@@ -103,7 +104,7 @@ fun HowToPlayScreen() {
             modifier = Modifier.weight(.25f),
             contentAlignment = Alignment.Center
         ) {
-            FlipTile(-1 to -1, 0, isFlipped = true)
+            FlipTile(Screen.ABOUT_GAME, -1 to -1, 0, isFlipped = true)
         }
         InfoTextBox(
             Modifier.weight(.75f)

@@ -10,8 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.*
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.unit.dp
+import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.drawInFocusBorders
 import dev.bogwalk.ui.util.drawInsetBackground
@@ -23,6 +25,7 @@ enum class TileState {
 
 @Composable
 fun Tile(
+    screen: Screen,
     position: Pair<Int, Int>,
     tileState: TileState,
     isInFocus: Boolean = false,
@@ -34,10 +37,10 @@ fun Tile(
         modifier = Modifier
             .semantics(mergeDescendants = true) {
                 role = Role.Button
-                testTag = TILE_TAG
-                if (tileState != TileState.NOT_FLIPPED || position.first == -1 ||
-                    position.second == -1) disabled()
+                if (screen != Screen.IN_GAME ||
+                    tileState != TileState.NOT_FLIPPED) disabled()
             }
+            .testTag(TILE_TAG)
             .padding(7.dp)
             .requiredSize(42.dp)
             .background(color = when (tileState) {
@@ -74,8 +77,7 @@ fun Tile(
             .clickable(
                 interactionSource = MutableInteractionSource(),
                 indication = null,  // this prevents mouse hover effect
-                enabled = tileState == TileState.NOT_FLIPPED &&
-                        position.first != -1 && position.second != -1,
+                enabled = screen == Screen.IN_GAME && tileState == TileState.NOT_FLIPPED,
                 role = Role.Button
             ) { onSelectRequest(position) },
         contentAlignment = Alignment.Center,
@@ -120,13 +122,13 @@ private fun DrawScope.drawConnectors(position: Pair<Int, Int>) {
 private fun TilePreview() {
     VoltorbFlipTheme {
         Column {
-            Tile(0 to 0, TileState.STATIC_INFO) {}
-            Tile(0 to 1, TileState.NOT_FLIPPED) {}
-            Tile(0 to 1, TileState.NOT_FLIPPED, isInFocus = true) {}
-            Tile(0 to 4, TileState.NOT_FLIPPED, isInFocus = true, isMemoOpen = true) {}
-            Tile(0 to 2, TileState.FLIPPED) {}
-            Tile(0 to 3, TileState.FLIPPED, isInFocus = true) {}
-            Tile(0 to 4, TileState.FLIPPED, isInFocus = true, isMemoOpen = true) {}
+            Tile(Screen.IN_GAME, 0 to 0, TileState.STATIC_INFO) {}
+            Tile(Screen.IN_GAME, 0 to 1, TileState.NOT_FLIPPED) {}
+            Tile(Screen.IN_GAME, 0 to 1, TileState.NOT_FLIPPED, isInFocus = true) {}
+            Tile(Screen.IN_GAME, 0 to 4, TileState.NOT_FLIPPED, isInFocus = true, isMemoOpen = true) {}
+            Tile(Screen.IN_GAME, 0 to 2, TileState.FLIPPED) {}
+            Tile(Screen.IN_GAME, 0 to 3, TileState.FLIPPED, isInFocus = true) {}
+            Tile(Screen.IN_GAME, 0 to 4, TileState.FLIPPED, isInFocus = true, isMemoOpen = true) {}
         }
     }
 }
@@ -137,13 +139,13 @@ private fun TileConnectorPreview() {
     VoltorbFlipTheme {
         Column {
             Row {
-                FlipTile(3 to 3, 0)
-                FlipTile(3 to 4, 1, isFlipped = true)
+                FlipTile(Screen.IN_GAME, 3 to 3, 0)
+                FlipTile(Screen.IN_GAME, 3 to 4, 1, isFlipped = true)
                 InfoTile(3, 4, 1)
             }
             Row {
-                FlipTile(4 to 3, 0)
-                FlipTile(4 to 4, 0)
+                FlipTile(Screen.IN_GAME, 4 to 3, 0)
+                FlipTile(Screen.IN_GAME, 4 to 4, 0)
                 InfoTile(4, 8, 1)
             }
             Row {

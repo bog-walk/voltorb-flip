@@ -7,12 +7,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.model.GameTile
+import dev.bogwalk.ui.Screen
+import dev.bogwalk.ui.style.GRID_TAG
 import dev.bogwalk.ui.style.VoltorbFlipTheme
 
 @Composable
 fun TileGrid(
+    screen: Screen,
     grid: List<List<GameTile>>,
     infoGrid: List<Pair<Int, Int>>,
     currentPosition: Pair<Int, Int>,
@@ -20,13 +24,16 @@ fun TileGrid(
     onSelectRequest: (Pair<Int, Int>) -> Unit
 ) {
     Column(
-        Modifier.padding(start = 8.dp, top = 8.dp, end = 4.dp, bottom = 8.dp)
+        Modifier
+            .padding(start = 8.dp, top = 8.dp, end = 4.dp, bottom = 8.dp)
+            .testTag(GRID_TAG)
     ) {
         for ((i, row) in grid.withIndex()) {
             Row {
                 for (tile in row) {
                     key(tile.position) {
                         FlipTile(
+                            screen,
                             tile.position, tile.value, tile.memoData,
                             isInFocus = tile.position == currentPosition,
                             isFlipped = tile.isFlipped,
@@ -53,6 +60,7 @@ fun TileGrid(
 private fun TileGridPreview() {
     VoltorbFlipTheme {
         TileGrid(
+            screen = Screen.IN_GAME,
             grid = List(5) { r -> List(5) { c -> GameTile(r to c, 1) } },
             infoGrid = listOf(
                 7 to 0, 6 to 0, 6 to 1, 3 to 2, 2 to 3, 5 to 1, 6 to 1, 2 to 3, 6 to 0, 5 to 1

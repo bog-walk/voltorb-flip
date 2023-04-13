@@ -11,10 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.components.tiles.FlipTile
 import dev.bogwalk.ui.style.*
 
@@ -74,9 +74,9 @@ private fun RulesBox() {
                 .drawBehind { drawUnderLine() },
             verticalAlignment = Alignment.CenterVertically
         ) {
-            FlipTile(-1 to -1, 1, isFlipped = true)
-            FlipTile(-1 to -1, 2, isFlipped = true)
-            FlipTile(-1 to -1, 3, isFlipped = true)
+            FlipTile(Screen.PRE_GAME, -1 to -1, 1, isFlipped = true)
+            FlipTile(Screen.PRE_GAME, -1 to -1, 2, isFlipped = true)
+            FlipTile(Screen.PRE_GAME, -1 to -1, 3, isFlipped = true)
             Text(
                 text = INFO_POINTS,
                 modifier = Modifier.weight(.6f).padding(start = 5.dp),
@@ -91,7 +91,7 @@ private fun RulesBox() {
                 .drawBehind { drawUnderLine() },
             verticalAlignment = Alignment.CenterVertically
         ) {
-            FlipTile(-1 to -1, 0, isFlipped = true)
+            FlipTile(Screen.PRE_GAME, -1 to -1, 0, isFlipped = true)
             Text(
                 text = GAME_OVER,
                 modifier = Modifier.padding(start = 5.dp),
@@ -121,10 +121,9 @@ private fun CoinsBox(
     ) {
         Row(
             modifier = Modifier
-                .semantics { testTag = COIN_TAG }
-                //.requiredHeight(70.dp)
                 .fillMaxWidth()
-                .padding(horizontal = 10.dp),
+                .padding(horizontal = 10.dp)
+                .testTag(COIN_TAG),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(

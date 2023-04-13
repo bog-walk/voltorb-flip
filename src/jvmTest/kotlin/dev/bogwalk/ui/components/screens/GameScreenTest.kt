@@ -4,6 +4,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import dev.bogwalk.model.GameTile
+import dev.bogwalk.ui.Screen
+import dev.bogwalk.ui.assertGameScreenDisabled
 import dev.bogwalk.ui.style.*
 import org.junit.Rule
 import kotlin.test.Test
@@ -16,6 +18,7 @@ class GameScreenTest {
     fun `GameScreen loads with initial correct content`() {
         composeTestRule.setContent {
             GameScreen(
+                Screen.IN_GAME,
                 List(5) { r -> List(5) { c -> GameTile(r to c, 1) } },
                 listOf(7 to 0, 6 to 0, 6 to 1, 3 to 2, 2 to 3, 5 to 1, 6 to 1, 2 to 3, 6 to 0, 5 to 1),
                 0 to 0, false,
@@ -38,11 +41,39 @@ class GameScreenTest {
     }
 
     @Test
+    fun `GameScreen entirely disabled if not in game`() {
+        val state = mutableStateOf(Screen.IN_GAME)
+
+        composeTestRule.setContent {
+            GameScreen(
+                state.value,
+                List(5) { r -> List(5) { c -> GameTile(r to c, 1) } },
+                listOf(7 to 0, 6 to 0, 6 to 1, 3 to 2, 2 to 3, 5 to 1, 6 to 1, 2 to 3, 6 to 0, 5 to 1),
+                0 to 0, false,
+                {}, {}, {}) {}
+        }
+
+        composeTestRule.onAllNodesWithTag(TILE_TAG)
+            .filter(isEnabled())
+            .assertCountEquals(25)
+        composeTestRule.onNodeWithTag(MEMO_TAG)
+            .assertIsEnabled()
+        composeTestRule.onNodeWithText(QUIT)
+            .assertIsEnabled()
+
+        state.value = Screen.QUITTING
+        composeTestRule.waitForIdle()
+
+        composeTestRule.assertGameScreenDisabled()
+    }
+
+    @Test
     fun `GameScreen changes content when memo is open`() {
         val padOpen = mutableStateOf(false)
 
         composeTestRule.setContent {
             GameScreen(
+                Screen.IN_GAME,
                 List(5) { r -> List(5) { c -> GameTile(r to c, 1) } },
                 listOf(7 to 0, 6 to 0, 6 to 1, 3 to 2, 2 to 3, 5 to 1, 6 to 1, 2 to 3, 6 to 0, 5 to 1),
                 0 to 0,
@@ -76,6 +107,7 @@ class GameScreenTest {
 
         composeTestRule.setContent {
             GameScreen(
+                Screen.IN_GAME,
                 List(5) { r -> List(5) { c -> GameTile(r to c, 1) } },
                 listOf(7 to 0, 6 to 0, 6 to 1, 3 to 2, 2 to 3, 5 to 1, 6 to 1, 2 to 3, 6 to 0, 5 to 1),
                 currentPosition = position.value,

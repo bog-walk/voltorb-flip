@@ -15,24 +15,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.unit.dp
+import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.drawLineBorder
 
 @Composable
 fun MemoButton(
+    screen: Screen,
     isMemoOpen: Boolean,
-    inGameUse: Boolean = true,
     onSelectRequest: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
             .semantics(mergeDescendants = true) {
-                testTag = MEMO_TAG
-                if (!inGameUse) disabled()  // in info screen
+                if (screen != Screen.IN_GAME) disabled()
             }
+            .testTag(MEMO_TAG)
             .padding(vertical = 12.dp, horizontal = 10.dp)
             .requiredSize(90.dp, 100.dp)
             .background(lightGreen)
@@ -44,7 +46,7 @@ fun MemoButton(
             .clickable(
                 interactionSource = MutableInteractionSource(),
                 indication = null,  // this prevents mouse hover effect
-                enabled = inGameUse,
+                enabled = screen == Screen.IN_GAME,
                 role = Role.Button
             ) { onSelectRequest() },
         contentAlignment = Alignment.TopCenter
@@ -76,8 +78,8 @@ fun MemoButton(
 private fun MemoButtonPreview() {
     VoltorbFlipTheme {
         Column {
-            MemoButton(isMemoOpen = false)
-            MemoButton(isMemoOpen = true)
+            MemoButton(Screen.IN_GAME, false)
+            MemoButton(Screen.IN_GAME, true)
         }
     }
 }

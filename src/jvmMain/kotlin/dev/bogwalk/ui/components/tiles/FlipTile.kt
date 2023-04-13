@@ -14,10 +14,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
+import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.style.*
 
 @Composable
 fun FlipTile(
+    screen: Screen,
     position: Pair<Int, Int>,
     value: Int,
     memo: BooleanArray = BooleanArray(4),
@@ -27,6 +29,7 @@ fun FlipTile(
     onSelectRequest: (Pair<Int, Int>) -> Unit = {}
 ) {
     Tile(
+        screen,
         position,
         if (isFlipped) TileState.FLIPPED else TileState.NOT_FLIPPED,
         isInFocus,
@@ -36,7 +39,7 @@ fun FlipTile(
         if (isFlipped) {
             Icon(
                 painter = painterResource("pixel_$value.svg"),
-                contentDescription = "Pixelated number $value",
+                contentDescription = "$FLIPPED_DESCR$value",
                 modifier = Modifier.requiredSize(if (value == 0) 23.dp else 15.dp),
                 tint = Color.Unspecified
             )
@@ -86,11 +89,11 @@ fun FlipTile(
 private fun FlipTilePreview() {
     VoltorbFlipTheme {
         Column {
-            FlipTile(0 to 0, 0) // unflipped & not in focus
-            FlipTile(0 to 1, 0, isInFocus = true) // unflipped & in focus
-            FlipTile(1 to 1, 1, isFlipped = true) // flipped with value
-            FlipTile(3 to 2, 2, isInFocus = true, isFlipped = true) // last flipped
-            FlipTile(1 to 3, 0, isFlipped = true) // flipped with zero
+            FlipTile(Screen.IN_GAME, 0 to 0, 0) // unflipped & not in focus
+            FlipTile(Screen.IN_GAME, 0 to 1, 0, isInFocus = true) // unflipped & in focus
+            FlipTile(Screen.IN_GAME, 1 to 1, 1, isFlipped = true) // flipped with value
+            FlipTile(Screen.IN_GAME, 3 to 2, 2, isInFocus = true, isFlipped = true) // last flipped
+            FlipTile(Screen.IN_GAME, 1 to 3, 0, isFlipped = true) // flipped with zero
         }
     }
 }
@@ -101,20 +104,23 @@ private fun FlipTileMemoPreview() {
     VoltorbFlipTheme {
         Column {
             // unflipped with memo open & no stored memo
-            FlipTile(2 to 0, 0, isMemoOpen = true)
+            FlipTile(Screen.IN_GAME, 2 to 0, 0, isMemoOpen = true)
             // unflipped with memo open & stored memo data
-            FlipTile(2 to 0, 0,
+            FlipTile(Screen.IN_GAME, 2 to 0, 0,
                 memo = booleanArrayOf(true, true, true, true), isMemoOpen = true)
             // unflipped, in focus, with memo open & no stored memo
-            FlipTile(2 to 0, 0, isInFocus = true, isMemoOpen = true)
+            FlipTile(Screen.IN_GAME, 2 to 0, 0, isInFocus = true, isMemoOpen = true)
             // unflipped, in focus, with memo open & stored memo data
-            FlipTile(2 to 0, 0, memo = booleanArrayOf(true, true, false, false),
+            FlipTile(Screen.IN_GAME, 2 to 0, 0,
+                memo = booleanArrayOf(true, true, false, false),
                 isInFocus = true, isMemoOpen = true)
             // flipped, with memo open & stored memo data
-            FlipTile(2 to 0, 2, memo = booleanArrayOf(true, true, false, false),
+            FlipTile(Screen.IN_GAME, 2 to 0, 2,
+                memo = booleanArrayOf(true, true, false, false),
                 isFlipped = true, isMemoOpen = true)
             // flipped, in focus, with memo open & stored memo data
-            FlipTile(2 to 0, 2, memo = booleanArrayOf(true, true, false, false),
+            FlipTile(Screen.IN_GAME, 2 to 0, 2,
+                memo = booleanArrayOf(true, true, false, false),
                 isInFocus = true, isFlipped = true, isMemoOpen = true)
         }
     }

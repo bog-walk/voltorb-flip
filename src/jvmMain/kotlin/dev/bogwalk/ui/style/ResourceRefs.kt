@@ -36,11 +36,13 @@ const val NEXT_ARROW_DESCR = "Show more text"
 
 // Tile
 const val TILE_TAG = "Game tile"
+const val GRID_TAG = "Game grid"
 const val MEMO_PENCIL = "memo_pencil.svg"
 const val MEMO_PENCIL_DESCR = "Pixelated pencil"
 const val ZERO_TAG = "Zero mark"
 const val INFO_ZERO = "zero.svg"
 const val INFO_ZERO_DESCR = "Zero without halo"
+const val FLIPPED_DESCR = "Pixelated number "
 
 // Info screens
 const val PLAYER_COINS = "Player's\nCollected Coins"
@@ -66,6 +68,7 @@ const val ABOUT_INFO = "Touch \"Open Memo\" to open the Memo Window.\n" +
         "Touch the cards to add and remove marks.\n\n"
 
 // Overlay screen
+const val SPEECH_TAG = "Speech text box"
 const val START_GAME = "Play VOLTORB Flip Lv. 1?\n"
 const val REQUEST_INFO = "Which set of info?\n"
 const val QUIT_GAME = "You haven't found any Coins!\nAre you sure you want to quit?"

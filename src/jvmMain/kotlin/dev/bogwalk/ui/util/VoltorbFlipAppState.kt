@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import dev.bogwalk.model.GameLevelGenerator
 import dev.bogwalk.model.LevelGenerator
+import dev.bogwalk.ui.Screen
 
 class VoltorbFlipAppState(
     private val generator: LevelGenerator = GameLevelGenerator()
@@ -52,11 +53,31 @@ class VoltorbFlipAppState(
     }
 
     fun endGame() {
+        if (screenState == Screen.PRE_GAME) {
+            screenState = Screen.POST_GAME  // close app entirely if quitting before playing
+        } else {
+            screenState = Screen.REVEAL
+            totalCoins += currentCoins
+            currentCoins = 0
+            // should winning streak be lost?
+            for (row in grid) {
+                for (tile in row) {
+                    tile.isFlipped = true
+                }
+            }
+        }
+    }
+
+    fun clearGame() {
+        screenState = Screen.PRE_GAME
         currentPosition = -1 to -1
-        screenState = Screen.QUITTING
-        // open dialog? or speech box confirming quit
-        totalCoins += currentCoins
-        currentCoins = 0
+        isMemoOpen = false
+
+        grid = generator.generateEmptyLevel()
+        infoGrid = generator.getEmptySummary()
+
+        maxLevelCoins = 0
+        numOfFlippedTiles = 0
     }
 
     fun resetGame() {
@@ -85,8 +106,4 @@ class VoltorbFlipAppState(
         totalCoins += currentCoins
         currentCoins = 0
     }
-}
-
-enum class Screen {
-    ABOUT_GAME, ABOUT_HINT, ABOUT_MEMO, PRE_INFO, PRE_GAME, IN_GAME, QUITTING
 }

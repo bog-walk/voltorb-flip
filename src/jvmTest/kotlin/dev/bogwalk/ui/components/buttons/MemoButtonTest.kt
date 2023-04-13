@@ -3,6 +3,7 @@ package dev.bogwalk.ui.components.buttons
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.style.CLOSE
 import dev.bogwalk.ui.style.MEMO_TAG
 import dev.bogwalk.ui.style.OPEN
@@ -16,21 +17,20 @@ class MemoButtonTest {
 
     @Test
     fun `MemoButton is disabled if position set to info screen`() {
-        val inGame = mutableStateOf(true)
+        val state = mutableStateOf(Screen.IN_GAME)
 
         composeTestRule.setContent {
-            MemoButton(false, inGame.value) {}
+            MemoButton(state.value, false) {}
         }
 
         composeTestRule.onNodeWithTag(MEMO_TAG)
             .assertExists()
             .assertIsEnabled()
 
-        inGame.value = false
+        state.value = Screen.PRE_GAME
         composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithTag(MEMO_TAG)
-            .assertExists()
             .assertIsNotEnabled()
     }
 
@@ -39,7 +39,7 @@ class MemoButtonTest {
         val isMemoOpen = mutableStateOf(false)
 
         composeTestRule.setContent {
-            MemoButton(isMemoOpen.value, true) {}
+            MemoButton(Screen.IN_GAME, isMemoOpen.value) {}
         }
 
         composeTestRule.onNodeWithTag(MEMO_TAG, useUnmergedTree = true)

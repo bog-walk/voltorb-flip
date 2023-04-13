@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import dev.bogwalk.model.GameTile
+import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.style.*
 import org.junit.Rule
 import kotlin.test.Test
@@ -16,6 +17,7 @@ class TileGridTest {
     fun `TileGrid loads with correct initial content`() {
         composeTestRule.setContent {
             TileGrid(
+                screen = Screen.IN_GAME,
                 grid = List(5) { r -> List(5) { c -> GameTile(r to c, 1) } },
                 infoGrid = listOf(
                     7 to 0, 6 to 0, 6 to 1, 3 to 2, 2 to 3, 5 to 1, 6 to 1, 2 to 3, 6 to 0, 5 to 1
@@ -35,6 +37,7 @@ class TileGridTest {
     fun `TileGrid has correct mid-game content`() {
         composeTestRule.setContent {
             TileGrid(
+                screen = Screen.IN_GAME,
                 grid = List(5) { r -> List(5) { c ->
                     if (r == 1) {
                         GameTile(1 to c, 1, isFlipped = true)
@@ -53,7 +56,7 @@ class TileGridTest {
             .assertCountEquals(35)
             .filter(isNotEnabled())
             .assertCountEquals(15)
-            .filter(hasTextExactly("1"))
+            .filter(hasContentDescriptionExactly("${FLIPPED_DESCR}1"))
             .assertCountEquals(5)
     }
 
@@ -64,6 +67,7 @@ class TileGridTest {
 
         composeTestRule.setContent {
             TileGrid(
+                screen = Screen.IN_GAME,
                 grid = List(5) { r -> List(5) { c ->
                     when (r) {
                         0 -> GameTile(0 to c, 1,
@@ -79,7 +83,7 @@ class TileGridTest {
                 isMemoOpen = padOpen.value) {}
         }
 
-        composeTestRule.onAllNodesWithTag(TILE_TAG, useUnmergedTree = true)
+        composeTestRule.onAllNodesWithTag(TILE_TAG)
             .assertCountEquals(35)
             .filter(hasContentDescriptionExactly(MEMO_PENCIL_DESCR))
             .assertCountEquals(0)
@@ -96,7 +100,7 @@ class TileGridTest {
         composeTestRule.waitForIdle()
 
         composeTestRule.onAllNodesWithTag(TILE_TAG)
-            .filter(hasTextExactly("1"))
+            .filter(hasContentDescription("${FLIPPED_DESCR}1"))
             .assertCountEquals(5)
             .filterToOne(hasContentDescriptionExactly(MEMO_PENCIL_DESCR))
     }

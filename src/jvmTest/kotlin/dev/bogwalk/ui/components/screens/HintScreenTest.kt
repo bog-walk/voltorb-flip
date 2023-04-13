@@ -3,7 +3,6 @@ package dev.bogwalk.ui.components.screens
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import dev.bogwalk.ui.style.INFO_ARROW_DESCR
-import dev.bogwalk.ui.style.QUIT
 import dev.bogwalk.ui.style.TILE_TAG
 import org.junit.Rule
 import kotlin.test.Test

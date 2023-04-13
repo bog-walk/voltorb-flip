@@ -22,12 +22,14 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.disabled
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.drawInFocusBorders
 import dev.bogwalk.ui.util.drawLineBorder
 
 @Composable
 fun QuitButton(
+    screen: Screen,
     currentPosition: Pair<Int, Int>,
     isMemoOpen: Boolean,
     onQuitRequest: () -> Unit = {}
@@ -36,7 +38,7 @@ fun QuitButton(
         text = QUIT,
         modifier = Modifier
             .semantics(mergeDescendants = true) {
-                if (currentPosition == -2 to -2) disabled()  // in info screen
+                if (screen != Screen.IN_GAME) disabled()
             }
             .padding(vertical = 15.dp)
             .requiredSize(95.dp, 38.dp)
@@ -55,7 +57,7 @@ fun QuitButton(
             .clickable(
                 interactionSource = MutableInteractionSource(),
                 indication = null,  // this prevents mouse hover effect
-                enabled = currentPosition != -2 to -2,
+                enabled = screen == Screen.IN_GAME,
                 role = Role.Button
             ) { onQuitRequest() },
         style = MaterialTheme.typography.labelLarge
@@ -102,9 +104,9 @@ fun QuitOption(
 private fun QuitButtonPreview() {
     VoltorbFlipTheme {
         Column {
-            QuitButton(currentPosition = 0 to 0, isMemoOpen = false) {}
-            QuitButton(currentPosition = -1 to -1, isMemoOpen = false) {}
-            QuitButton(currentPosition = -1 to -1, isMemoOpen = true) {}
+            QuitButton(Screen.IN_GAME, currentPosition = 0 to 0, isMemoOpen = false) {}
+            QuitButton(Screen.IN_GAME, currentPosition = -1 to -1, isMemoOpen = false) {}
+            QuitButton(Screen.IN_GAME, currentPosition = -1 to -1, isMemoOpen = true) {}
         }
     }
 }

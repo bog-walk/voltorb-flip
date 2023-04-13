@@ -7,8 +7,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.components.screens.*
 import dev.bogwalk.ui.style.VoltorbFlipTheme
-import dev.bogwalk.ui.util.Screen
 import dev.bogwalk.ui.util.VoltorbFlipAppState
+
+enum class Screen {
+    ABOUT_GAME, ABOUT_HINT, ABOUT_MEMO, PRE_GAME, PRE_INFO, IN_GAME, QUITTING, REVEAL, POST_GAME
+}
 
 @Composable
 @Preview
@@ -31,19 +34,23 @@ fun VoltorbFlipApp(state: VoltorbFlipAppState) {
             Modifier.weight(.51f).height(IntrinsicSize.Max)
         ) {
             GameScreen(
+                state.screenState,
                 state.grid,
                 state.infoGrid,
                 state.currentPosition,
                 state.isMemoOpen,
                 state::selectATile,
                 { state.isMemoOpen = !state.isMemoOpen },
-                state::editCurrentTile,
-                state::endGame
-            )
+                state::editCurrentTile
+            ) {
+                state.currentPosition = -1 to -1
+                state.screenState = Screen.QUITTING
+            }
             if (state.screenState != Screen.IN_GAME) {
                 OverlayScreen(
                     state.screenState,
                     state::resetGame,
+                    state::clearGame,
                     state::endGame
                 ) {
                     state.screenState = Screen.values()[it]

@@ -12,6 +12,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.model.GameTile
+import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.components.buttons.MemoButton
 import dev.bogwalk.ui.components.buttons.MemoPad
 import dev.bogwalk.ui.components.buttons.QuitButton
@@ -22,6 +23,7 @@ import dev.bogwalk.ui.style.lightGreen
 
 @Composable
 fun GameScreen(
+    screen: Screen,
     grid: List<List<GameTile>>,
     infoGrid: List<Pair<Int, Int>>,
     currentPosition: Pair<Int, Int>,
@@ -47,22 +49,23 @@ fun GameScreen(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        TileGrid(grid, infoGrid, currentPosition, isMemoOpen, onSelectRequest)
+        TileGrid(screen, grid, infoGrid, currentPosition, isMemoOpen, onSelectRequest)
         Column(
             modifier = Modifier.fillMaxHeight().padding(end = 8.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            MemoButton(isMemoOpen, onSelectRequest = onMemoRequest)
+            MemoButton(screen, isMemoOpen, onSelectRequest = onMemoRequest)
             if (isMemoOpen) {
                 MemoPad(
+                    screen = screen,
                     memoData = if (currentPosition == -1 to -1) null else {
                         grid[currentPosition.first][currentPosition.second].memoData
                     },
                     onEditRequest = onEditRequest,
                     onQuitRequest = onQuitRequest)
             }
-            QuitButton(currentPosition, isMemoOpen, onQuitRequest)
+            QuitButton(screen, currentPosition, isMemoOpen, onQuitRequest)
         }
     }
 }
@@ -73,6 +76,7 @@ private fun GameScreenPreview() {
     VoltorbFlipTheme {
         Box(Modifier.requiredWidth(450.dp)) {
             GameScreen(
+                Screen.IN_GAME,
                 List(5) { r -> List(5) { c -> GameTile(r to c, 1) } },
                 listOf(7 to 0, 6 to 0, 6 to 1, 3 to 2, 2 to 3, 5 to 1, 6 to 1, 2 to 3, 6 to 0, 5 to 1),
                 0 to 0, false,
@@ -88,6 +92,7 @@ private fun GameScreenWithMemoPreview() {
     VoltorbFlipTheme {
         Box(Modifier.requiredWidth(450.dp)) {
             GameScreen(
+                Screen.IN_GAME,
                 List(5) { r -> List(5) { c -> GameTile(r to c, 1) } },
                 listOf(7 to 0, 6 to 0, 6 to 1, 3 to 2, 2 to 3, 5 to 1, 6 to 1, 2 to 3, 6 to 0, 5 to 1),
                 2 to 1, true,

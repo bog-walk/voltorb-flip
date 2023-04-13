@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.components.buttons.MemoButton
 import dev.bogwalk.ui.components.buttons.MemoPad
 import dev.bogwalk.ui.components.tiles.FlipTile
@@ -27,7 +28,7 @@ fun AboutMemoScreen() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box {
-            MemoButton(isMemoOpen = false, inGameUse = false)
+            MemoButton(Screen.ABOUT_MEMO, isMemoOpen = false)
             Icon(
                 painter = painterResource(INFO_STYLUS),
                 contentDescription = INFO_STYLUS_DESCR,
@@ -44,7 +45,7 @@ fun AboutMemoScreen() {
             tint = Color.Unspecified
         )
         Box {
-            MemoPad(booleanArrayOf(true, true, true, false), inGameUse = false)
+            MemoPad(Screen.ABOUT_MEMO, booleanArrayOf(true, true, true, false))
             Icon(
                 painter = painterResource(INFO_STYLUS),
                 contentDescription = INFO_STYLUS_DESCR,
@@ -60,7 +61,7 @@ fun AboutMemoScreen() {
             modifier = Modifier.requiredSize(26.dp),
             tint = Color.Unspecified
         )
-        FlipTile(-1 to -1, 1,
+        FlipTile(Screen.ABOUT_MEMO, -1 to -1, 1,
             booleanArrayOf(true, true, true, false),
             isMemoOpen = true) {}
     }

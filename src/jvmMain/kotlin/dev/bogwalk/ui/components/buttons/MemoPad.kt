@@ -11,16 +11,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.unit.dp
+import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.drawBorder
 
 @Composable
 fun MemoPad(
+    screen: Screen,
     memoData: BooleanArray?,
-    inGameUse: Boolean = true,
     onEditRequest: (Int) -> Unit = {},
     onQuitRequest: () -> Unit = {}
 ) {
@@ -43,23 +45,23 @@ fun MemoPad(
         ) {
             Row(Modifier.fillMaxWidth()) {
                 MemoPadButton(Modifier.weight(.5f),
-                    inGameUse, 0, memoData?.get(0),
+                    screen, 0, memoData?.get(0),
                     onEditRequest = onEditRequest) {}
                 MemoPadButton(Modifier.weight(.5f),
-                    inGameUse, 1, memoData?.get(1),
+                    screen, 1, memoData?.get(1),
                     onEditRequest = onEditRequest) {}
             }
             Row(Modifier.fillMaxWidth()) {
                 MemoPadButton(Modifier.weight(.5f),
-                    inGameUse, 2, memoData?.get(2),
+                    screen, 2, memoData?.get(2),
                     onEditRequest = onEditRequest) {}
                 MemoPadButton(Modifier.weight(.5f),
-                    inGameUse, 3, memoData?.get(3),
+                    screen, 3, memoData?.get(3),
                     onEditRequest = onEditRequest) {}
             }
             // return arrow should always be enabled unless used in info screen
             MemoPadButton(Modifier.fillMaxWidth(.5f),
-                inGameUse, -1, null, {},
+                screen, -1, null, {},
                 onQuitRequest = onQuitRequest)
         }
     }
@@ -68,7 +70,7 @@ fun MemoPad(
 @Composable
 private fun MemoPadButton(
     modifier: Modifier,
-    inGameUse: Boolean,
+    screen: Screen,
     value: Int,
     hasBeenAdded: Boolean?,
     onEditRequest: (Int) -> Unit,
@@ -77,9 +79,9 @@ private fun MemoPadButton(
     Box(
         modifier = modifier
             .semantics(mergeDescendants = true) {
-                testTag = MEMO_PAD_TAG
-                if (!inGameUse || value > -1 && hasBeenAdded == null) disabled()
+                if (screen != Screen.IN_GAME || value > -1 && hasBeenAdded == null) disabled()
             }
+            .testTag(MEMO_PAD_TAG)
             .aspectRatio(1f)
             .padding(2.dp)
             .background(when (hasBeenAdded) {
@@ -101,7 +103,8 @@ private fun MemoPadButton(
             .clickable(
                 interactionSource = MutableInteractionSource(),
                 indication = null,  // this prevents mouse hover effect
-                enabled = inGameUse && (value == -1 || value > -1 && hasBeenAdded != null),
+                enabled = screen == Screen.IN_GAME &&
+                        (value == -1 || value > -1 && hasBeenAdded != null),
                 role = Role.Button
             ) {
                 if (value == -1) onQuitRequest() else onEditRequest(value)
@@ -148,13 +151,16 @@ private fun MemoPadPreview() {
     VoltorbFlipTheme {
         Column {
             // fully disabled
-            MemoPad(memoData = null, onEditRequest = {}) {}
+            MemoPad(Screen.IN_GAME, memoData = null, onEditRequest = {}) {}
             // enabled with nothing cached
-            MemoPad(memoData = booleanArrayOf(false, false, false, false), onEditRequest = {}) {}
+            MemoPad(Screen.IN_GAME, memoData = booleanArrayOf(false, false, false, false),
+                onEditRequest = {}) {}
             // enabled with half cached
-            MemoPad(memoData = booleanArrayOf(true, true, false, false), onEditRequest = {}) {}
+            MemoPad(Screen.IN_GAME, memoData = booleanArrayOf(true, true, false, false),
+                onEditRequest = {}) {}
             // enabled with all cached
-            MemoPad(memoData = booleanArrayOf(true, true, true, true), onEditRequest = {}) {}
+            MemoPad(Screen.IN_GAME, memoData = booleanArrayOf(true, true, true, true),
+                onEditRequest = {}) {}
         }
     }
 }

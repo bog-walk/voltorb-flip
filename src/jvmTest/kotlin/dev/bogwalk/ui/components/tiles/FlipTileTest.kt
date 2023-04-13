@@ -3,9 +3,10 @@ package dev.bogwalk.ui.components.tiles
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import dev.bogwalk.ui.Screen
+import dev.bogwalk.ui.style.FLIPPED_DESCR
 import dev.bogwalk.ui.style.MEMO_PENCIL_DESCR
 import dev.bogwalk.ui.style.TILE_TAG
-import dev.bogwalk.ui.style.ZERO_OUTLINED_DESCR
 import dev.bogwalk.ui.style.ZERO_TAG
 import org.junit.Rule
 import kotlin.test.Test
@@ -20,7 +21,7 @@ class FlipTileTest {
         val content = mutableStateOf(0)
 
         composeTestRule.setContent {
-            FlipTile(0 to 0, content.value, isFlipped = state.value) {}
+            FlipTile(Screen.IN_GAME,0 to 0, content.value, isFlipped = state.value) {}
         }
 
         composeTestRule.onNodeWithTag(TILE_TAG, useUnmergedTree = true)
@@ -36,16 +37,15 @@ class FlipTileTest {
             .assertIsNotEnabled()
             .onChildren()
             .assertCountEquals(1)
-            .assertAll(hasContentDescriptionExactly(ZERO_OUTLINED_DESCR))
+            .assertAll(hasContentDescriptionExactly("${FLIPPED_DESCR}0"))
 
         content.value = 3
         composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithTag(TILE_TAG, useUnmergedTree = true)
             .assertIsNotEnabled()
-            .onChildren()
-            .assertCountEquals(1)
-            .assertAll(hasTextExactly(content.value.toString()))
+            .onChild()
+            .assertContentDescriptionEquals("$FLIPPED_DESCR${content.value}")
     }
 
     @Test
@@ -54,7 +54,8 @@ class FlipTileTest {
         val padOpen = mutableStateOf(false)
 
         composeTestRule.setContent {
-            FlipTile(0 to 0, 1, marks.value, isMemoOpen = padOpen.value) {}
+            FlipTile(Screen.IN_GAME,0 to 0, 1, marks.value,
+                isMemoOpen = padOpen.value) {}
         }
 
         composeTestRule.onNodeWithTag(TILE_TAG, useUnmergedTree = true)
@@ -85,7 +86,8 @@ class FlipTileTest {
         val state = mutableStateOf(false)
 
         composeTestRule.setContent {
-            FlipTile(0 to 0, 0, booleanArrayOf(true, false, false, false),
+            FlipTile(Screen.IN_GAME,0 to 0, 0,
+                booleanArrayOf(true, false, false, false),
                 isFlipped = state.value, isMemoOpen = true) {}
         }
 
@@ -101,7 +103,7 @@ class FlipTileTest {
         composeTestRule.onNodeWithTag(TILE_TAG, useUnmergedTree = true)
             .onChildren()
             .assertCountEquals(1)
-            .filterToOne(hasContentDescriptionExactly(ZERO_OUTLINED_DESCR))
+            .filterToOne(hasContentDescriptionExactly("${FLIPPED_DESCR}0"))
     }
 
     @Test
@@ -110,7 +112,8 @@ class FlipTileTest {
         val focus = mutableStateOf(false)
 
         composeTestRule.setContent {
-            FlipTile(0 to 0, 1, booleanArrayOf(true, false, false, false),
+            FlipTile(Screen.IN_GAME,0 to 0, 1,
+                booleanArrayOf(true, false, false, false),
                 isInFocus = focus.value, isFlipped = state.value, isMemoOpen = true) {}
         }
 
@@ -135,6 +138,6 @@ class FlipTileTest {
             .onChildren()
             .assertCountEquals(2)
             .assertAny(hasContentDescriptionExactly(MEMO_PENCIL_DESCR))
-            .assertAny(hasTextExactly("1"))
+            .assertAny(hasContentDescriptionExactly("${FLIPPED_DESCR}1"))
     }
 }

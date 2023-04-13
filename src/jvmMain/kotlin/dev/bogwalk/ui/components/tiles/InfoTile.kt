@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.style.INFO_ZERO
 import dev.bogwalk.ui.style.INFO_ZERO_DESCR
 import dev.bogwalk.ui.style.VoltorbFlipTheme
@@ -22,6 +23,7 @@ fun InfoTile(
     mines: Int
 ) {
     Tile(
+        Screen.PRE_GAME,
         rowIndex to -1,
         TileState.STATIC_INFO
     ) {

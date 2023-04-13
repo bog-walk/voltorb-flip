@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.components.tiles.FlipTile
 import dev.bogwalk.ui.components.tiles.InfoTile
 import dev.bogwalk.ui.style.*
@@ -26,11 +27,11 @@ fun HintScreen() {
         modifier = Modifier.padding(top = 40.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        FlipTile(0 to -1, 3)
-        FlipTile(0 to -1, 0)
-        FlipTile(0 to -1, 3)
-        FlipTile(0 to -1, 0)
-        FlipTile(0 to -1, 1)
+        FlipTile(Screen.ABOUT_HINT, 0 to -1, 3)
+        FlipTile(Screen.ABOUT_HINT, 0 to -1, 0)
+        FlipTile(Screen.ABOUT_HINT, 0 to -1, 3)
+        FlipTile(Screen.ABOUT_HINT, 0 to -1, 0)
+        FlipTile(Screen.ABOUT_HINT, 0 to -1, 1)
         InfoTile(0, 7, 2)
     }
     Icon(
@@ -50,11 +51,11 @@ fun HintScreen() {
                 drawOutlinedLine(isOutline = false)
             }
     ) {
-        FlipTile(0 to -1, 3, isFlipped = true)
-        FlipTile(0 to -1, 0, isFlipped = true)
-        FlipTile(0 to -1, 3, isFlipped = true)
-        FlipTile(0 to -1, 0, isFlipped = true)
-        FlipTile(0 to -1, 1, isFlipped = true)
+        FlipTile(Screen.ABOUT_HINT, 0 to -1, 3, isFlipped = true)
+        FlipTile(Screen.ABOUT_HINT, 0 to -1, 0, isFlipped = true)
+        FlipTile(Screen.ABOUT_HINT, 0 to -1, 3, isFlipped = true)
+        FlipTile(Screen.ABOUT_HINT, 0 to -1, 0, isFlipped = true)
+        FlipTile(Screen.ABOUT_HINT, 0 to -1, 1, isFlipped = true)
         InfoTile(0, 7, 2)
     }
     InfoTextBox(
