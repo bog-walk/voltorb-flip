@@ -45,7 +45,7 @@ fun AboutMemoScreen() {
             tint = Color.Unspecified
         )
         Box {
-            MemoPad(Screen.ABOUT_MEMO, booleanArrayOf(true, true, true, false))
+            MemoPad(Screen.ABOUT_MEMO, listOf(true, true, true, false))
             Icon(
                 painter = painterResource(INFO_STYLUS),
                 contentDescription = INFO_STYLUS_DESCR,
@@ -62,7 +62,7 @@ fun AboutMemoScreen() {
             tint = Color.Unspecified
         )
         FlipTile(Screen.ABOUT_MEMO, -1 to -1, 1,
-            booleanArrayOf(true, true, true, false),
+            listOf(true, true, true, false),
             isMemoOpen = true) {}
     }
     InfoTextBox(
@@ -81,8 +81,8 @@ fun AboutMemoScreen() {
 @Composable
 private fun AboutMemoScreenPreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredSize(450.dp, 360.dp)) {
-            TopScreen(Modifier) { AboutMemoScreen() }
+        TopScreen(Modifier.requiredSize(450.dp, 360.dp)) {
+            AboutMemoScreen()
         }
     }
 }

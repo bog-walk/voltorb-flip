@@ -21,7 +21,7 @@ fun FlipTile(
     screen: Screen,
     position: Pair<Int, Int>,
     value: Int,
-    memo: BooleanArray = BooleanArray(4),
+    memo: List<Boolean> = List(4) { false },
     isInFocus: Boolean = false,
     isFlipped: Boolean = false,
     isMemoOpen: Boolean = false,
@@ -88,9 +88,9 @@ private fun FlipTilePreview() {
             FlipTile(Screen.IN_GAME, 0 to 0, 0) // unflipped & not in focus
             FlipTile(Screen.IN_GAME, 0 to 1, 0, isInFocus = true) // unflipped & in focus
             FlipTile(Screen.IN_GAME, 2 to 0, 3,
-                memo = BooleanArray(4) { true }) // unflipped with stored memo
+                memo = List(4) { true }) // unflipped with stored memo
             FlipTile(Screen.IN_GAME, 2 to 0, 3,
-                memo = BooleanArray(4) { true }, isFlipped = true) // flipped with stored memo
+                memo = List(4) { true }, isFlipped = true) // flipped with stored memo
             FlipTile(Screen.IN_GAME, 1 to 1, 1, isFlipped = true) // flipped with value
             FlipTile(Screen.IN_GAME, 3 to 2, 2, isInFocus = true, isFlipped = true) // last flipped
             FlipTile(Screen.IN_GAME, 1 to 3, 0, isFlipped = true) // flipped with zero
@@ -107,20 +107,20 @@ private fun FlipTileMemoOpenPreview() {
             FlipTile(Screen.IN_GAME, 2 to 0, 0, isMemoOpen = true)
             // unflipped with memo open & stored memo data
             FlipTile(Screen.IN_GAME, 2 to 0, 0,
-                memo = BooleanArray(4) { true }, isMemoOpen = true)
+                memo = List(4) { true }, isMemoOpen = true)
             // unflipped, in focus, with memo open & no stored memo
             FlipTile(Screen.IN_GAME, 2 to 0, 0, isInFocus = true, isMemoOpen = true)
             // unflipped, in focus, with memo open & stored memo data
             FlipTile(Screen.IN_GAME, 2 to 0, 0,
-                memo = booleanArrayOf(true, true, false, false),
+                memo = listOf(true, true, false, false),
                 isInFocus = true, isMemoOpen = true)
             // flipped, with memo open & stored memo data
             FlipTile(Screen.IN_GAME, 2 to 0, 2,
-                memo = booleanArrayOf(true, true, false, false),
+                memo = listOf(true, true, false, false),
                 isFlipped = true, isMemoOpen = true)
             // flipped, in focus, with memo open & stored memo data
             FlipTile(Screen.IN_GAME, 2 to 0, 2,
-                memo = booleanArrayOf(true, true, false, false),
+                memo = listOf(true, true, false, false),
                 isInFocus = true, isFlipped = true, isMemoOpen = true)
         }
     }

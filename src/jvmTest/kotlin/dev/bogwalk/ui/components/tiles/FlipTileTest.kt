@@ -54,7 +54,7 @@ class FlipTileTest {
 
         composeTestRule.setContent {
             FlipTile(Screen.IN_GAME,0 to 0, 1,
-                booleanArrayOf(true, true, false, false),
+                listOf(true, true, false, false),
                 isFlipped = flipped.value, isMemoOpen = padOpen.value) {}
         }
 
@@ -89,7 +89,7 @@ class FlipTileTest {
 
         composeTestRule.setContent {
             FlipTile(Screen.IN_GAME,0 to 0, 1,
-                booleanArrayOf(true, false, false, false),
+                listOf(true, false, false, false),
                 isInFocus = focus.value, isFlipped = flipped.value, isMemoOpen = true) {}
         }
 

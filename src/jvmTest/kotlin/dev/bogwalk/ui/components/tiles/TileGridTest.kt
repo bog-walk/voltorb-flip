@@ -64,7 +64,7 @@ class TileGridTest {
                 grid = List(5) { r -> List(5) { c ->
                     when (r) {
                         0 -> GameTile(0 to c, 1,
-                            memoData = booleanArrayOf(true, false, false, false))
+                            memoData = listOf(true, false, false, false))
                         1 -> GameTile(1 to c, 1, isFlipped = true)
                         else -> GameTile(r to c, 1)
                     }

@@ -144,8 +144,8 @@ private fun CoinsBox(
 @Composable
 private fun InfoScreenPreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredSize(450.dp, 360.dp)) {
-            TopScreen(Modifier) { InfoScreen(1, 0, 0) }
+        TopScreen(Modifier.requiredSize(450.dp, 360.dp)) {
+            InfoScreen(1, 0, 0)
         }
     }
 }

@@ -10,7 +10,7 @@ class VoltorbFlipAppState(
     private val grid: GameGrid = GameGrid()
 ) {
     var currentLevel by mutableStateOf(1)
-    var screenState by mutableStateOf(Screen.PRE_GAME)
+    var screenState by mutableStateOf(Screen.PRE_GAME) // should this be hoisted?
     var totalCoins by mutableStateOf(0)
     var currentCoins by mutableStateOf(0)
 
@@ -46,17 +46,12 @@ class VoltorbFlipAppState(
         gameTiles = grid.tiles
     }
 
-    fun endGame() {
-        if (screenState == Screen.PRE_GAME) {
-            screenState = Screen.POST_GAME  // close app entirely if quitting before playing
-        } else {
-            // does this count as changeLevel with a loss?
-            screenState = Screen.REVEAL
-            grid.reveal()
-            gameTiles = grid.tiles
-            totalCoins += currentCoins
-            currentCoins = 0
-        }
+    fun endGame() {  // should this be placed in changeLevel?
+        screenState = Screen.REVEAL
+        grid.reveal()
+        gameTiles = grid.tiles
+        totalCoins += currentCoins
+        currentCoins = 0
     }
 
     fun clearGame() {
@@ -91,6 +86,7 @@ class VoltorbFlipAppState(
         }
         totalCoins += currentCoins
         currentCoins = 0
+        screenState = Screen.REVEAL
         grid.reveal()
         gameTiles = grid.tiles
     }

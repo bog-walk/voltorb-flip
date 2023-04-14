@@ -1,15 +1,10 @@
 package dev.bogwalk.ui.components.screens
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.model.GameTile
 import dev.bogwalk.ui.Screen
@@ -18,8 +13,6 @@ import dev.bogwalk.ui.components.buttons.MemoPad
 import dev.bogwalk.ui.components.buttons.QuitButton
 import dev.bogwalk.ui.components.tiles.TileGrid
 import dev.bogwalk.ui.style.VoltorbFlipTheme
-import dev.bogwalk.ui.style.darkGreen
-import dev.bogwalk.ui.style.lightGreen
 
 @Composable
 fun GameScreen(
@@ -36,16 +29,7 @@ fun GameScreen(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(IntrinsicSize.Max)
-            .background(darkGreen)
-            .drawBehind {
-                drawRoundRect(
-                    lightGreen,
-                    Offset(6.dp.toPx(), 6.dp.toPx()),
-                    Size(size.width - 12.dp.toPx(), size.height - 12.dp.toPx()),
-                    CornerRadius(5.dp.toPx())
-                )
-            },
+            .height(IntrinsicSize.Max),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -76,7 +60,7 @@ fun GameScreen(
 @Composable
 private fun GameScreenPreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredWidth(450.dp)) {
+        BottomScreen(Modifier.requiredWidth(450.dp)) {
             GameScreen(
                 Screen.IN_GAME,
                 List(5) { r -> List(5) { c -> GameTile(r to c, 1) } }.flatten(),
@@ -91,7 +75,7 @@ private fun GameScreenPreview() {
 @Composable
 private fun GameScreenWithMemoPreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredWidth(450.dp)) {
+        BottomScreen(Modifier.requiredWidth(450.dp)) {
             GameScreen(
                 Screen.IN_GAME,
                 List(5) { r -> List(5) { c -> GameTile(r to c, 1) } }.flatten(),

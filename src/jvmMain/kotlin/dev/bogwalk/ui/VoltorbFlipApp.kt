@@ -17,8 +17,10 @@ enum class Screen {
 @Composable
 @Preview
 fun VoltorbFlipApp(state: VoltorbFlipAppState) {
-    Row(
-        modifier = Modifier.fillMaxHeight().padding(10.dp),
+    Row(  // possible to center composable within a window scope? must use Box?
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -29,36 +31,41 @@ fun VoltorbFlipApp(state: VoltorbFlipAppState) {
                 Screen.ABOUT_GAME -> HowToPlayScreen()
                 Screen.ABOUT_HINT -> HintScreen()
                 Screen.ABOUT_MEMO -> AboutMemoScreen()
+                Screen.POST_GAME -> ThanksTopScreen()
                 else -> InfoScreen(state.currentLevel, state.totalCoins, state.currentCoins)
             }
         }
-        Box(
-            Modifier.weight(.51f).height(IntrinsicSize.Max)
+        BottomScreen(
+            Modifier.weight(.51f)
         ) {
-            GameScreen(
-                screen = state.screenState,
-                grid = state.gameTiles,
-                infoGrid = state.infoSummary,
-                currentPosition = state.currentPosition,
-                isMemoOpen = state.isMemoOpen,
-                onSelectRequest = state::selectATile,
-                onMemoRequest = { state.isMemoOpen = !state.isMemoOpen },
-                onEditMemoRequest = state::editCurrentTile,
-                onQuitRequest = {
-                    state.currentPosition = -1 to -1
-                    state.screenState = Screen.QUITTING
-                }
-            )
-            if (state.screenState !in listOf(Screen.IN_GAME, Screen.POST_GAME)) {
-                OverlayScreen(
+            if (state.screenState == Screen.POST_GAME) {
+                ThanksBottomScreen()
+            } else {
+                GameScreen(
                     screen = state.screenState,
-                    onPlayRequest = state::resetGame,
-                    onClearRequest = state::clearGame,
-                    onQuitRequest = { state.screenState = Screen.POST_GAME },
-                    onContinueRequest = { state.screenState = Screen.IN_GAME },
-                    onRevealRequest = { state.screenState = Screen.REVEAL },
-                    onChangeScreen = { state.screenState = Screen.values()[it] }
+                    grid = state.gameTiles,
+                    infoGrid = state.infoSummary,
+                    currentPosition = state.currentPosition,
+                    isMemoOpen = state.isMemoOpen,
+                    onSelectRequest = state::selectATile,
+                    onMemoRequest = { state.isMemoOpen = !state.isMemoOpen },
+                    onEditMemoRequest = state::editCurrentTile,
+                    onQuitRequest = {
+                        state.screenState = Screen.QUITTING
+                        state.currentPosition = -1 to -1
+                    }
                 )
+                if (state.screenState != Screen.IN_GAME) {
+                    OverlayScreen(
+                        screen = state.screenState,
+                        onPlayRequest = state::resetGame,
+                        onClearRequest = state::clearGame,
+                        onQuitRequest = { state.screenState = Screen.POST_GAME },
+                        onContinueRequest = { state.screenState = Screen.IN_GAME },
+                        onRevealRequest = state::endGame,
+                        onChangeScreen = { state.screenState = Screen.values()[it] }
+                    )
+                }
             }
         }
     }
@@ -68,7 +75,7 @@ fun VoltorbFlipApp(state: VoltorbFlipAppState) {
 @Composable
 private fun AppPreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredWidth(900.dp)) {
+        Box(Modifier.requiredSize(920.dp, 370.dp)) {
             VoltorbFlipApp(VoltorbFlipAppState())
         }
     }

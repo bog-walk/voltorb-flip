@@ -66,6 +66,7 @@ const val HINT_INFO = "By looking at the numbers on the sides of\n" +
         "and VOLTORB totals."
 const val ABOUT_INFO = "Touch \"Open Memo\" to open the Memo Window.\n" +
         "Touch the cards to add and remove marks.\n\n"
+const val THANKS = "Thanks for playing!"
 
 // Overlay screen
 const val OVERLAY_TAG = "Overlay screen"

@@ -78,7 +78,7 @@ class GameGrid(
         val (row, col) = position
         val current = board[row][col].memoData[index]
         board[row][col] = board[row][col].copy(
-            memoData = board[row][col].memoData.apply { set(index, !current) }
+            memoData = board[row][col].memoData.toMutableList().apply { set(index, !current) }
         )
     }
 

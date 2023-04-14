@@ -3,6 +3,7 @@ package dev.bogwalk.ui.components.screens
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,7 +41,11 @@ fun OverlayScreen(
             .background(
                 if (screen == Screen.REVEAL) Color.Transparent else Color(0f,0f,0f,.3f)
             )
-            .clickable(enabled = screen == Screen.REVEAL) { onClearRequest() },
+            .clickable(
+                interactionSource = MutableInteractionSource(),
+                indication = null,  // this prevents mouse hover effect
+                enabled = screen == Screen.REVEAL)
+            { onClearRequest() },
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.End
     ) {
@@ -137,11 +142,9 @@ private fun SpeechBox(
 @Composable
 private fun SpeechBoxPreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredSize(450.dp)) {
-            Column {
-                SpeechBox(START_GAME) {}
-                SpeechBox(ABOUT_TEXT) {}
-            }
+        BottomScreen(Modifier.requiredSize(450.dp, 360.dp)) {
+            SpeechBox(ABOUT_TEXT) {}
+            SpeechBox(START_GAME) {}
         }
     }
 }
@@ -150,7 +153,7 @@ private fun SpeechBoxPreview() {
 @Composable
 private fun OverlayScreenPreGamePreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredSize(450.dp)) {
+        BottomScreen(Modifier.requiredSize(450.dp, 360.dp)) {
             OverlayScreen(Screen.PRE_GAME, {}, {}, {}, {}, {}) {}
         }
     }
@@ -160,7 +163,7 @@ private fun OverlayScreenPreGamePreview() {
 @Composable
 private fun OverlayScreenPreInfoPreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredSize(450.dp)) {
+        BottomScreen(Modifier.requiredSize(450.dp, 360.dp)) {
             OverlayScreen(Screen.PRE_INFO, {}, {}, {}, {}, {}) {}
         }
     }
@@ -170,7 +173,7 @@ private fun OverlayScreenPreInfoPreview() {
 @Composable
 private fun OverlayScreenQuittingPreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredSize(450.dp)) {
+        BottomScreen(Modifier.requiredSize(450.dp, 360.dp)) {
             OverlayScreen(Screen.QUITTING, {}, {}, {}, {}, {}) {}
         }
     }
@@ -180,7 +183,7 @@ private fun OverlayScreenQuittingPreview() {
 @Composable
 private fun OverlayScreenInInfoPreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredSize(450.dp)) {
+        BottomScreen(Modifier.requiredSize(450.dp, 360.dp)) {
             OverlayScreen(Screen.ABOUT_GAME, {}, {}, {}, {}, {}) {}
         }
     }

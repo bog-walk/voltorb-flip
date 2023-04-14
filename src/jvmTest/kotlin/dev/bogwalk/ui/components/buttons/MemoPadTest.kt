@@ -18,7 +18,7 @@ class MemoPadTest {
     @Test
     fun `MemoPad loads with correct content`() {
         composeTestRule.setContent {
-            MemoPad(Screen.IN_GAME, BooleanArray(4), {}) {}
+            MemoPad(Screen.IN_GAME, List(4) { false }, {}) {}
         }
 
         composeTestRule.onAllNodesWithTag(MEMO_PAD_TAG)
@@ -32,7 +32,7 @@ class MemoPadTest {
 
     @Test
     fun `MemoPad buttons all but 1 disabled when no array provided`() {
-        val array: MutableState<BooleanArray?> = mutableStateOf(BooleanArray(4))
+        val array: MutableState<List<Boolean>?> = mutableStateOf(List(4) { false })
 
         composeTestRule.setContent {
             MemoPad(Screen.IN_GAME, array.value, {}) {}
@@ -56,7 +56,7 @@ class MemoPadTest {
         val screen = mutableStateOf(Screen.IN_GAME)
 
         composeTestRule.setContent {
-            MemoPad(screen.value, BooleanArray(4), {}) {}
+            MemoPad(screen.value, List(4) { false }, {}) {}
         }
 
         composeTestRule.onAllNodesWithTag(MEMO_PAD_TAG)

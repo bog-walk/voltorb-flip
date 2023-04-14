@@ -83,7 +83,7 @@ class GameGridTest {
         grid.edit(position, 0)
         grid.edit(position, 1)
         grid.edit(position, 3)
-        val expectedMemo = booleanArrayOf(true, true, false, true)
+        val expectedMemo = listOf(true, true, false, true)
 
         assertFalse { grid.tiles.all { tile -> tile.memoData.all { !it } } }
         assertContentEquals(expectedMemo, grid.tiles[expectedIndex].memoData)

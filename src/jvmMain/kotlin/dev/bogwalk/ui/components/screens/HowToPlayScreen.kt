@@ -104,8 +104,8 @@ fun HowToPlayScreen() {
 @Composable
 private fun HowToPlayScreenPreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredSize(450.dp, 360.dp)) {
-            TopScreen(Modifier) { HowToPlayScreen() }
+        TopScreen(Modifier.requiredSize(450.dp, 360.dp)) {
+            HowToPlayScreen()
         }
     }
 }

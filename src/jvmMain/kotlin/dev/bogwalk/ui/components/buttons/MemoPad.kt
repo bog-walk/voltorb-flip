@@ -25,7 +25,7 @@ import dev.bogwalk.ui.util.drawBorder
 @Composable
 fun MemoPad(
     screen: Screen,
-    memoData: BooleanArray?,
+    memoData: List<Boolean>?,
     onEditRequest: (Int) -> Unit = {},
     onCloseRequest: () -> Unit = {}
 ) {
@@ -164,13 +164,13 @@ private fun MemoPadPreview() {
             // fully disabled
             MemoPad(Screen.IN_GAME, memoData = null, onEditRequest = {}) {}
             // enabled with nothing cached
-            MemoPad(Screen.IN_GAME, memoData = booleanArrayOf(false, false, false, false),
+            MemoPad(Screen.IN_GAME, memoData = List(4) { false },
                 onEditRequest = {}) {}
             // enabled with half cached
-            MemoPad(Screen.IN_GAME, memoData = booleanArrayOf(true, true, false, false),
+            MemoPad(Screen.IN_GAME, memoData = listOf(true, true, false, false),
                 onEditRequest = {}) {}
             // enabled with all cached
-            MemoPad(Screen.IN_GAME, memoData = booleanArrayOf(true, true, true, true),
+            MemoPad(Screen.IN_GAME, memoData = List(4) { true },
                 onEditRequest = {}) {}
         }
     }
