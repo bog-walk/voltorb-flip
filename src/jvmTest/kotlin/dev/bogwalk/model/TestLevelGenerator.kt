@@ -4,7 +4,9 @@ class TestLevelGenerator : LevelGenerator() {
     var subLevel: Int = 0
     var toAssign: List<Int> = emptyList()
 
-    override fun getLevelData(level: Int): List<Int> = levelOptions[level][subLevel]
+    override fun getLevelData(level: Int): List<Int> {
+        return levelOptions[level - 1][subLevel]
+    }
 
     override fun assignLevelData(data: List<Int>): List<Int> {
         val values = MutableList(25) { 1 }

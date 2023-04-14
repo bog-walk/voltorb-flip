@@ -17,8 +17,10 @@ class AboutMemoScreenTest {
         }
 
         composeTestRule.onNodeWithTag(MEMO_TAG)
-            .assertExists()
             .assertIsNotEnabled()
+
+        composeTestRule.onAllNodesWithContentDescription(INFO_STYLUS_DESCR)
+            .assertCountEquals(2)
 
         composeTestRule.onAllNodesWithContentDescription(INFO_ARROW_DESCR)
             .assertCountEquals(2)
@@ -27,8 +29,10 @@ class AboutMemoScreenTest {
             .assertCountEquals(5)
             .assertAll(isNotEnabled())
 
-        composeTestRule.onNodeWithTag(TILE_TAG, useUnmergedTree = true)
-            .assertExists()
+        composeTestRule.onNodeWithTag(TILE_TAG)
             .assertIsNotEnabled()
+
+        composeTestRule.onNodeWithText(ABOUT_INFO)
+            .assertExists()
     }
 }

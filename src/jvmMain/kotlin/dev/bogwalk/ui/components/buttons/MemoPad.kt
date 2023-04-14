@@ -11,9 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.*
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.style.*
@@ -24,7 +27,7 @@ fun MemoPad(
     screen: Screen,
     memoData: BooleanArray?,
     onEditRequest: (Int) -> Unit = {},
-    onQuitRequest: () -> Unit = {}
+    onCloseRequest: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
@@ -62,11 +65,12 @@ fun MemoPad(
             // return arrow should always be enabled unless used in info screen
             MemoPadButton(Modifier.fillMaxWidth(.5f),
                 screen, -1, null, {},
-                onQuitRequest = onQuitRequest)
+                onCloseRequest = onCloseRequest)
         }
     }
 }
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 private fun MemoPadButton(
     modifier: Modifier,
@@ -74,12 +78,13 @@ private fun MemoPadButton(
     value: Int,
     hasBeenAdded: Boolean?,
     onEditRequest: (Int) -> Unit,
-    onQuitRequest: () -> Unit
+    onCloseRequest: () -> Unit
 ) {
     Box(
         modifier = modifier
-            .semantics(mergeDescendants = true) {
-                if (screen != Screen.IN_GAME || value > -1 && hasBeenAdded == null) disabled()
+            .semantics {
+                if (screen != Screen.IN_GAME ||
+                    value > -1 && hasBeenAdded == null) disabled()
             }
             .testTag(MEMO_PAD_TAG)
             .aspectRatio(1f)
@@ -107,7 +112,7 @@ private fun MemoPadButton(
                         (value == -1 || value > -1 && hasBeenAdded != null),
                 role = Role.Button
             ) {
-                if (value == -1) onQuitRequest() else onEditRequest(value)
+                if (value == -1) onCloseRequest() else onEditRequest(value)
               },
         contentAlignment = Alignment.Center
     ) {
@@ -139,7 +144,13 @@ private fun MemoPadButton(
                     false -> memoGreen
                     else -> memoPink
                 },
-                style = MaterialTheme.typography.labelMedium
+                style = if (hasBeenAdded != null) {
+                    MaterialTheme.typography.labelMedium
+                } else {
+                    MaterialTheme.typography.labelMedium.copy(
+                        drawStyle = Stroke(width = 1f, join = StrokeJoin.Round)
+                    )
+                }
             )
         }
     }

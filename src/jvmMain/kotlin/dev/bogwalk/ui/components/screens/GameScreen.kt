@@ -24,13 +24,13 @@ import dev.bogwalk.ui.style.lightGreen
 @Composable
 fun GameScreen(
     screen: Screen,
-    grid: List<List<GameTile>>,
+    grid: List<GameTile>,
     infoGrid: List<Pair<Int, Int>>,
     currentPosition: Pair<Int, Int>,
     isMemoOpen: Boolean,
     onSelectRequest: (Pair<Int, Int>) -> Unit,
     onMemoRequest: () -> Unit,
-    onEditRequest: (Int) -> Unit,
+    onEditMemoRequest: (Int) -> Unit,
     onQuitRequest: () -> Unit
 ) {
     Row(
@@ -51,19 +51,21 @@ fun GameScreen(
     ) {
         TileGrid(screen, grid, infoGrid, currentPosition, isMemoOpen, onSelectRequest)
         Column(
-            modifier = Modifier.fillMaxHeight().padding(end = 8.dp),
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(end = 8.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            MemoButton(screen, isMemoOpen, onSelectRequest = onMemoRequest)
+            MemoButton(screen, isMemoOpen, onMemoRequest)
             if (isMemoOpen) {
                 MemoPad(
                     screen = screen,
                     memoData = if (currentPosition == -1 to -1) null else {
-                        grid[currentPosition.first][currentPosition.second].memoData
+                        grid[currentPosition.first * 5 + currentPosition.second].memoData
                     },
-                    onEditRequest = onEditRequest,
-                    onQuitRequest = onQuitRequest)
+                    onEditRequest = onEditMemoRequest,
+                    onCloseRequest = onMemoRequest)
             }
             QuitButton(screen, currentPosition, isMemoOpen, onQuitRequest)
         }
@@ -77,11 +79,10 @@ private fun GameScreenPreview() {
         Box(Modifier.requiredWidth(450.dp)) {
             GameScreen(
                 Screen.IN_GAME,
-                List(5) { r -> List(5) { c -> GameTile(r to c, 1) } },
+                List(5) { r -> List(5) { c -> GameTile(r to c, 1) } }.flatten(),
                 listOf(7 to 0, 6 to 0, 6 to 1, 3 to 2, 2 to 3, 5 to 1, 6 to 1, 2 to 3, 6 to 0, 5 to 1),
                 0 to 0, false,
-                onSelectRequest = {}, onEditRequest = {}, onMemoRequest = {}
-            ) {}
+                {}, {}, {}) {}
         }
     }
 }
@@ -93,11 +94,10 @@ private fun GameScreenWithMemoPreview() {
         Box(Modifier.requiredWidth(450.dp)) {
             GameScreen(
                 Screen.IN_GAME,
-                List(5) { r -> List(5) { c -> GameTile(r to c, 1) } },
+                List(5) { r -> List(5) { c -> GameTile(r to c, 1) } }.flatten(),
                 listOf(7 to 0, 6 to 0, 6 to 1, 3 to 2, 2 to 3, 5 to 1, 6 to 1, 2 to 3, 6 to 0, 5 to 1),
                 2 to 1, true,
-                onSelectRequest = {}, onEditRequest = {}, onMemoRequest = {}
-            ) {}
+                {}, {}, {}) {}
         }
     }
 }

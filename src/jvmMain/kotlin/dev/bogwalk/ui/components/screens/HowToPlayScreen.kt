@@ -27,34 +27,15 @@ fun HowToPlayScreen() {
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        FlipTile(Screen.ABOUT_GAME, -1 to -1, 3, isFlipped = true)
-        Icon(
-            painter = painterResource(INFO_ARROW),
-            contentDescription = INFO_ARROW_DESCR,
-            modifier = Modifier.requiredSize(26.dp),
-            tint = Color.Unspecified
-        )
-        FlipTile(Screen.ABOUT_GAME, -1 to -1, 1, isFlipped = true)
-        Icon(
-            painter = painterResource(INFO_ARROW),
-            contentDescription = INFO_ARROW_DESCR,
-            modifier = Modifier.requiredSize(26.dp),
-            tint = Color.Unspecified
-        )
-        FlipTile(Screen.ABOUT_GAME, -1 to -1, 2, isFlipped = true)
-        Icon(
-            painter = painterResource(INFO_ARROW),
-            contentDescription = INFO_ARROW_DESCR,
-            modifier = Modifier.requiredSize(26.dp),
-            tint = Color.Unspecified
-        )
-        FlipTile(Screen.ABOUT_GAME, -1 to -1, 1, isFlipped = true)
-        Icon(
-            painter = painterResource(INFO_ARROW),
-            contentDescription = INFO_ARROW_DESCR,
-            modifier = Modifier.requiredSize(26.dp),
-            tint = Color.Unspecified
-        )
+        for (value in listOf(3, 1, 2, 1)) {
+            FlipTile(Screen.ABOUT_GAME, -1 to -1, value, isFlipped = true)
+            Icon(
+                painter = painterResource(INFO_ARROW),
+                contentDescription = INFO_ARROW_DESCR,
+                modifier = Modifier.requiredSize(26.dp),
+                tint = Color.Unspecified
+            )
+        }
         FlipTile(Screen.ABOUT_GAME, -1 to -1, 3, isFlipped = true)
     }
     InfoTextBox(

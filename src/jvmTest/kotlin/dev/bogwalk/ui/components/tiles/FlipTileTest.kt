@@ -17,11 +17,11 @@ class FlipTileTest {
 
     @Test
     fun `FlipTile only displays content when flipped`() {
-        val state = mutableStateOf(false)
+        val flipped = mutableStateOf(false)
         val content = mutableStateOf(0)
 
         composeTestRule.setContent {
-            FlipTile(Screen.IN_GAME,0 to 0, content.value, isFlipped = state.value) {}
+            FlipTile(Screen.IN_GAME,0 to 0, content.value, isFlipped = flipped.value) {}
         }
 
         composeTestRule.onNodeWithTag(TILE_TAG, useUnmergedTree = true)
@@ -30,14 +30,13 @@ class FlipTileTest {
             .onChildren()
             .assertCountEquals(0)
 
-        state.value = true
+        flipped.value = true
         composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithTag(TILE_TAG, useUnmergedTree = true)
             .assertIsNotEnabled()
-            .onChildren()
-            .assertCountEquals(1)
-            .assertAll(hasContentDescriptionExactly("${FLIPPED_DESCR}0"))
+            .onChild()
+            .assertContentDescriptionEquals("${FLIPPED_DESCR}0")
 
         content.value = 3
         composeTestRule.waitForIdle()
@@ -49,19 +48,22 @@ class FlipTileTest {
     }
 
     @Test
-    fun `FlipTile shows marks if memo opened`() {
-        val marks = mutableStateOf(booleanArrayOf(true, true, false, false))
+    fun `FlipTile shows marks if any stored & not flipped`() {
+        val flipped = mutableStateOf(false)
         val padOpen = mutableStateOf(false)
 
         composeTestRule.setContent {
-            FlipTile(Screen.IN_GAME,0 to 0, 1, marks.value,
-                isMemoOpen = padOpen.value) {}
+            FlipTile(Screen.IN_GAME,0 to 0, 1,
+                booleanArrayOf(true, true, false, false),
+                isFlipped = flipped.value, isMemoOpen = padOpen.value) {}
         }
 
         composeTestRule.onNodeWithTag(TILE_TAG, useUnmergedTree = true)
             .assertExists()
             .onChildren()
-            .assertCountEquals(0)
+            .assertCountEquals(2)
+            .assertAny(hasTestTag(ZERO_TAG))
+            .assertAny(hasTextExactly("1"))
 
         padOpen.value = true
         composeTestRule.waitForIdle()
@@ -72,49 +74,23 @@ class FlipTileTest {
             .assertAny(hasTestTag(ZERO_TAG))
             .assertAny(hasTextExactly("1"))
 
-        marks.value = booleanArrayOf(true, true, true, true)
+        flipped.value = true
         composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithTag(TILE_TAG, useUnmergedTree = true)
-            .onChildren()
-            .assertCountEquals(4)
-            .assertAny(hasTextExactly("3"))
-    }
-
-    @Test
-    fun `FlipTile does not shows marks if flipped with memo open`() {
-        val state = mutableStateOf(false)
-
-        composeTestRule.setContent {
-            FlipTile(Screen.IN_GAME,0 to 0, 0,
-                booleanArrayOf(true, false, false, false),
-                isFlipped = state.value, isMemoOpen = true) {}
-        }
-
-        composeTestRule.onNodeWithTag(TILE_TAG, useUnmergedTree = true)
-            .assertExists()
-            .onChildren()
-            .assertCountEquals(1)
-            .filterToOne(hasTestTag(ZERO_TAG))
-
-        state.value = false
-        composeTestRule.waitForIdle()
-
-        composeTestRule.onNodeWithTag(TILE_TAG, useUnmergedTree = true)
-            .onChildren()
-            .assertCountEquals(1)
-            .filterToOne(hasContentDescriptionExactly("${FLIPPED_DESCR}0"))
+            .onChild()
+            .assertContentDescriptionEquals("${FLIPPED_DESCR }1")
     }
 
     @Test
     fun `FlipTile shows pencil icon if in focus regardless of flip state`() {
-        val state = mutableStateOf(false)
+        val flipped = mutableStateOf(false)
         val focus = mutableStateOf(false)
 
         composeTestRule.setContent {
             FlipTile(Screen.IN_GAME,0 to 0, 1,
                 booleanArrayOf(true, false, false, false),
-                isInFocus = focus.value, isFlipped = state.value, isMemoOpen = true) {}
+                isInFocus = focus.value, isFlipped = flipped.value, isMemoOpen = true) {}
         }
 
         composeTestRule.onNodeWithTag(TILE_TAG, useUnmergedTree = true)
@@ -130,8 +106,9 @@ class FlipTileTest {
             .onChildren()
             .assertCountEquals(2)
             .assertAny(hasContentDescriptionExactly(MEMO_PENCIL_DESCR))
+            .assertAny(hasTestTag(ZERO_TAG))
 
-        state.value = true
+        flipped.value = true
         composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithTag(TILE_TAG, useUnmergedTree = true)

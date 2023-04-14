@@ -3,7 +3,9 @@ package dev.bogwalk.model
 import kotlin.random.Random
 
 class GameLevelGenerator : LevelGenerator() {
-    override fun getLevelData(level: Int): List<Int> = levelOptions[level].random()
+    override fun getLevelData(level: Int): List<Int> {
+        return levelOptions[level - 1].random()
+    }
 
     override fun assignLevelData(data: List<Int>): List<Int> {
         val values = MutableList(25) { 1 }

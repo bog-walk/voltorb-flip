@@ -74,9 +74,9 @@ private fun RulesBox() {
                 .drawBehind { drawUnderLine() },
             verticalAlignment = Alignment.CenterVertically
         ) {
-            FlipTile(Screen.PRE_GAME, -1 to -1, 1, isFlipped = true)
-            FlipTile(Screen.PRE_GAME, -1 to -1, 2, isFlipped = true)
-            FlipTile(Screen.PRE_GAME, -1 to -1, 3, isFlipped = true)
+            FlipTile(Screen.IN_GAME, -1 to -1, 1, isFlipped = true)
+            FlipTile(Screen.IN_GAME, -1 to -1, 2, isFlipped = true)
+            FlipTile(Screen.IN_GAME, -1 to -1, 3, isFlipped = true)
             Text(
                 text = INFO_POINTS,
                 modifier = Modifier.weight(.6f).padding(start = 5.dp),
@@ -91,7 +91,7 @@ private fun RulesBox() {
                 .drawBehind { drawUnderLine() },
             verticalAlignment = Alignment.CenterVertically
         ) {
-            FlipTile(Screen.PRE_GAME, -1 to -1, 0, isFlipped = true)
+            FlipTile(Screen.IN_GAME, -1 to -1, 0, isFlipped = true)
             Text(
                 text = GAME_OVER,
                 modifier = Modifier.padding(start = 5.dp),
@@ -121,9 +121,9 @@ private fun CoinsBox(
     ) {
         Row(
             modifier = Modifier
+                .testTag(COIN_TAG)
                 .fillMaxWidth()
-                .padding(horizontal = 10.dp)
-                .testTag(COIN_TAG),
+                .padding(horizontal = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(

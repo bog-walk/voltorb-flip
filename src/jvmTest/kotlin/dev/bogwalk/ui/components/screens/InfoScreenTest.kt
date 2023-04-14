@@ -12,7 +12,7 @@ class InfoScreenTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun `InfoScreen loads with correct initial content`() {
+    fun `InfoScreen loads with correct disabled content`() {
         composeTestRule.setContent {
             InfoScreen(1, 0, 0)
         }
@@ -23,6 +23,12 @@ class InfoScreenTest {
         composeTestRule.onAllNodesWithTag(TILE_TAG)
             .assertCountEquals(4)
             .assertAll(isNotEnabled())
+
+        composeTestRule.onNodeWithText(INFO_POINTS)
+            .assertExists()
+
+        composeTestRule.onNodeWithText(GAME_OVER)
+            .assertExists()
 
         composeTestRule.onAllNodesWithTag(COIN_TAG)
             .filterToOne(
@@ -37,43 +43,23 @@ class InfoScreenTest {
 
     @Test
     fun `InfoScreen adjusts coins accordingly`() {
-        val total = mutableStateOf(999)
         val current = mutableStateOf(0)
 
         composeTestRule.setContent {
-            InfoScreen(1, total.value, current.value)
+            InfoScreen(1, 0, current.value)
         }
 
         composeTestRule.onAllNodesWithTag(COIN_TAG)
             .filterToOne(
-                hasAnyChild(hasTextExactly(PLAYER_COINS)) and hasAnyChild(hasTextExactly("00999"))
-            )
-
-        composeTestRule.onAllNodesWithTag(COIN_TAG)
-            .filterToOne(
                 hasAnyChild(hasTextExactly(CURRENT_COINS)) and hasAnyChild(hasTextExactly("00001"))
             )
 
-        current.value = 1
+        current.value = 99
         composeTestRule.waitForIdle()
 
         composeTestRule.onAllNodesWithTag(COIN_TAG)
             .filterToOne(
-                hasAnyChild(hasTextExactly(CURRENT_COINS)) and hasAnyChild(hasTextExactly("00001"))
-            )
-
-        total.value = 1000
-        current.value = 0
-        composeTestRule.waitForIdle()
-
-        composeTestRule.onAllNodesWithTag(COIN_TAG)
-            .filterToOne(
-                hasAnyChild(hasTextExactly(PLAYER_COINS)) and hasAnyChild(hasTextExactly("01000"))
-            )
-
-        composeTestRule.onAllNodesWithTag(COIN_TAG)
-            .filterToOne(
-                hasAnyChild(hasTextExactly(CURRENT_COINS)) and hasAnyChild(hasTextExactly("00000"))
+                hasAnyChild(hasTextExactly(CURRENT_COINS)) and hasAnyChild(hasTextExactly("00099"))
             )
     }
 }

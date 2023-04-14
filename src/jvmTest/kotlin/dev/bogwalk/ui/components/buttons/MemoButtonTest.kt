@@ -4,10 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import dev.bogwalk.ui.Screen
-import dev.bogwalk.ui.style.CLOSE
-import dev.bogwalk.ui.style.MEMO_TAG
-import dev.bogwalk.ui.style.OPEN
-import dev.bogwalk.ui.style.MEMO_X_DESCR
+import dev.bogwalk.ui.style.*
 import org.junit.Rule
 import kotlin.test.Test
 
@@ -16,22 +13,26 @@ class MemoButtonTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun `MemoButton is disabled if position set to info screen`() {
-        val state = mutableStateOf(Screen.IN_GAME)
+    fun `MemoButton is enabled in only 1 screen state`() {
+        val screen = mutableStateOf(Screen.IN_GAME)
 
         composeTestRule.setContent {
-            MemoButton(state.value, false) {}
+            MemoButton(screen.value, false) {}
         }
 
         composeTestRule.onNodeWithTag(MEMO_TAG)
             .assertExists()
             .assertIsEnabled()
 
-        state.value = Screen.PRE_GAME
-        composeTestRule.waitForIdle()
+        for (screenType in Screen.values()) {
+            if (screenType == Screen.IN_GAME) continue
 
-        composeTestRule.onNodeWithTag(MEMO_TAG)
-            .assertIsNotEnabled()
+            screen.value = screenType
+            composeTestRule.waitForIdle()
+
+            composeTestRule.onNodeWithTag(MEMO_TAG)
+                .assertIsNotEnabled()
+        }
     }
 
     @Test
@@ -45,16 +46,16 @@ class MemoButtonTest {
         composeTestRule.onNodeWithTag(MEMO_TAG, useUnmergedTree = true)
             .assertExists()
             .onChildren()
+            .assertCountEquals(3)
             .assertAny(hasTextExactly(OPEN))
-            .filterToOne(hasContentDescriptionExactly(MEMO_X_DESCR))
-            .assertExists()
+            .assertAny(hasContentDescriptionExactly(MEMO_X_DESCR))
 
         isMemoOpen.value = true
         composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithTag(MEMO_TAG, useUnmergedTree = true)
-            .assertExists()
             .onChildren()
-            .assertAny(hasTextExactly(CLOSE))
+            .assertCountEquals(3)
+            .filterToOne(hasTextExactly(CLOSE))
     }
 }

@@ -15,18 +15,22 @@ class GameScreenTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun `GameScreen loads with initial correct content`() {
+    fun `GameScreen loads with correct content`() {
         composeTestRule.setContent {
             GameScreen(
                 Screen.IN_GAME,
-                List(5) { r -> List(5) { c -> GameTile(r to c, 1) } },
+                List(5) { r -> List(5) { c -> GameTile(r to c, 1) } }.flatten(),
                 listOf(7 to 0, 6 to 0, 6 to 1, 3 to 2, 2 to 3, 5 to 1, 6 to 1, 2 to 3, 6 to 0, 5 to 1),
                 0 to 0, false,
                 {}, {}, {}) {}
         }
 
-        composeTestRule.onAllNodesWithTag(TILE_TAG)
+        composeTestRule.onNodeWithTag(GRID_TAG)
+            .onChildren()
+            .filter(hasTestTag(TILE_TAG))
             .assertCountEquals(35)
+            .filter(isEnabled())
+            .assertCountEquals(25)
 
         composeTestRule.onNodeWithTag(MEMO_TAG)
             .assertExists()
@@ -42,29 +46,36 @@ class GameScreenTest {
 
     @Test
     fun `GameScreen entirely disabled if not in game`() {
-        val state = mutableStateOf(Screen.IN_GAME)
+        val screen = mutableStateOf(Screen.IN_GAME)
 
         composeTestRule.setContent {
             GameScreen(
-                state.value,
-                List(5) { r -> List(5) { c -> GameTile(r to c, 1) } },
+                screen.value,
+                List(5) { r -> List(5) { c -> GameTile(r to c, 1) } }.flatten(),
                 listOf(7 to 0, 6 to 0, 6 to 1, 3 to 2, 2 to 3, 5 to 1, 6 to 1, 2 to 3, 6 to 0, 5 to 1),
                 0 to 0, false,
                 {}, {}, {}) {}
         }
 
-        composeTestRule.onAllNodesWithTag(TILE_TAG)
+        composeTestRule.onNodeWithTag(GRID_TAG)
+            .onChildren()
             .filter(isEnabled())
             .assertCountEquals(25)
+
         composeTestRule.onNodeWithTag(MEMO_TAG)
             .assertIsEnabled()
+
         composeTestRule.onNodeWithText(QUIT)
             .assertIsEnabled()
 
-        state.value = Screen.QUITTING
-        composeTestRule.waitForIdle()
+        for (screenType in Screen.values()) {
+            if (screenType == Screen.IN_GAME) continue
 
-        composeTestRule.assertGameScreenDisabled()
+            screen.value = screenType
+            composeTestRule.waitForIdle()
+
+            composeTestRule.assertGameScreenDisabled()
+        }
     }
 
     @Test
@@ -74,7 +85,7 @@ class GameScreenTest {
         composeTestRule.setContent {
             GameScreen(
                 Screen.IN_GAME,
-                List(5) { r -> List(5) { c -> GameTile(r to c, 1) } },
+                List(5) { r -> List(5) { c -> GameTile(r to c, 1) } }.flatten(),
                 listOf(7 to 0, 6 to 0, 6 to 1, 3 to 2, 2 to 3, 5 to 1, 6 to 1, 2 to 3, 6 to 0, 5 to 1),
                 0 to 0,
                 isMemoOpen = padOpen.value,
@@ -108,7 +119,7 @@ class GameScreenTest {
         composeTestRule.setContent {
             GameScreen(
                 Screen.IN_GAME,
-                List(5) { r -> List(5) { c -> GameTile(r to c, 1) } },
+                List(5) { r -> List(5) { c -> GameTile(r to c, 1) } }.flatten(),
                 listOf(7 to 0, 6 to 0, 6 to 1, 3 to 2, 2 to 3, 5 to 1, 6 to 1, 2 to 3, 6 to 0, 5 to 1),
                 currentPosition = position.value,
                 isMemoOpen = true,

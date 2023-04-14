@@ -12,7 +12,7 @@ class InfoTileTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun `InfoTile is not enabled & loads with correct content`() {
+    fun `InfoTile is not enabled in game & loads with correct content`() {
         composeTestRule.setContent {
             InfoTile(0, 4, 1)
         }

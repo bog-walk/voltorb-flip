@@ -31,9 +31,9 @@ fun MemoButton(
     isMemoOpen: Boolean,
     onSelectRequest: () -> Unit = {}
 ) {
-    Box(
+    Box(  // slightly too large clickable bounds; play with padding?
         modifier = Modifier
-            .semantics(mergeDescendants = true) {
+            .semantics {
                 if (screen != Screen.IN_GAME) disabled()
             }
             .testTag(MEMO_TAG)
@@ -65,6 +65,7 @@ fun MemoButton(
                 .padding(top = 10.dp),
             contentAlignment = Alignment.Center
         ) {
+            // drawStyle removes fill colour, so only option for outlined text?
             Text(
                 text = if (isMemoOpen) CLOSE else OPEN,
                 style = MaterialTheme.typography.labelLarge

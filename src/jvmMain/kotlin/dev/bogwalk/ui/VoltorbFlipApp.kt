@@ -3,6 +3,7 @@ package dev.bogwalk.ui
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.components.screens.*
@@ -17,7 +18,8 @@ enum class Screen {
 @Preview
 fun VoltorbFlipApp(state: VoltorbFlipAppState) {
     Row(
-        modifier = Modifier.height(IntrinsicSize.Max),
+        modifier = Modifier.fillMaxHeight().padding(10.dp),
+        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         TopScreen(
@@ -34,27 +36,29 @@ fun VoltorbFlipApp(state: VoltorbFlipAppState) {
             Modifier.weight(.51f).height(IntrinsicSize.Max)
         ) {
             GameScreen(
-                state.screenState,
-                state.grid,
-                state.infoGrid,
-                state.currentPosition,
-                state.isMemoOpen,
-                state::selectATile,
-                { state.isMemoOpen = !state.isMemoOpen },
-                state::editCurrentTile
-            ) {
-                state.currentPosition = -1 to -1
-                state.screenState = Screen.QUITTING
-            }
-            if (state.screenState != Screen.IN_GAME) {
-                OverlayScreen(
-                    state.screenState,
-                    state::resetGame,
-                    state::clearGame,
-                    state::endGame
-                ) {
-                    state.screenState = Screen.values()[it]
+                screen = state.screenState,
+                grid = state.gameTiles,
+                infoGrid = state.infoSummary,
+                currentPosition = state.currentPosition,
+                isMemoOpen = state.isMemoOpen,
+                onSelectRequest = state::selectATile,
+                onMemoRequest = { state.isMemoOpen = !state.isMemoOpen },
+                onEditMemoRequest = state::editCurrentTile,
+                onQuitRequest = {
+                    state.currentPosition = -1 to -1
+                    state.screenState = Screen.QUITTING
                 }
+            )
+            if (state.screenState !in listOf(Screen.IN_GAME, Screen.POST_GAME)) {
+                OverlayScreen(
+                    screen = state.screenState,
+                    onPlayRequest = state::resetGame,
+                    onClearRequest = state::clearGame,
+                    onQuitRequest = { state.screenState = Screen.POST_GAME },
+                    onContinueRequest = { state.screenState = Screen.IN_GAME },
+                    onRevealRequest = { state.screenState = Screen.REVEAL },
+                    onChangeScreen = { state.screenState = Screen.values()[it] }
+                )
             }
         }
     }

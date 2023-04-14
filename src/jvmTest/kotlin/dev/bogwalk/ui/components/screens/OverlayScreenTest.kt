@@ -15,74 +15,73 @@ class OverlayScreenTest {
     val composeTestRule = createComposeRule()
 
     @Test
+    fun `OverlayScreen is only enabled in 1 screen state`() {
+        val screen = mutableStateOf(Screen.REVEAL)
+
+        composeTestRule.setContent {
+            OverlayScreen(screen.value, {}, {}, {}, {}, {}) {}
+        }
+
+        composeTestRule.onNodeWithTag(OVERLAY_TAG)
+            .assertExists()
+            .assertIsEnabled()
+
+        for (screenType in Screen.values()) {
+            if (screenType == Screen.REVEAL) continue
+
+            screen.value = screenType
+            composeTestRule.waitForIdle()
+
+            composeTestRule.onNodeWithTag(OVERLAY_TAG)
+                .assertIsNotEnabled()
+        }
+    }
+
+    @Test
     fun `OverlayScreen changes content based on screen state`() {
         val state = mutableStateOf(Screen.PRE_GAME)
 
         composeTestRule.setContent {
-            OverlayScreen(state.value, {}, {}, {}, {})
+            OverlayScreen(state.value, {}, {}, {}, {}, {}) {}
         }
 
         composeTestRule.onAllNodesWithTag(OPTIONS_TAG)
             .assertCountEquals(3)
-        composeTestRule.onNodeWithTag(SPEECH_TAG)
-            .assertExists()
-
-        state.value = Screen.PRE_INFO
-        composeTestRule.waitForIdle()
-
-        composeTestRule.onAllNodesWithTag(OPTIONS_TAG)
-            .assertCountEquals(4)
-        composeTestRule.onNodeWithTag(SPEECH_TAG)
-            .assertExists()
-
-        state.value = Screen.QUITTING
-        composeTestRule.waitForIdle()
-
-        composeTestRule.onNodeWithText(YES)
-            .assertExists()
-        composeTestRule.onNodeWithText(NO)
-            .assertExists()
-        composeTestRule.onNodeWithTag(SPEECH_TAG)
-            .assertExists()
-
-        state.value = Screen.ABOUT_GAME
-        composeTestRule.waitForIdle()
-
-        composeTestRule.onNodeWithTag(SPEECH_TAG)
-            .assertExists()
-    }
-    @Test
-    fun `SpeechBox changes based on screen`() {
-        val state = mutableStateOf(Screen.PRE_GAME)
-
-        composeTestRule.setContent {
-            OverlayScreen(state.value, {}, {}, {}, {})
-        }
-
-        composeTestRule.onNodeWithTag(SPEECH_TAG)
+        composeTestRule.onNodeWithTag(SPEECH_TAG, useUnmergedTree = true)
             .onChild()
             .assertTextEquals(START_GAME)
 
         state.value = Screen.PRE_INFO
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithTag(SPEECH_TAG)
+        composeTestRule.onAllNodesWithTag(OPTIONS_TAG)
+            .assertCountEquals(4)
+        composeTestRule.onNodeWithTag(SPEECH_TAG, useUnmergedTree = true)
             .onChild()
             .assertTextEquals(REQUEST_INFO)
 
         state.value = Screen.QUITTING
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithTag(SPEECH_TAG)
+        composeTestRule.onNodeWithText(YES)
+            .assertExists()
+            .assertIsEnabled()
+        composeTestRule.onNodeWithText(NO)
+            .assertExists()
+            .assertIsEnabled()
+        composeTestRule.onNodeWithTag(SPEECH_TAG, useUnmergedTree = true)
             .onChild()
             .assertTextEquals(QUIT_GAME)
 
-        state.value = Screen.ABOUT_MEMO
+        state.value = Screen.ABOUT_GAME
         composeTestRule.waitForIdle()
 
-        val expected = ABOUT_TEXT.substringBefore("|")
-
-        composeTestRule.onSpeechBox(expected)
+        composeTestRule.onNodeWithTag(OPTIONS_TAG)
+            .assertDoesNotExist()
+        composeTestRule.onNodeWithTag(SPEECH_TAG, useUnmergedTree = true)
+            .onChildren()
+            .assertCountEquals(2)
+            .filterToOne(hasAnyChild(hasContentDescriptionExactly(NEXT_ARROW_DESCR)))
             .assertIsEnabled()
     }
 
@@ -91,7 +90,7 @@ class OverlayScreenTest {
         val expected = HOW_TO_TEXT.split("|").map { it.split("\n") }
 
         composeTestRule.setContent {
-            OverlayScreen(Screen.ABOUT_GAME, {}, {}, {}, {})
+            OverlayScreen(Screen.ABOUT_GAME, {}, {}, {}, {}, {}) {}
         }
 
         composeTestRule.onSpeechBox(expected[0].take(2).joinToString("\n"))
@@ -116,10 +115,10 @@ class OverlayScreenTest {
     @Test
     fun `SpeechBox correctly calls function when text is finished`() {
         val expected = ABOUT_TEXT.split("|").map { it.split("\n") }
-        var screen = Screen.values()[2]
+        var screen = Screen.ABOUT_MEMO
 
         composeTestRule.setContent {
-            OverlayScreen(screen, {}, {}, {}) { screen = Screen.values()[it] }
+            OverlayScreen(screen, {}, {}, {}, {}, {}) { screen = Screen.values()[it] }
         }
 
         composeTestRule.onSpeechBox(expected[0].take(2).joinToString("\n"))
@@ -127,7 +126,7 @@ class OverlayScreenTest {
 
         composeTestRule.waitForIdle()
 
-        repeat(6) {
+        repeat(5) {
             composeTestRule.onSpeechBox()
                 .performClick()
 

@@ -39,7 +39,7 @@ fun QuitButton(
 ) {
     Box(
         Modifier
-            .semantics(mergeDescendants = true) {
+            .semantics {
                 if (screen != Screen.IN_GAME) disabled()
             }
             .padding(vertical = 15.dp)
@@ -64,6 +64,7 @@ fun QuitButton(
             ) { onQuitRequest() },
         contentAlignment = Alignment.Center
     ) {
+        // drawStyle removes fill colour, so only option for outlined text?
         Text(
             text = QUIT,
             style = MaterialTheme.typography.labelLarge
@@ -82,9 +83,10 @@ fun QuitButton(
 @Composable
 fun QuitOption(
     option: String,
-    onSelect: () -> Unit = {}
+    onSelect: () -> Unit
 ) {
     var isInFocus by remember { mutableStateOf(false) }
+
     Text(
         text = option,
         modifier = Modifier

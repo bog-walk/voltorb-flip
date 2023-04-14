@@ -2,9 +2,7 @@ package dev.bogwalk.ui.components.screens
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
-import dev.bogwalk.ui.style.INFO_ARROW_DESCR
-import dev.bogwalk.ui.style.QUIT
-import dev.bogwalk.ui.style.TILE_TAG
+import dev.bogwalk.ui.style.*
 import org.junit.Rule
 import kotlin.test.Test
 
@@ -25,8 +23,16 @@ class HowToPlayScreenTest {
         composeTestRule.onAllNodesWithContentDescription(INFO_ARROW_DESCR)
             .assertCountEquals(5)
 
-        composeTestRule.onNodeWithText(QUIT)
+        composeTestRule.onNodeWithText(HOW_TO_INFO_1)
             .assertExists()
+
+        composeTestRule.onNodeWithText(QUIT)
             .assertIsNotEnabled()
+
+        composeTestRule.onNodeWithText(HOW_TO_INFO_2)
+            .assertExists()
+
+        composeTestRule.onNodeWithText(HOW_TO_INFO_3)
+            .assertExists()
     }
 }

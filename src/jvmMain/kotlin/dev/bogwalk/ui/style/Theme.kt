@@ -134,6 +134,9 @@ fun VoltorbFlipTheme(
         colorScheme = VoltorbFlipColorScheme,
         typography = VoltorbFlipTypography
     ) {
-        Surface(content = content)
+        Surface(
+            color = darkGrey,
+            content = content
+        )
     }
 }

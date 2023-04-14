@@ -28,7 +28,7 @@ fun AboutMemoScreen() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box {
-            MemoButton(Screen.ABOUT_MEMO, isMemoOpen = false)
+            MemoButton(Screen.ABOUT_MEMO, false)
             Icon(
                 painter = painterResource(INFO_STYLUS),
                 contentDescription = INFO_STYLUS_DESCR,

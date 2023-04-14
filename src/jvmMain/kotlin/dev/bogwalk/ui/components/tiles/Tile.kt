@@ -36,9 +36,8 @@ fun Tile(
     Box(
         modifier = Modifier
             .semantics(mergeDescendants = true) {
-                role = Role.Button
-                if (screen != Screen.IN_GAME ||
-                    tileState != TileState.NOT_FLIPPED) disabled()
+                if (tileState != TileState.NOT_FLIPPED ||
+                    screen != Screen.IN_GAME) disabled()
             }
             .testTag(TILE_TAG)
             .padding(7.dp)
@@ -77,7 +76,7 @@ fun Tile(
             .clickable(
                 interactionSource = MutableInteractionSource(),
                 indication = null,  // this prevents mouse hover effect
-                enabled = screen == Screen.IN_GAME && tileState == TileState.NOT_FLIPPED,
+                enabled = tileState == TileState.NOT_FLIPPED && screen == Screen.IN_GAME,
                 role = Role.Button
             ) { onSelectRequest(position) },
         contentAlignment = Alignment.Center,

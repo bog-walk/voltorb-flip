@@ -23,7 +23,7 @@ fun InfoTile(
     mines: Int
 ) {
     Tile(
-        Screen.PRE_GAME,
+        Screen.IN_GAME,
         rowIndex to -1,
         TileState.STATIC_INFO
     ) {

@@ -16,7 +16,7 @@ class MemoPadTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun `MemoPad loads with correct children`() {
+    fun `MemoPad loads with correct content`() {
         composeTestRule.setContent {
             MemoPad(Screen.IN_GAME, BooleanArray(4), {}) {}
         }
@@ -31,7 +31,7 @@ class MemoPadTest {
     }
 
     @Test
-    fun `all MemoPad buttons except return disabled when no array provided`() {
+    fun `MemoPad buttons all but 1 disabled when no array provided`() {
         val array: MutableState<BooleanArray?> = mutableStateOf(BooleanArray(4))
 
         composeTestRule.setContent {
@@ -52,22 +52,26 @@ class MemoPadTest {
     }
 
     @Test
-    fun `all MemoPad buttons disabled when used in info screen`() {
-        val state = mutableStateOf(Screen.IN_GAME)
+    fun `MemoPad buttons only enabled in 1 screen state`() {
+        val screen = mutableStateOf(Screen.IN_GAME)
 
         composeTestRule.setContent {
-            MemoPad(state.value, BooleanArray(4), {}) {}
+            MemoPad(screen.value, BooleanArray(4), {}) {}
         }
 
         composeTestRule.onAllNodesWithTag(MEMO_PAD_TAG)
             .assertCountEquals(5)
             .assertAll(isEnabled())
 
-        state.value = Screen.ABOUT_MEMO
-        composeTestRule.waitForIdle()
+        for (screenType in Screen.values()) {
+            if (screenType == Screen.IN_GAME) continue
 
-        composeTestRule.onAllNodesWithTag(MEMO_PAD_TAG)
-            .assertCountEquals(5)
-            .assertAll(isNotEnabled())
+            screen.value = screenType
+            composeTestRule.waitForIdle()
+
+            composeTestRule.onAllNodesWithTag(MEMO_PAD_TAG)
+                .assertCountEquals(5)
+                .assertAll(isNotEnabled())
+        }
     }
 }

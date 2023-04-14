@@ -14,11 +14,15 @@ class TileGridTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun `TileGrid loads with correct initial content`() {
+    fun `TileGrid loads with correct content`() {
+        val grid = mutableStateOf(List(5) { r ->
+            List(5) { c -> GameTile(r to c, 1) }
+        }.flatten())
+
         composeTestRule.setContent {
             TileGrid(
                 screen = Screen.IN_GAME,
-                grid = List(5) { r -> List(5) { c -> GameTile(r to c, 1) } },
+                grid = grid.value,
                 infoGrid = listOf(
                     7 to 0, 6 to 0, 6 to 1, 3 to 2, 2 to 3, 5 to 1, 6 to 1, 2 to 3, 6 to 0, 5 to 1
                 ),
@@ -31,26 +35,15 @@ class TileGridTest {
             .filter(isNotEnabled())
             .assertCountEquals(10)
             .assertAll(hasContentDescriptionExactly(INFO_ZERO_DESCR))
-    }
 
-    @Test
-    fun `TileGrid has correct mid-game content`() {
-        composeTestRule.setContent {
-            TileGrid(
-                screen = Screen.IN_GAME,
-                grid = List(5) { r -> List(5) { c ->
-                    if (r == 1) {
-                        GameTile(1 to c, 1, isFlipped = true)
-                    } else {
-                        GameTile(r to c, 1)
-                    }
-                } },
-                infoGrid = listOf(
-                    7 to 0, 5 to 0, 6 to 2, 3 to 2, 2 to 3, 5 to 2, 6 to 2, 2 to 3, 6 to 0, 5 to 2
-                ),
-                currentPosition = 0 to 0,
-                isMemoOpen = false) {}
-        }
+        grid.value = List(5) { r -> List(5) { c ->
+            if (r == 1) {
+                GameTile(1 to c, 1, isFlipped = true)
+            } else {
+                GameTile(r to c, 1)
+            }
+        }}.flatten()
+        composeTestRule.waitForIdle()
 
         composeTestRule.onAllNodesWithTag(TILE_TAG)
             .assertCountEquals(35)
@@ -61,7 +54,7 @@ class TileGridTest {
     }
 
     @Test
-    fun `TileGrid only ever has one pencil when memo open`() {
+    fun `TileGrid has maximum 1 pencil when memo open`() {
         val position = mutableStateOf(0 to 0)
         val padOpen = mutableStateOf(false)
 
@@ -75,7 +68,7 @@ class TileGridTest {
                         1 -> GameTile(1 to c, 1, isFlipped = true)
                         else -> GameTile(r to c, 1)
                     }
-                } },
+                } }.flatten(),
                 infoGrid = listOf(
                     5 to 0, 5 to 0, 6 to 2, 3 to 2, 2 to 3, 5 to 2, 6 to 2, 2 to 3, 6 to 0, 5 to 2
                 ),
@@ -103,5 +96,12 @@ class TileGridTest {
             .filter(hasContentDescription("${FLIPPED_DESCR}1"))
             .assertCountEquals(5)
             .filterToOne(hasContentDescriptionExactly(MEMO_PENCIL_DESCR))
+
+        position.value = -1 to -1  // quit button in focus
+        composeTestRule.waitForIdle()
+
+        composeTestRule.onAllNodesWithTag(TILE_TAG)
+            .filter(hasContentDescriptionExactly(MEMO_PENCIL_DESCR))
+            .assertCountEquals(0)
     }
 }

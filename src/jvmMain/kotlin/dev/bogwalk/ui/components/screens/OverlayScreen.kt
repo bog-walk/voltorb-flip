@@ -29,41 +29,40 @@ fun OverlayScreen(
     onPlayRequest: () -> Unit,
     onClearRequest: () -> Unit,
     onQuitRequest: () -> Unit,
+    onContinueRequest: () -> Unit,
+    onRevealRequest: () -> Unit,
     onChangeScreen: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
+            .testTag(OVERLAY_TAG)
             .fillMaxSize()
             .background(
                 if (screen == Screen.REVEAL) Color.Transparent else Color(0f,0f,0f,.3f)
             )
-            .clickable(enabled = screen == Screen.REVEAL) { onClearRequest },
+            .clickable(enabled = screen == Screen.REVEAL) { onClearRequest() },
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.End
     ) {
         when (screen) {
-            Screen.PRE_GAME, Screen.PRE_INFO -> {
+            Screen.ABOUT_GAME -> SpeechBox(HOW_TO_TEXT) { onChangeScreen(Screen.PRE_INFO.ordinal) }
+            Screen.ABOUT_HINT -> SpeechBox(HINT_TEXT) { onChangeScreen(Screen.PRE_INFO.ordinal) }
+            Screen.ABOUT_MEMO -> SpeechBox(ABOUT_TEXT) { onChangeScreen(Screen.PRE_INFO.ordinal) }
+            Screen.PRE_GAME -> {
                 OptionsPanel(screen, onPlayRequest, onQuitRequest, onChangeScreen)
+                SpeechBox(START_GAME) {}
+            }
+            Screen.PRE_INFO -> {
+                OptionsPanel(screen, onPlayRequest, onQuitRequest, onChangeScreen)
+                SpeechBox(REQUEST_INFO) {}
             }
             Screen.QUITTING -> {
-                QuitOption(YES) { onQuitRequest() }
-                QuitOption(NO) { onPlayRequest() }
+                QuitOption(YES) { onRevealRequest() }
+                QuitOption(NO) { onContinueRequest() }
+                SpeechBox(QUIT_GAME) {}
             }
             else -> {}
         }
-        if (screen != Screen.REVEAL) {
-            SpeechBox(
-                when (screen) {
-                    Screen.ABOUT_GAME -> HOW_TO_TEXT
-                    Screen.ABOUT_HINT -> HINT_TEXT
-                    Screen.ABOUT_MEMO -> ABOUT_TEXT
-                    Screen.PRE_GAME -> START_GAME
-                    Screen.PRE_INFO -> REQUEST_INFO
-                    Screen.QUITTING -> QUIT_GAME
-                    else -> ""
-                }
-            ) { onChangeScreen(Screen.PRE_INFO.ordinal) }
-        }  // only 3 info screens will show next arrow
     }
 }
 
@@ -78,10 +77,10 @@ private fun SpeechBox(
 
     Row(
         modifier = Modifier
+            .testTag(SPEECH_TAG)
             .fillMaxWidth()
             .height(IntrinsicSize.Max)
             .padding(horizontal = 8.dp, vertical = 10.dp)
-            .testTag(SPEECH_TAG)
             .background(
                 Brush.verticalGradient(
                     .7f to Color(0xff63636b), .8f to Color(0xff5a5a63),
@@ -104,8 +103,7 @@ private fun SpeechBox(
                 .padding(5.dp)
                 .align(Alignment.CenterVertically),
             maxLines = 2,
-            fontSize = 16.sp,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp)
         )
         if (groupedLines.size > 1) {
             IconButton(
@@ -153,7 +151,7 @@ private fun SpeechBoxPreview() {
 private fun OverlayScreenPreGamePreview() {
     VoltorbFlipTheme {
         Box(Modifier.requiredSize(450.dp)) {
-            OverlayScreen(Screen.PRE_GAME, {}, {}, {}) {}
+            OverlayScreen(Screen.PRE_GAME, {}, {}, {}, {}, {}) {}
         }
     }
 }
@@ -163,7 +161,7 @@ private fun OverlayScreenPreGamePreview() {
 private fun OverlayScreenPreInfoPreview() {
     VoltorbFlipTheme {
         Box(Modifier.requiredSize(450.dp)) {
-            OverlayScreen(Screen.PRE_INFO, {}, {}, {}) {}
+            OverlayScreen(Screen.PRE_INFO, {}, {}, {}, {}, {}) {}
         }
     }
 }
@@ -173,7 +171,7 @@ private fun OverlayScreenPreInfoPreview() {
 private fun OverlayScreenQuittingPreview() {
     VoltorbFlipTheme {
         Box(Modifier.requiredSize(450.dp)) {
-            OverlayScreen(Screen.QUITTING, {}, {}, {}) {}
+            OverlayScreen(Screen.QUITTING, {}, {}, {}, {}, {}) {}
         }
     }
 }
@@ -183,7 +181,7 @@ private fun OverlayScreenQuittingPreview() {
 private fun OverlayScreenInInfoPreview() {
     VoltorbFlipTheme {
         Box(Modifier.requiredSize(450.dp)) {
-            OverlayScreen(Screen.ABOUT_GAME, {}, {}, {}) {}
+            OverlayScreen(Screen.ABOUT_GAME, {}, {}, {}, {}, {}) {}
         }
     }
 }

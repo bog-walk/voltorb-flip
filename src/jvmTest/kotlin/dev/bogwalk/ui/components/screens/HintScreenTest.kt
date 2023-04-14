@@ -2,6 +2,7 @@ package dev.bogwalk.ui.components.screens
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import dev.bogwalk.ui.style.HINT_INFO
 import dev.bogwalk.ui.style.INFO_ARROW_DESCR
 import dev.bogwalk.ui.style.TILE_TAG
 import org.junit.Rule
@@ -21,7 +22,10 @@ class HintScreenTest {
             .assertCountEquals(12)
             .assertAll(isNotEnabled())
 
-        composeTestRule.onAllNodesWithContentDescription(INFO_ARROW_DESCR)
-            .assertCountEquals(1)
+        composeTestRule.onNodeWithContentDescription(INFO_ARROW_DESCR)
+            .assertExists()
+
+        composeTestRule.onNodeWithText(HINT_INFO)
+            .assertExists()
     }
 }

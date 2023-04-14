@@ -3,6 +3,7 @@ package dev.bogwalk
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 import dev.bogwalk.ui.Screen
@@ -17,7 +18,11 @@ fun main() = application {
 
     Window(
         onCloseRequest = ::exitApplication,
-        state = WindowState(width = 900.dp, height = 450.dp),
+        state = rememberWindowState(
+            position = WindowPosition(Alignment.Center),
+            width = 920.dp, height = 370.dp
+        ),
+        undecorated = true,  // window no longer moveable by user?
         resizable = false
     ) {
         VoltorbFlipTheme {

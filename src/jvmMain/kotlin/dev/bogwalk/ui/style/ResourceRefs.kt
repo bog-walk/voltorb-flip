@@ -68,6 +68,7 @@ const val ABOUT_INFO = "Touch \"Open Memo\" to open the Memo Window.\n" +
         "Touch the cards to add and remove marks.\n\n"
 
 // Overlay screen
+const val OVERLAY_TAG = "Overlay screen"
 const val SPEECH_TAG = "Speech text box"
 const val START_GAME = "Play VOLTORB Flip Lv. 1?\n"
 const val REQUEST_INFO = "Which set of info?\n"

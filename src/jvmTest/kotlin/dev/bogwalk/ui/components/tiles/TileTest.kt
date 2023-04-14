@@ -37,34 +37,28 @@ class TileTest {
 
         composeTestRule.onNodeWithTag(TILE_TAG)
             .assertIsNotEnabled()
-
     }
 
     @Test
-    fun `Tile is only enabled when positioned in grid and in game`() {
-        val position = mutableStateOf(0 to 0)
+    fun `Tile is only enabled in 1 screen state`() {
         val screen = mutableStateOf(Screen.IN_GAME)
 
         composeTestRule.setContent {
-            Tile(screen.value, position.value, TileState.NOT_FLIPPED, onSelectRequest = {}) {}
+            Tile(screen.value, 0 to 0, TileState.NOT_FLIPPED, onSelectRequest = {}) {}
         }
 
         composeTestRule.onNodeWithTag(TILE_TAG)
             .assertExists()
             .assertIsEnabled()
 
-        position.value = -1 to -1  // info tile with no connectors
-        screen.value = Screen.ABOUT_GAME
-        composeTestRule.waitForIdle()
+        for (screenType in Screen.values()) {
+            if (screenType == Screen.IN_GAME) continue
 
-        composeTestRule.onNodeWithTag(TILE_TAG)
-            .assertIsNotEnabled()
+            screen.value = screenType
+            composeTestRule.waitForIdle()
 
-        position.value = 3 to -1  // info tile with row connectors
-        composeTestRule.waitForIdle()
-
-        composeTestRule.onNodeWithTag(TILE_TAG)
-            .assertIsNotEnabled()
-
+            composeTestRule.onNodeWithTag(TILE_TAG)
+                .assertIsNotEnabled()
+        }
     }
 }

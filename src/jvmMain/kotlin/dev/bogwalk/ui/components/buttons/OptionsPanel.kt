@@ -13,9 +13,8 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.Screen
@@ -32,8 +31,6 @@ fun OptionsPanel(
 ) {
     val mainOptions = listOf(PLAY, INFO, QUIT)
     val infoOptions = listOf(HOW_TO, HINT, ABOUT, RETURN)
-
-    // should buttons be highlighted on mouse hover or on focus change?
 
     Column(
         modifier = Modifier
@@ -64,8 +61,7 @@ fun OptionsPanel(
                     )
                 }
             }
-        }
-        if (screen == Screen.PRE_INFO) {
+        } else if (screen == Screen.PRE_INFO) {
             for ((i, option) in infoOptions.withIndex()) {
                 key(i) {
                     OptionsButton(
@@ -90,7 +86,7 @@ private fun OptionsButton(
 
     Box(
         Modifier
-            .semantics { testTag = OPTIONS_TAG }
+            .testTag(OPTIONS_TAG)
             .fillMaxWidth()
             .padding(horizontal = 2.dp)
             .requiredHeight(35.dp)
@@ -108,6 +104,7 @@ private fun OptionsButton(
             ) { onActionRequest(optionNum) },
         contentAlignment = Alignment.Center
     ) {
+        // drawStyle removes fill colour, so only option for outlined text?
         Text(
             text = text,
             style = MaterialTheme.typography.labelLarge

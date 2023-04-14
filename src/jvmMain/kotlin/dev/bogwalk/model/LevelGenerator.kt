@@ -1,6 +1,7 @@
 package dev.bogwalk.model
 
 abstract class LevelGenerator {
+    // each list represents (num of x2s, num of x3s, num of x0s, max coins)
     // @see <a href="https://bulbapedia.bulbagarden.net/wiki/Voltorb_Flip">Source</a>
     protected val levelOptions = listOf(
         listOf(  // Level 1
@@ -37,47 +38,14 @@ abstract class LevelGenerator {
         )
     )
 
+    /**
+     * @param level Current non-zero indexed level value.
+     * @return List from [levelOptions] representing (x2s, x3s, x0s, max coins).
+     */
     abstract fun getLevelData(level: Int): List<Int>
-    protected abstract fun assignLevelData(data: List<Int>): List<Int>
 
-    fun generateEmptyLevel(): List<List<GameTile>> {
-        return List(5) { row ->
-            List(5) { col ->
-                GameTile(row to col, 1)
-            }
-        }
-    }
-
-    fun getEmptySummary(): List<Pair<Int, Int>> = List(10) { 0 to 0 }
-
-    fun generateLevelTiles(data: List<Int>): List<List<GameTile>> {
-        val values = assignLevelData(data)
-
-        return List(5) { row ->
-            List(5) { col ->
-                GameTile(row to col, values[row * 5 + col])
-            }
-        }
-    }
-
-    fun getTilesSummary(tiles: List<List<GameTile>>): List<Pair<Int, Int>> {
-        val summary = mutableListOf<Pair<Int, Int>>()
-
-        for (row in tiles) {
-            summary += row.sumOf { it.value } to row.count { it.value == 0 }
-        }
-        for (col in 0..4) {
-            var values = 0
-            var zeroes = 0
-            for (row in 0..4) {
-                when (val v = tiles[row][col].value) {
-                    0 -> zeroes++
-                    else -> values += v
-                }
-            }
-            summary += values to zeroes
-        }
-
-        return summary
-    }
+    /**
+     * @return List representing the values of the 25 tiles in a game grid, row by row.
+     */
+    abstract fun assignLevelData(data: List<Int>): List<Int>
 }

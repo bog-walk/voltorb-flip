@@ -21,16 +21,23 @@ internal fun ComposeContentTestRule.assertGameScreenDisabled() {
         .assertIsNotEnabled()
 }
 
+/**
+ * Asserts the presence of a SpeechBox with an IconButton as one of its children.
+ *
+ * @param line Asserts that child Text matches this exactly, if provided.
+ */
 internal fun ComposeContentTestRule.onSpeechBox(
     line: String? = null
 ): SemanticsNodeInteraction {
     return line?.let {
-        onNodeWithTag(SPEECH_TAG)
+        onNodeWithTag(SPEECH_TAG, useUnmergedTree = true)
             .onChildren()
             .assertAny(hasTextExactly(it))
-            .filterToOne(hasContentDescriptionExactly(NEXT_ARROW_DESCR))
+            .filterToOne(hasAnyChild(hasContentDescriptionExactly(NEXT_ARROW_DESCR)))
+            .assertIsEnabled()
     } ?:
-    onNodeWithTag(SPEECH_TAG)
+    onNodeWithTag(SPEECH_TAG, useUnmergedTree = true)
         .onChildren()
-        .filterToOne(hasContentDescriptionExactly(NEXT_ARROW_DESCR))
+        .filterToOne(hasAnyChild(hasContentDescriptionExactly(NEXT_ARROW_DESCR)))
+        .assertIsEnabled()
 }
