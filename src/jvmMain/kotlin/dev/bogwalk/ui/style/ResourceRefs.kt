@@ -73,7 +73,18 @@ const val OVERLAY_TAG = "Overlay screen"
 const val SPEECH_TAG = "Speech text box"
 const val START_GAME = "Play VOLTORB Flip Lv. 1?\n"
 const val REQUEST_INFO = "Which set of info?\n"
-const val QUIT_GAME = "You haven't found any Coins!\nAre you sure you want to quit?"
+const val QUIT_NO_COINS = "You haven't found any Coins!\nAre you sure you want to quit?"
+const val QUIT_START = "If you quit now, you will\nreceive "
+const val QUIT_END = " Coin(s).\nWill you quit?"
+const val GAME_CLEAR_START = "Game clear!\n|You've found all the hidden x2 and\nx3 cards.|" +
+        "This means you've found all the Coins\nin this game, so the game is now over.|" +
+        "PLAYER\nreceived "
+const val GAME_CLEAR_END = " Coin(s)!"
+const val ADVANCE_START = "Advanced to Game Lv. "
+const val ADVANCE_END = "!\n|Congratulations!\n|You can receive even more Coins\nin the next game!"
+const val NEW_1 = "x"
+const val NEW_2 = "! Received "
+const val NEW_3 = " Coins!"
 const val ABOUT_TEXT = "Select \"Open Memo\" to mark\nthe cards.|" +
         "You can mark the cards with the\nnumbers 1 through 3, but also with a\nVOLTORB mark.|" +
         "When you have an idea of the numbers\nhidden on the back of the cards, touch\n" +

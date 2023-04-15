@@ -45,7 +45,10 @@ fun GameScreen(
             if (isMemoOpen) {
                 MemoPad(
                     screen = screen,
-                    memoData = if (currentPosition == -1 to -1) null else {
+                    memoData = if (currentPosition == -1 to -1 ||
+                        grid[currentPosition.first * 5 + currentPosition.second].isFlipped) {
+                        null
+                    } else {
                         grid[currentPosition.first * 5 + currentPosition.second].memoData
                     },
                     onEditRequest = onEditMemoRequest,

@@ -5,34 +5,30 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.components.buttons.OptionsPanel
 import dev.bogwalk.ui.components.buttons.QuitOption
 import dev.bogwalk.ui.style.*
-import dev.bogwalk.ui.util.drawLineBorder
 
 @Composable
 fun OverlayScreen(
     screen: Screen,
+    level: Int,
+    coins: Int,
     onPlayRequest: () -> Unit,
     onClearRequest: () -> Unit,
     onQuitRequest: () -> Unit,
     onContinueRequest: () -> Unit,
     onRevealRequest: () -> Unit,
-    onChangeScreen: (Int) -> Unit
+    onChangeScreen: (Int) -> Unit,
+    onLastLineNext: () -> Unit,
+    newCoin: Int? = null,
 ) {
     Column(
         modifier = Modifier
@@ -45,106 +41,46 @@ fun OverlayScreen(
                 interactionSource = MutableInteractionSource(),
                 indication = null,  // this prevents mouse hover effect
                 enabled = screen == Screen.REVEAL)
-            { onClearRequest() },
+            { if (newCoin == null) onClearRequest() else onContinueRequest() },
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.End
     ) {
         when (screen) {
-            Screen.ABOUT_GAME -> SpeechBox(HOW_TO_TEXT) { onChangeScreen(Screen.PRE_INFO.ordinal) }
-            Screen.ABOUT_HINT -> SpeechBox(HINT_TEXT) { onChangeScreen(Screen.PRE_INFO.ordinal) }
-            Screen.ABOUT_MEMO -> SpeechBox(ABOUT_TEXT) { onChangeScreen(Screen.PRE_INFO.ordinal) }
+            Screen.ABOUT_GAME -> SpeechBox(HOW_TO_TEXT, { onChangeScreen(Screen.PRE_INFO.ordinal) })
+            Screen.ABOUT_HINT -> SpeechBox(HINT_TEXT, { onChangeScreen(Screen.PRE_INFO.ordinal) })
+            Screen.ABOUT_MEMO -> SpeechBox(ABOUT_TEXT, { onChangeScreen(Screen.PRE_INFO.ordinal) })
             Screen.PRE_GAME -> {
                 OptionsPanel(screen, onPlayRequest, onQuitRequest, onChangeScreen)
-                SpeechBox(START_GAME) {}
+                SpeechBox(START_GAME)
             }
             Screen.PRE_INFO -> {
                 OptionsPanel(screen, onPlayRequest, onQuitRequest, onChangeScreen)
-                SpeechBox(REQUEST_INFO) {}
+                SpeechBox(REQUEST_INFO)
             }
             Screen.QUITTING -> {
-                QuitOption(YES) { onRevealRequest() }
-                QuitOption(NO) { onContinueRequest() }
-                SpeechBox(QUIT_GAME) {}
+                var onlastLine by remember { mutableStateOf(coins == 0) }
+
+                if (onlastLine) {
+                    QuitOption(YES) { onRevealRequest() }
+                    QuitOption(NO) { onContinueRequest() }
+                }
+                // only choosing 1 of 2 options should allow this screen to exit
+                SpeechBox(
+                    text = if (coins == 0) QUIT_NO_COINS else "$QUIT_START$coins$QUIT_END",
+                    onLastLineNext = { onlastLine = true }
+                )
+            }
+            Screen.GAME_WON -> {
+                SpeechBox(text = "$GAME_CLEAR_START$coins$GAME_CLEAR_END",
+                    onFinish = onRevealRequest, onLastLineNext = onLastLineNext)
+            }
+            Screen.ADVANCING -> {
+                SpeechBox("$ADVANCE_START$level$ADVANCE_END", onFinish = onClearRequest)
+            }
+            Screen.REVEAL -> {
+                newCoin?.let { SpeechBox("$NEW_1$it$NEW_2$it$NEW_3") }
             }
             else -> {}
-        }
-    }
-}
-
-@Composable
-private fun SpeechBox(
-    text: String,
-    onFinish: () -> Unit
-) {
-    val groupedLines = text.split("|").map { it.split("\n") }
-    var group by remember { mutableStateOf(0) }
-    var line by remember { mutableStateOf(0) }
-
-    Row(
-        modifier = Modifier
-            .testTag(SPEECH_TAG)
-            .fillMaxWidth()
-            .height(IntrinsicSize.Max)
-            .padding(horizontal = 8.dp, vertical = 10.dp)
-            .background(
-                Brush.verticalGradient(
-                    .7f to Color(0xff63636b), .8f to Color(0xff5a5a63),
-                    .85f to Color(0xff52525a)
-                )
-            )
-            .drawBehind {
-                // are these colours correct?
-                drawLineBorder(outerColor = darkGrey)
-                drawLineBorder(innerColor = Color(0xffffde6b))
-            },
-        horizontalArrangement = Arrangement.Start
-    ) {
-        Text(
-            text = "${groupedLines[group][line]}\n${groupedLines[group][line + 1]}",
-            modifier = Modifier
-                .fillMaxWidth(.9f)
-                .padding(start = 15.dp, top = 10.dp, end = 0.dp, bottom = 10.dp)
-                .background(Color.White, RoundedCornerShape(2.dp))
-                .padding(5.dp)
-                .align(Alignment.CenterVertically),
-            maxLines = 2,
-            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp)
-        )
-        if (groupedLines.size > 1) {
-            IconButton(
-                onClick = {
-                    if (group == groupedLines.lastIndex &&
-                        line + 1 == groupedLines[group].lastIndex) {
-                        group = 0
-                        line = 0
-                        onFinish()
-                    } else if (line + 1 == groupedLines[group].lastIndex) {
-                        group++
-                        line = 0
-                    } else  {
-                        line++
-                    }
-                },
-                modifier = Modifier.align(Alignment.Bottom)
-            ) {
-                Icon(
-                    painter = painterResource(NEXT_ARROW),
-                    contentDescription = NEXT_ARROW_DESCR,
-                    modifier = Modifier.requiredSize(16.dp),
-                    tint = Color.Unspecified
-                )
-            }
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun SpeechBoxPreview() {
-    VoltorbFlipTheme {
-        BottomScreen(Modifier.requiredSize(450.dp, 360.dp)) {
-            SpeechBox(ABOUT_TEXT) {}
-            SpeechBox(START_GAME) {}
         }
     }
 }
@@ -154,7 +90,7 @@ private fun SpeechBoxPreview() {
 private fun OverlayScreenPreGamePreview() {
     VoltorbFlipTheme {
         BottomScreen(Modifier.requiredSize(450.dp, 360.dp)) {
-            OverlayScreen(Screen.PRE_GAME, {}, {}, {}, {}, {}) {}
+            OverlayScreen(Screen.PRE_GAME, 1, 0, {}, {}, {}, {}, {}, {}, {})
         }
     }
 }
@@ -164,7 +100,7 @@ private fun OverlayScreenPreGamePreview() {
 private fun OverlayScreenPreInfoPreview() {
     VoltorbFlipTheme {
         BottomScreen(Modifier.requiredSize(450.dp, 360.dp)) {
-            OverlayScreen(Screen.PRE_INFO, {}, {}, {}, {}, {}) {}
+            OverlayScreen(Screen.PRE_INFO, 1, 0, {}, {}, {}, {}, {}, {}, {})
         }
     }
 }
@@ -174,7 +110,17 @@ private fun OverlayScreenPreInfoPreview() {
 private fun OverlayScreenQuittingPreview() {
     VoltorbFlipTheme {
         BottomScreen(Modifier.requiredSize(450.dp, 360.dp)) {
-            OverlayScreen(Screen.QUITTING, {}, {}, {}, {}, {}) {}
+            OverlayScreen(Screen.QUITTING, 1, 6, {}, {}, {}, {}, {}, {}, {})
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun OverlayScreenQuittingWithNoCoinsPreview() {
+    VoltorbFlipTheme {
+        BottomScreen(Modifier.requiredSize(450.dp, 360.dp)) {
+            OverlayScreen(Screen.QUITTING, 1, 0,  {}, {}, {}, {}, {}, {}, {})
         }
     }
 }
@@ -184,7 +130,7 @@ private fun OverlayScreenQuittingPreview() {
 private fun OverlayScreenInInfoPreview() {
     VoltorbFlipTheme {
         BottomScreen(Modifier.requiredSize(450.dp, 360.dp)) {
-            OverlayScreen(Screen.ABOUT_GAME, {}, {}, {}, {}, {}) {}
+            OverlayScreen(Screen.ABOUT_GAME, 1, 0, {}, {}, {}, {}, {}, {}, {})
         }
     }
 }

@@ -23,6 +23,7 @@ class NavigateScreensTest {
         // top screen initially shows info screen
         composeTestRule.onNodeWithText("${HEADER_START}1$HEADER_END")
             .assertExists()
+        composeTestRule.assertGameScreenDisabled()
 
         // request more info
         composeTestRule.onAllNodesWithTag(OPTIONS_TAG)
@@ -31,6 +32,8 @@ class NavigateScreensTest {
 
         composeTestRule.waitForIdle()
 
+        composeTestRule.onNodeWithText("${HEADER_START}1$HEADER_END")
+            .assertExists()
         composeTestRule.assertGameScreenDisabled()
         // choose how to play
         composeTestRule.onAllNodesWithTag(OPTIONS_TAG)
@@ -64,6 +67,7 @@ class NavigateScreensTest {
 
         // choose to no longer see info
         composeTestRule.onAllNodesWithTag(OPTIONS_TAG)
+            .assertCountEquals(4)
             .filterToOne(hasTextExactly(RETURN))
             .performClick()
 
@@ -75,52 +79,5 @@ class NavigateScreensTest {
             .assertCountEquals(3)
         composeTestRule.onNodeWithText("${HEADER_START}1$HEADER_END")
             .assertExists()
-    }
-
-    @Test
-    fun `VoltorbFlipApp keeps info screen when not requesting more info`() {
-        composeTestRule.setContent {
-            VoltorbFlipApp(VoltorbFlipAppState())
-        }
-
-        // top screen initially shows info screen
-        composeTestRule.onNodeWithText("${HEADER_START}1$HEADER_END")
-            .assertExists()
-        composeTestRule.assertGameScreenDisabled()
-
-        // request more info
-        composeTestRule.onAllNodesWithTag(OPTIONS_TAG)
-            .filterToOne(hasTextExactly(INFO))
-            .performClick()
-
-        composeTestRule.waitForIdle()
-
-        // choose to return
-        composeTestRule.assertGameScreenDisabled()
-        composeTestRule.onAllNodesWithTag(OPTIONS_TAG)
-            .filterToOne(hasTextExactly(RETURN))
-            .performClick()
-
-        composeTestRule.waitForIdle()
-
-        composeTestRule.onNodeWithText("${HEADER_START}1$HEADER_END")
-            .assertExists()
-        composeTestRule.assertGameScreenDisabled()
-        // choose to play
-        composeTestRule.onAllNodesWithTag(OPTIONS_TAG)
-            .filterToOne(hasTextExactly(PLAY))
-            .performClick()
-
-        composeTestRule.waitForIdle()
-
-        composeTestRule.onNodeWithText("${HEADER_START}1$HEADER_END")
-            .assertExists()
-        composeTestRule.onAllNodesWithTag(TILE_TAG)
-            .filter(isEnabled())
-            .assertCountEquals(25)
-        composeTestRule.onNodeWithTag(MEMO_TAG)
-            .assertIsEnabled()
-        composeTestRule.onNodeWithText(QUIT)
-            .assertIsEnabled()
     }
 }

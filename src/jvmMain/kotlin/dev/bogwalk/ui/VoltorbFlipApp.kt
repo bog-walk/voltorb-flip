@@ -11,7 +11,9 @@ import dev.bogwalk.ui.style.VoltorbFlipTheme
 import dev.bogwalk.ui.util.VoltorbFlipAppState
 
 enum class Screen {
-    ABOUT_GAME, ABOUT_HINT, ABOUT_MEMO, PRE_GAME, PRE_INFO, IN_GAME, QUITTING, REVEAL, POST_GAME
+    ABOUT_GAME, ABOUT_HINT, ABOUT_MEMO,
+    PRE_GAME, PRE_INFO, IN_GAME, QUITTING,
+    REVEAL, POST_GAME, GAME_WON, ADVANCING
 }
 
 @Composable
@@ -53,17 +55,28 @@ fun VoltorbFlipApp(state: VoltorbFlipAppState) {
                     onQuitRequest = {
                         state.screenState = Screen.QUITTING
                         state.currentPosition = -1 to -1
+                        state.isMemoOpen = false
                     }
                 )
                 if (state.screenState != Screen.IN_GAME) {
                     OverlayScreen(
                         screen = state.screenState,
+                        level = state.currentLevel,
+                        coins = state.currentCoins,
                         onPlayRequest = state::resetGame,
                         onClearRequest = state::clearGame,
                         onQuitRequest = { state.screenState = Screen.POST_GAME },
-                        onContinueRequest = { state.screenState = Screen.IN_GAME },
+                        onContinueRequest = {
+                            state.newCoin = null
+                            state.screenState = Screen.IN_GAME
+                        },
                         onRevealRequest = state::endGame,
-                        onChangeScreen = { state.screenState = Screen.values()[it] }
+                        onChangeScreen = { state.screenState = Screen.values()[it] },
+                        onLastLineNext = {  // should only be invoked when game won
+                            state.totalCoins += state.currentCoins
+                            state.currentCoins = 0
+                        },
+                        newCoin = state.newCoin
                     )
                 }
             }

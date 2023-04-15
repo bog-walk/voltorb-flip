@@ -8,7 +8,6 @@ import dev.bogwalk.ui.onSpeechBox
 import dev.bogwalk.ui.style.*
 import org.junit.Rule
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class OverlayScreenTest {
     @get:Rule
@@ -19,7 +18,7 @@ class OverlayScreenTest {
         val screen = mutableStateOf(Screen.REVEAL)
 
         composeTestRule.setContent {
-            OverlayScreen(screen.value, {}, {}, {}, {}, {}) {}
+            OverlayScreen(screen.value, 1, 0, {}, {}, {}, {}, {}, {}, {})
         }
 
         composeTestRule.onNodeWithTag(OVERLAY_TAG)
@@ -42,7 +41,7 @@ class OverlayScreenTest {
         val state = mutableStateOf(Screen.PRE_GAME)
 
         composeTestRule.setContent {
-            OverlayScreen(state.value, {}, {}, {}, {}, {}) {}
+            OverlayScreen(state.value, 1, 0, {}, {}, {}, {}, {}, {}, {})
         }
 
         composeTestRule.onAllNodesWithTag(OPTIONS_TAG)
@@ -64,14 +63,12 @@ class OverlayScreenTest {
         composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithText(YES)
-            .assertExists()
             .assertIsEnabled()
         composeTestRule.onNodeWithText(NO)
-            .assertExists()
             .assertIsEnabled()
         composeTestRule.onNodeWithTag(SPEECH_TAG, useUnmergedTree = true)
             .onChild()
-            .assertTextEquals(QUIT_GAME)
+            .assertTextEquals(QUIT_NO_COINS)
 
         state.value = Screen.ABOUT_GAME
         composeTestRule.waitForIdle()
@@ -86,58 +83,40 @@ class OverlayScreenTest {
     }
 
     @Test
-    fun `SpeechBox iterates through text when clicked`() {
-        val expected = HOW_TO_TEXT.split("|").map { it.split("\n") }
-
+    fun `OverlayScreen changes content when quitting with coins`() {
+        val coins = 12
         composeTestRule.setContent {
-            OverlayScreen(Screen.ABOUT_GAME, {}, {}, {}, {}, {}) {}
+            OverlayScreen(Screen.QUITTING, 1, coins, {}, {}, {}, {}, {}, {}, {})
         }
 
-        composeTestRule.onSpeechBox(expected[0].take(2).joinToString("\n"))
+        composeTestRule.onNodeWithText(YES)
+            .assertDoesNotExist()
+        composeTestRule.onNodeWithText(NO)
+            .assertDoesNotExist()
+
+        composeTestRule.onSpeechBox(
+            "$QUIT_START$coins${QUIT_END.substringBefore("\n")}")
             .performClick()
 
         composeTestRule.waitForIdle()
 
-        composeTestRule.onSpeechBox(expected[0].takeLast(2).joinToString("\n"))
+        composeTestRule.onNodeWithText(YES)
+            .assertIsEnabled()
+        composeTestRule.onNodeWithText(NO)
+            .assertIsEnabled()
+        // click next arrow even though at end of text
+        composeTestRule.onSpeechBox(
+            "${QUIT_START.substringAfter("\n")}$coins${QUIT_END}")
             .performClick()
 
         composeTestRule.waitForIdle()
 
-        composeTestRule.onSpeechBox(expected[1].take(2).joinToString("\n"))
-            .performClick()
-
-        composeTestRule.waitForIdle()
-
-        composeTestRule.onSpeechBox(expected[2].take(2).joinToString("\n"))
-            .performClick()
-    }
-
-    @Test
-    fun `SpeechBox correctly calls function when text is finished`() {
-        val expected = ABOUT_TEXT.split("|").map { it.split("\n") }
-        var screen = Screen.ABOUT_MEMO
-
-        composeTestRule.setContent {
-            OverlayScreen(screen, {}, {}, {}, {}, {}) { screen = Screen.values()[it] }
-        }
-
-        composeTestRule.onSpeechBox(expected[0].take(2).joinToString("\n"))
-            .performClick()
-
-        composeTestRule.waitForIdle()
-
-        repeat(5) {
-            composeTestRule.onSpeechBox()
-                .performClick()
-
-            composeTestRule.waitForIdle()
-        }
-
-        composeTestRule.onSpeechBox(expected[3].take(2).joinToString("\n"))
-            .performClick()
-
-        composeTestRule.waitForIdle()
-
-        assertEquals(Screen.PRE_INFO, screen)
+        // there should be no change
+        composeTestRule.onNodeWithText(YES)
+            .assertIsEnabled()
+        composeTestRule.onNodeWithText(NO)
+            .assertIsEnabled()
+        composeTestRule.onSpeechBox(
+            "${QUIT_START.substringAfter("\n")}$coins${QUIT_END}")
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import dev.bogwalk.model.GameTile
 import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.assertGameScreenDisabled
+import dev.bogwalk.ui.assertGameScreenEnabled
 import dev.bogwalk.ui.style.*
 import org.junit.Rule
 import kotlin.test.Test
@@ -25,23 +26,10 @@ class GameScreenTest {
                 {}, {}, {}) {}
         }
 
-        composeTestRule.onNodeWithTag(GRID_TAG)
-            .onChildren()
-            .filter(hasTestTag(TILE_TAG))
-            .assertCountEquals(35)
-            .filter(isEnabled())
-            .assertCountEquals(25)
-
-        composeTestRule.onNodeWithTag(MEMO_TAG)
-            .assertExists()
-            .assertIsEnabled()
+        composeTestRule.assertGameScreenEnabled()
 
         composeTestRule.onAllNodesWithTag(MEMO_PAD_TAG)
             .assertCountEquals(0)
-
-        composeTestRule.onNodeWithText(QUIT)
-            .assertExists()
-            .assertIsEnabled()
     }
 
     @Test
@@ -57,16 +45,7 @@ class GameScreenTest {
                 {}, {}, {}) {}
         }
 
-        composeTestRule.onNodeWithTag(GRID_TAG)
-            .onChildren()
-            .filter(isEnabled())
-            .assertCountEquals(25)
-
-        composeTestRule.onNodeWithTag(MEMO_TAG)
-            .assertIsEnabled()
-
-        composeTestRule.onNodeWithText(QUIT)
-            .assertIsEnabled()
+        composeTestRule.assertGameScreenEnabled()
 
         for (screenType in Screen.values()) {
             if (screenType == Screen.IN_GAME) continue
@@ -143,5 +122,34 @@ class GameScreenTest {
         composeTestRule.onAllNodesWithTag(TILE_TAG)
             .filter(hasContentDescriptionExactly(MEMO_PENCIL_DESCR))
             .assertCountEquals(0)
+    }
+
+    @Test
+    fun `GameScreen disables most of memo pad if flipped tile in focus`() {
+        val position = mutableStateOf(3 to 3)
+
+        composeTestRule.setContent {
+            GameScreen(
+                Screen.IN_GAME,
+                List(5) { r -> List(5) { c ->
+                    if (r == 0) GameTile(0 to c, 1, isFlipped = true)
+                    else GameTile(r to c, 1)
+                } }.flatten(),
+                listOf(7 to 0, 6 to 0, 6 to 1, 3 to 2, 2 to 3, 5 to 1, 6 to 1, 2 to 3, 6 to 0, 5 to 1),
+                currentPosition = position.value,
+                isMemoOpen = true,
+                {}, {}, {}) {}
+        }
+
+        composeTestRule.onAllNodesWithTag(MEMO_PAD_TAG)
+            .assertCountEquals(5)
+            .assertAll(isEnabled())
+
+        position.value = 0 to 0
+        composeTestRule.waitForIdle()
+
+        composeTestRule.onAllNodesWithTag(MEMO_PAD_TAG)
+            .filterToOne(isEnabled())
+            .assertContentDescriptionEquals(MEMO_ARROW_DESCR)
     }
 }

@@ -13,6 +13,7 @@ class VoltorbFlipAppState(
     var screenState by mutableStateOf(Screen.PRE_GAME) // should this be hoisted?
     var totalCoins by mutableStateOf(0)
     var currentCoins by mutableStateOf(0)
+    var newCoin: Int? by mutableStateOf(1)
 
     var gameTiles by mutableStateOf(grid.tiles)
     var infoSummary by mutableStateOf(grid.getSummary(isEmpty = true))
@@ -21,6 +22,9 @@ class VoltorbFlipAppState(
 
     private var maxLevelCoins = 0
     private var winningStreak = 0
+    private var shouldAdvance = false
+    private var isFirstDouble = true
+    private var isFirstTriple = true
 
     fun selectATile(position: Pair<Int, Int>) {
         if (!isMemoOpen) {
@@ -30,11 +34,28 @@ class VoltorbFlipAppState(
                     return
                 }
                 1 -> if (currentCoins == 0) currentCoins = 1
-                2, 3 -> currentCoins = if (currentCoins == 0) v else currentCoins * v
+                2 -> {
+                    currentCoins = if (currentCoins == 0) v else currentCoins * v
+                    if (isFirstDouble) {
+                        newCoin = 2
+                        screenState = Screen.REVEAL
+                        isFirstDouble = false
+                    }
+                }
+                3 -> {
+                    currentCoins = if (currentCoins == 0) v else currentCoins * v
+                    if (isFirstTriple) {
+                        newCoin = 3
+                        screenState = Screen.REVEAL
+                        isFirstTriple = false
+                    }
+                }
             }
             if (currentCoins == maxLevelCoins) {
-                changeLevel(isAWin = true)
-                return
+                screenState = Screen.GAME_WON
+                winningStreak++
+                shouldAdvance = true
+                newCoin = null  // game won takes precedence
             }
         }
         currentPosition = position
@@ -52,22 +73,35 @@ class VoltorbFlipAppState(
         gameTiles = grid.tiles
         totalCoins += currentCoins
         currentCoins = 0
+        newCoin = null
     }
 
+    // can this be consolidated with resetGame()?
     fun clearGame() {
-        screenState = Screen.PRE_GAME
+        screenState = if (shouldAdvance) {
+            currentLevel = if (winningStreak >= 5) 7 else (currentLevel + 1).coerceAtMost(7)
+            shouldAdvance = false
+            Screen.ADVANCING
+        } else {
+            Screen.PRE_GAME
+        }
         currentPosition = -2 to -2
         isMemoOpen = false
+        newCoin = null
 
         maxLevelCoins = grid.reset(currentLevel, toEmpty = true)
         gameTiles = grid.tiles
         infoSummary = grid.getSummary(isEmpty = true)
+
+        isFirstDouble = true
+        isFirstTriple = true
     }
 
     fun resetGame() {
         screenState = Screen.IN_GAME
         currentPosition = 0 to 0
         isMemoOpen = false
+        newCoin = null
 
         maxLevelCoins = grid.reset(currentLevel)
         gameTiles = grid.tiles
@@ -77,7 +111,7 @@ class VoltorbFlipAppState(
     private fun changeLevel(isAWin: Boolean) {
         if (isAWin) {
             winningStreak++
-            currentLevel = if (winningStreak >= 5) 7 else (currentLevel + 1).coerceAtMost(7)
+
         } else {
             winningStreak = 0
             currentLevel = if (grid.numOfFlippedTiles < currentLevel + 1) {

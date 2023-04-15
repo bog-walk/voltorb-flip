@@ -21,6 +21,22 @@ internal fun ComposeContentTestRule.assertGameScreenDisabled() {
         .assertIsNotEnabled()
 }
 
+internal fun ComposeContentTestRule.assertGameScreenEnabled() {
+    onNodeWithTag(GRID_TAG)
+        .onChildren()
+        .filter(hasTestTag(TILE_TAG))
+        .assertCountEquals(35)
+        .filter(isEnabled())
+        .assertCountEquals(25)
+
+    onNodeWithTag(MEMO_TAG)
+        .assertIsEnabled()
+
+    onAllNodesWithText(QUIT)
+        .filterToOne(!hasTestTag(OPTIONS_TAG))
+        .assertIsEnabled()
+}
+
 /**
  * Asserts the presence of a SpeechBox with an IconButton as one of its children.
  *
@@ -40,4 +56,10 @@ internal fun ComposeContentTestRule.onSpeechBox(
         .onChildren()
         .filterToOne(hasAnyChild(hasContentDescriptionExactly(NEXT_ARROW_DESCR)))
         .assertIsEnabled()
+}
+
+internal fun ComposeContentTestRule.performClickToPlay() {
+    onAllNodesWithTag(OPTIONS_TAG)
+        .filterToOne(hasTextExactly(PLAY))
+        .performClick()
 }
