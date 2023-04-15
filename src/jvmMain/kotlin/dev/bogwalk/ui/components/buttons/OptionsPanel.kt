@@ -8,11 +8,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.ExperimentalTextApi
@@ -75,7 +77,7 @@ fun OptionsPanel(
     }
 }
 
-@OptIn(ExperimentalTextApi::class)
+@OptIn(ExperimentalTextApi::class, ExperimentalComposeUiApi::class)
 @Composable
 private fun OptionsButton(
     text: String,
@@ -96,7 +98,8 @@ private fun OptionsButton(
                 drawLineBorder(innerColor = darkGrey)
             }
             .wrapContentHeight(Alignment.CenterVertically)
-            .onFocusChanged { isInFocus = it.isFocused }
+            .onPointerEvent(PointerEventType.Enter) { isInFocus = true }
+            .onPointerEvent(PointerEventType.Exit) { isInFocus = false }
             .clickable(
                 interactionSource = MutableInteractionSource(),
                 indication = null,  // this prevents mouse hover effect

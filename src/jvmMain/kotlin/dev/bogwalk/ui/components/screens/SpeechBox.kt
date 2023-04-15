@@ -1,5 +1,6 @@
 package dev.bogwalk.ui.components.screens
 
+import androidx.compose.animation.core.*
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -16,6 +17,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.bogwalk.ui.style.*
@@ -64,6 +66,16 @@ fun SpeechBox(
             style = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp)
         )
         if (groupedLines.size > 1 || groupedLines.single().size > 2) {
+            val infiniteBounce = rememberInfiniteTransition()
+            val yOffset by infiniteBounce.animateValue(
+                initialValue = 0.dp,
+                targetValue = (-8).dp,
+                typeConverter = Dp.VectorConverter,
+                animationSpec = infiniteRepeatable<Dp>(
+                    animation = tween(600, easing = LinearEasing),
+                    repeatMode = RepeatMode.Reverse
+                )
+            )
             IconButton(
                 onClick = {
                     if (group == groupedLines.lastIndex &&
@@ -93,7 +105,7 @@ fun SpeechBox(
                 Icon(
                     painter = painterResource(NEXT_ARROW),
                     contentDescription = NEXT_ARROW_DESCR,
-                    modifier = Modifier.requiredSize(16.dp),
+                    modifier = Modifier.requiredSize(16.dp).offset(x = 0.dp, y = yOffset),
                     tint = Color.Unspecified
                 )
             }

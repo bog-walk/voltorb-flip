@@ -88,7 +88,7 @@ const val NEW_2 = "! Received "
 const val NEW_3 = " Coins!"
 const val NO_COINS = "Oh no! You get 0 Coins!"
 const val DROPPED_START = "Dropped to Game Lv. "
-const val DROPPED_END = "."
+const val DROPPED_END = ".\n"
 const val ABOUT_TEXT = "Select \"Open Memo\" to mark\nthe cards.|" +
         "You can mark the cards with the\nnumbers 1 through 3, but also with a\nVOLTORB mark.|" +
         "When you have an idea of the numbers\nhidden on the back of the cards, touch\n" +

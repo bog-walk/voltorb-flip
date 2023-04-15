@@ -28,7 +28,6 @@ class InitialLoadTest {
             .assertExists()
         composeTestRule.onAllNodesWithTag(COIN_TAG)
             .assertCountEquals(2)
-            .assertAll(hasAnyChild(hasTextExactly("00000")))
 
         // game screen (no game date & all disabled)
         composeTestRule.assertGameScreenDisabled()

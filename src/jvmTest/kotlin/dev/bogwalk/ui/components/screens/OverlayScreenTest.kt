@@ -14,7 +14,7 @@ class OverlayScreenTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun `OverlayScreen is only enabled in 1 screen state`() {
+    fun `OverlayScreen is only enabled in 2 screen states`() {
         val screen = mutableStateOf(Screen.REVEAL)
 
         composeTestRule.setContent {
@@ -25,8 +25,14 @@ class OverlayScreenTest {
             .assertExists()
             .assertIsEnabled()
 
+        screen.value = Screen.DROPPING
+        composeTestRule.waitForIdle()
+
+        composeTestRule.onNodeWithTag(OVERLAY_TAG)
+            .assertIsEnabled()
+
         for (screenType in Screen.values()) {
-            if (screenType == Screen.REVEAL) continue
+            if (screenType == Screen.REVEAL || screenType == Screen.DROPPING) continue
 
             screen.value = screenType
             composeTestRule.waitForIdle()

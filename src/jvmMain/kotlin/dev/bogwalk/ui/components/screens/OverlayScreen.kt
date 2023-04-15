@@ -35,7 +35,7 @@ fun OverlayScreen(
             .testTag(OVERLAY_TAG)
             .fillMaxSize()
             .background(
-                if (screen == Screen.REVEAL) Color.Transparent else Color(0f,0f,0f,.2f)
+                if (screen == Screen.REVEAL) Color.Transparent else Color(0f,0f,0f,.3f)
             )
             .clickable(
                 interactionSource = MutableInteractionSource(),

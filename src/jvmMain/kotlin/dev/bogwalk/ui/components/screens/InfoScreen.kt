@@ -114,7 +114,7 @@ private fun DrawScope.drawUnderLine() {
 @Composable
 private fun CoinsBox(
     text: String,
-    coins: Int? = null
+    coins: Int
 ) {
     InfoTextBox(
         Modifier.fillMaxWidth()

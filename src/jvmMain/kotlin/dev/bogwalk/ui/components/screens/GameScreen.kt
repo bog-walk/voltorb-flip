@@ -1,5 +1,9 @@
 package dev.bogwalk.ui.components.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.*
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -42,7 +46,17 @@ fun GameScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             MemoButton(screen, isMemoOpen, onMemoRequest)
-            if (isMemoOpen) {
+            AnimatedVisibility (
+                visible = isMemoOpen,
+                enter = slideInHorizontally(
+                    animationSpec = tween(200, easing = FastOutLinearInEasing),
+                    initialOffsetX = { it + 20 }  // slide from right to left
+                ),
+                exit = slideOutHorizontally(
+                    animationSpec = tween(200, easing = FastOutLinearInEasing),
+                    targetOffsetX = { it + 20 }  // slide from left to right
+                )
+            ) {
                 MemoPad(
                     screen = screen,
                     memoData = if (currentPosition == -1 to -1 ||

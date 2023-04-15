@@ -22,7 +22,7 @@ class VoltorbFlipAppState(
 
     private var maxLevelCoins = 0
     private var winningStreak = 0
-    private var shouldAdvance = true
+    private var shouldAdvance = false
 
     fun selectATile(position: Pair<Int, Int>) {
         if (!isMemoOpen) {

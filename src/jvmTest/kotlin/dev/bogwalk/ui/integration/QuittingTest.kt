@@ -84,6 +84,7 @@ class QuittingTest {
 
         composeTestRule.waitForIdle()
 
+        // no tiles flipped
         composeTestRule.onNodeWithTag(GRID_TAG)
             .onChildren()
             .filterToOne(isNotEnabled() and hasTextExactly("04", "2"))
@@ -109,7 +110,7 @@ class QuittingTest {
             .assertAll(isNotEnabled())
             .filter(hasContentDescriptionExactly("${FLIPPED_DESCR}0"))
             .assertCountEquals(6)
-        // overlay screen enabled do grid data can be viewed as wished
+        // overlay screen enabled so grid data can be viewed as wished
         composeTestRule.onNodeWithTag(OVERLAY_TAG)
             .assertIsEnabled()
             .performClick()
