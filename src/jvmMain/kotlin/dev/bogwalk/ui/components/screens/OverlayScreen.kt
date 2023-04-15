@@ -35,13 +35,17 @@ fun OverlayScreen(
             .testTag(OVERLAY_TAG)
             .fillMaxSize()
             .background(
-                if (screen == Screen.REVEAL) Color.Transparent else Color(0f,0f,0f,.3f)
+                if (screen == Screen.REVEAL) Color.Transparent else Color(0f,0f,0f,.2f)
             )
             .clickable(
                 interactionSource = MutableInteractionSource(),
                 indication = null,  // this prevents mouse hover effect
-                enabled = screen == Screen.REVEAL)
-            { if (newCoin == null) onClearRequest() else onContinueRequest() },
+                enabled = screen == Screen.REVEAL || screen == Screen.DROPPING)
+            { when (newCoin) {
+                null -> if (screen == Screen.REVEAL) onClearRequest() else onContinueRequest()
+                2, 3 -> onContinueRequest()
+                0 -> onRevealRequest()
+            }},
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.End
     ) {
@@ -51,7 +55,7 @@ fun OverlayScreen(
             Screen.ABOUT_MEMO -> SpeechBox(ABOUT_TEXT, { onChangeScreen(Screen.PRE_INFO.ordinal) })
             Screen.PRE_GAME -> {
                 OptionsPanel(screen, onPlayRequest, onQuitRequest, onChangeScreen)
-                SpeechBox(START_GAME)
+                SpeechBox("$START_GAME_START$level$START_GAME_END")
             }
             Screen.PRE_INFO -> {
                 OptionsPanel(screen, onPlayRequest, onQuitRequest, onChangeScreen)
@@ -70,15 +74,20 @@ fun OverlayScreen(
                     onLastLineNext = { onlastLine = true }
                 )
             }
+            Screen.REVEAL -> {
+                newCoin?.let { SpeechBox(
+                    if (it == 0) NO_COINS else "$NEW_1$it$NEW_2$it$NEW_3")
+                }
+            }
             Screen.GAME_WON -> {
                 SpeechBox(text = "$GAME_CLEAR_START$coins$GAME_CLEAR_END",
                     onFinish = onRevealRequest, onLastLineNext = onLastLineNext)
             }
             Screen.ADVANCING -> {
-                SpeechBox("$ADVANCE_START$level$ADVANCE_END", onFinish = onClearRequest)
+                SpeechBox("$ADVANCE_START$level$ADVANCE_END", onFinish = onContinueRequest)
             }
-            Screen.REVEAL -> {
-                newCoin?.let { SpeechBox("$NEW_1$it$NEW_2$it$NEW_3") }
+            Screen.DROPPING -> {
+                SpeechBox("$DROPPED_START$level$DROPPED_END")
             }
             else -> {}
         }

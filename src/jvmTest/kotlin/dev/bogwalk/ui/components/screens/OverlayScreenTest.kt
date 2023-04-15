@@ -48,7 +48,7 @@ class OverlayScreenTest {
             .assertCountEquals(3)
         composeTestRule.onNodeWithTag(SPEECH_TAG, useUnmergedTree = true)
             .onChild()
-            .assertTextEquals(START_GAME)
+            .assertTextEquals("${START_GAME_START}1$START_GAME_END")
 
         state.value = Screen.PRE_INFO
         composeTestRule.waitForIdle()

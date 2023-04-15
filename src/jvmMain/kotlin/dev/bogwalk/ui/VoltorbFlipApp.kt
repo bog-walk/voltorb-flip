@@ -13,7 +13,7 @@ import dev.bogwalk.ui.util.VoltorbFlipAppState
 enum class Screen {
     ABOUT_GAME, ABOUT_HINT, ABOUT_MEMO,
     PRE_GAME, PRE_INFO, IN_GAME, QUITTING,
-    REVEAL, POST_GAME, GAME_WON, ADVANCING
+    REVEAL, POST_GAME, GAME_WON, ADVANCING, DROPPING
 }
 
 @Composable
@@ -68,7 +68,10 @@ fun VoltorbFlipApp(state: VoltorbFlipAppState) {
                         onQuitRequest = { state.screenState = Screen.POST_GAME },
                         onContinueRequest = {
                             state.newCoin = null
-                            state.screenState = Screen.IN_GAME
+                            state.screenState = if (state.screenState in listOf(
+                                    Screen.ADVANCING, Screen.DROPPING)) {
+                                Screen.PRE_GAME
+                            } else { Screen.IN_GAME }
                         },
                         onRevealRequest = state::endGame,
                         onChangeScreen = { state.screenState = Screen.values()[it] },

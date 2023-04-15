@@ -36,7 +36,6 @@ fun SpeechBox(
         modifier = Modifier
             .testTag(SPEECH_TAG)
             .fillMaxWidth()
-            .height(IntrinsicSize.Max)
             .padding(horizontal = 8.dp, vertical = 10.dp)
             .background(
                 Brush.verticalGradient(
@@ -107,8 +106,11 @@ fun SpeechBox(
 private fun SpeechBoxPreview() {
     VoltorbFlipTheme {
         BottomScreen(Modifier.requiredSize(450.dp, 360.dp)) {
-            SpeechBox(ABOUT_TEXT, {}) {}
-            SpeechBox(START_GAME, {}) {}
+            Column {
+                SpeechBox(ABOUT_TEXT, {}) {}
+                SpeechBox("${START_GAME_START}1$START_GAME_END", {}) {}
+                SpeechBox(NO_COINS, {}) {}
+            }
         }
     }
 }
