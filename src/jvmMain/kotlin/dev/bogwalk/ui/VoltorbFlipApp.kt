@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.components.screens.*
 import dev.bogwalk.ui.style.VoltorbFlipTheme
+import dev.bogwalk.ui.style.thickerPadding
+import dev.bogwalk.ui.style.windowHeight
+import dev.bogwalk.ui.style.windowWidth
 import dev.bogwalk.ui.util.VoltorbFlipAppState
 
 enum class Screen {
@@ -19,10 +21,10 @@ enum class Screen {
 @Composable
 @Preview
 fun VoltorbFlipApp(state: VoltorbFlipAppState) {
-    Row(  // possible to center composable within a window scope? must use Box?
+    Row(
         modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp),
+            .padding(thickerPadding),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -91,7 +93,7 @@ fun VoltorbFlipApp(state: VoltorbFlipAppState) {
 @Composable
 private fun AppPreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredSize(920.dp, 370.dp)) {
+        Box(Modifier.requiredSize(windowWidth, windowHeight)) {
             VoltorbFlipApp(VoltorbFlipAppState())
         }
     }

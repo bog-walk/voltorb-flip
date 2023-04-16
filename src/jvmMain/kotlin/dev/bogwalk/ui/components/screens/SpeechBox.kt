@@ -38,7 +38,7 @@ fun SpeechBox(
         modifier = Modifier
             .testTag(SPEECH_TAG)
             .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 10.dp)
+            .padding(horizontal = 8.dp, vertical = thickerPadding)
             .background(
                 Brush.verticalGradient(
                     .7f to Color(0xff63636b), .8f to Color(0xff5a5a63),
@@ -46,21 +46,21 @@ fun SpeechBox(
                 )
             )
             .drawBehind {
-                // are these colours correct?
                 drawLineBorder(outerColor = darkGrey)
                 drawLineBorder(innerColor = Color(0xffffde6b))
             },
         horizontalArrangement = Arrangement.Start
     ) {
+        // technically this should hold a typewriter effect animation
         Text(
             text = groupedLines[group][line] +
                     (if (groupedLines[group].size > 1) "\n" else "") +
                     (groupedLines[group].getOrNull(line + 1) ?: ""),
             modifier = Modifier
                 .fillMaxWidth(.9f)
-                .padding(start = 15.dp, top = 10.dp, end = 0.dp, bottom = 10.dp)
-                .background(Color.White, RoundedCornerShape(2.dp))
-                .padding(5.dp)
+                .padding(start = 15.dp, top = thickerPadding, end = 0.dp, bottom = thickerPadding)
+                .background(Color.White, RoundedCornerShape(thinBorder))
+                .padding(thickerPadding / 2)
                 .align(Alignment.CenterVertically),
             maxLines = 2,
             style = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp)
@@ -71,7 +71,7 @@ fun SpeechBox(
                 initialValue = 0.dp,
                 targetValue = (-8).dp,
                 typeConverter = Dp.VectorConverter,
-                animationSpec = infiniteRepeatable<Dp>(
+                animationSpec = infiniteRepeatable(
                     animation = tween(600, easing = LinearEasing),
                     repeatMode = RepeatMode.Reverse
                 )
@@ -105,7 +105,7 @@ fun SpeechBox(
                 Icon(
                     painter = painterResource(NEXT_ARROW),
                     contentDescription = NEXT_ARROW_DESCR,
-                    modifier = Modifier.requiredSize(16.dp).offset(x = 0.dp, y = yOffset),
+                    modifier = Modifier.requiredSize(memoIconSize).offset(x = 0.dp, y = yOffset),
                     tint = Color.Unspecified
                 )
             }
@@ -117,7 +117,7 @@ fun SpeechBox(
 @Composable
 private fun SpeechBoxPreview() {
     VoltorbFlipTheme {
-        BottomScreen(Modifier.requiredSize(450.dp, 360.dp)) {
+        BottomScreen(Modifier.requiredSize(windowWidth / 2, windowHeight)) {
             Column {
                 SpeechBox(ABOUT_TEXT, {}) {}
                 SpeechBox("${START_GAME_START}1$START_GAME_END", {}) {}

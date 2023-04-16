@@ -23,7 +23,7 @@ fun HowToPlayScreen() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 10.dp),
+            .padding(top = thickerPadding),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -32,7 +32,7 @@ fun HowToPlayScreen() {
             Icon(
                 painter = painterResource(INFO_ARROW),
                 contentDescription = INFO_ARROW_DESCR,
-                modifier = Modifier.requiredSize(26.dp),
+                modifier = Modifier.requiredSize(memoArrowSize),
                 tint = Color.Unspecified
             )
         }
@@ -43,7 +43,7 @@ fun HowToPlayScreen() {
     ) {
         Text(
             text = HOW_TO_INFO_1,
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = thickerPadding),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium
         )
@@ -52,7 +52,7 @@ fun HowToPlayScreen() {
         painter = painterResource(INFO_ARROW),
         contentDescription = INFO_ARROW_DESCR,
         modifier = Modifier
-            .requiredSize(26.dp)
+            .requiredSize(memoArrowSize)
             .rotate(90f),
         tint = Color.Unspecified
     )
@@ -71,7 +71,7 @@ fun HowToPlayScreen() {
         ) {
             Text(
                 text = HOW_TO_INFO_2,
-                modifier = Modifier.padding(vertical = 10.dp),
+                modifier = Modifier.padding(vertical = thickerPadding),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium
             )
@@ -92,7 +92,7 @@ fun HowToPlayScreen() {
         ) {
             Text(
                 text = HOW_TO_INFO_3,
-                modifier = Modifier.padding(vertical = 10.dp),
+                modifier = Modifier.padding(vertical = thickerPadding),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium
             )
@@ -104,7 +104,7 @@ fun HowToPlayScreen() {
 @Composable
 private fun HowToPlayScreenPreview() {
     VoltorbFlipTheme {
-        TopScreen(Modifier.requiredSize(450.dp, 360.dp)) {
+        TopScreen(Modifier.requiredSize(windowWidth / 2, windowHeight)) {
             HowToPlayScreen()
         }
     }

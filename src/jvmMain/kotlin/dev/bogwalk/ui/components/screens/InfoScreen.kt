@@ -38,23 +38,23 @@ private fun LevelHeader(level: Int) {
             .fillMaxWidth()
             .padding(top = 12.dp)
             .background(darkGreen)
-            .drawBehind {  // are these colours correct?
+            .drawBehind {
                 drawLine(darkGrey,
                     Offset.Zero,
                     Offset(size.width, 0f),
-                    2.dp.toPx())
+                    thinBorder.toPx())
                 drawLine(darkGrey,
                     Offset(0f, size.height),
                     Offset(size.width, size.height),
-                    2.dp.toPx())
+                    thinBorder.toPx())
                 drawLine(offWhite,
                     Offset(0f, 3.1.dp.toPx()),
                     Offset(size.width, 3.1.dp.toPx()),
-                    4.dp.toPx())
+                    thickBorder.toPx())
                 drawLine(offWhite,
                     Offset(0f, size.height - 3.1.dp.toPx()),
                     Offset(size.width, size.height - 3.1.dp.toPx()),
-                    4.dp.toPx())
+                    thickBorder.toPx())
             }
             .padding(vertical = 8.dp),
         style = MaterialTheme.typography.titleMedium
@@ -66,7 +66,7 @@ private fun RulesBox() {
     Column(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = 6.dp, vertical = 4.dp)
+            .padding(horizontal = standardPadding, vertical = thickBorder)
     ) {
         Row(
             modifier = Modifier
@@ -107,7 +107,7 @@ private fun DrawScope.drawUnderLine() {
         greenWhite,
         Offset(7.dp.toPx(), size.height - 7.dp.toPx()),
         Offset(size.width - 7.dp.toPx(), size.height - 7.dp.toPx()),
-        4.dp.toPx()
+        thickBorder.toPx()
     )
 }
 
@@ -123,15 +123,16 @@ private fun CoinsBox(
             modifier = Modifier
                 .testTag(COIN_TAG)
                 .fillMaxWidth()
-                .padding(horizontal = 10.dp),
+                .padding(horizontal = thickerPadding),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = text,
-                modifier = Modifier.weight(.6f).padding(vertical = 10.dp),
+                modifier = Modifier.weight(.6f).padding(vertical = thickerPadding),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium
             )
+            // technically this should be more pixelated and should carry a rolling animation
             Text(
                 text = coins.toString().padStart(5, '0'),
                 style = MaterialTheme.typography.titleLarge
@@ -144,7 +145,7 @@ private fun CoinsBox(
 @Composable
 private fun InfoScreenPreview() {
     VoltorbFlipTheme {
-        TopScreen(Modifier.requiredSize(450.dp, 360.dp)) {
+        TopScreen(Modifier.requiredSize(windowWidth / 2, windowHeight)) {
             InfoScreen(1, 0, 0)
         }
     }

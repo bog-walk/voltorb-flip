@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
@@ -37,15 +36,15 @@ fun OptionsPanel(
     Column(
         modifier = Modifier
             .requiredWidth(190.dp)
-            .padding(end = 6.dp)
+            .padding(end = standardPadding)
             .background(darkGrey)
             .drawBehind {
-                drawBorder(2.dp.toPx(), 0f, darkGrey, StrokeCap.Butt)
-                drawBorder(2.dp.toPx(), 3.1.dp.toPx(), Color(0xff888888))
+                drawBorder(thinBorder.toPx(), 0f, darkGrey, StrokeCap.Butt)
+                drawBorder(thinBorder.toPx(), 3.1.dp.toPx(), lightGrey4)
             }
-            .padding(horizontal = 10.dp, vertical = 12.dp)
+            .padding(horizontal = thickerPadding, vertical = 12.dp)
             .background(disabledBlue3),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(thickBorder * 2)
     ) {
         if (screen == Screen.PRE_GAME) {
             for ((i, option) in mainOptions.withIndex()) {
@@ -90,9 +89,9 @@ private fun OptionsButton(
         Modifier
             .testTag(OPTIONS_TAG)
             .fillMaxWidth()
-            .padding(horizontal = 2.dp)
+            .padding(horizontal = thinBorder)
             .requiredHeight(35.dp)
-            .background(Color(0xff78c0b0))
+            .background(blueGreen)
             .drawBehind {
                 drawLineBorder(outerColor = if (isInFocus) brightRed else offWhite)
                 drawLineBorder(innerColor = darkGrey)

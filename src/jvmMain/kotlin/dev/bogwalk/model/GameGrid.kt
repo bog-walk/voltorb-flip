@@ -12,6 +12,9 @@ class GameGrid(
         get() = board.flatten()
     var numOfFlippedTiles = 0
 
+    /**
+     * @return Pair of num of coins to num of zeroes in all rows, followed by all columns.
+     */
     fun getSummary(isEmpty: Boolean = false): List<Pair<Int, Int>> {
         if (isEmpty) return List(10) { 0 to 0 }
 
@@ -72,7 +75,7 @@ class GameGrid(
     }
 
     /**
-     * Edits stored memo boolean array of selected tile by toggling the indexed value.
+     * Edits stored memo list of selected tile by toggling the indexed value.
      */
     fun edit(position: Pair<Int, Int>, index: Int) {
         val (row, col) = position
@@ -83,7 +86,7 @@ class GameGrid(
     }
 
     /**
-     * Changes state of all board files to flipped.
+     * Changes state of all board tiles to flipped.
      *
      * [numOfFlippedTiles] is not altered as this only happens on game round loss/win.
      */

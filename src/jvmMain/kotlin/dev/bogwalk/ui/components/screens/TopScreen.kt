@@ -25,8 +25,8 @@ fun TopScreen(
             .fillMaxSize()
             .background(lightGreen)
             .drawBehind {
-                val top = 6.dp.toPx()
-                val patternSize = (42.dp / 3).toPx()
+                val top = standardPadding.toPx()
+                val patternSize = (tileSize / 3).toPx()
                 drawRect(darkGreen, Offset.Zero, Size(size.width, top))
 
                 var yStart = top
@@ -62,8 +62,8 @@ fun InfoTextBox(
             .padding(start = 7.dp, end = 7.dp, bottom = 7.dp)
             .background(Color.White)
             .drawBehind {
-                drawBorder(2.dp.toPx(), 0f, darkGrey, StrokeCap.Butt)
-                drawBorder(4.dp.toPx(), 3.1.dp.toPx(), greenWhite2, StrokeCap.Square)
+                drawBorder(thinBorder.toPx(), 0f, darkGrey, StrokeCap.Butt)
+                drawBorder(thickBorder.toPx(), 3.1.dp.toPx(), greenWhite2, StrokeCap.Square)
             },
         contentAlignment = Alignment.Center,
         content = content
@@ -74,7 +74,7 @@ fun InfoTextBox(
 @Composable
 private fun TopScreenPreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredSize(450.dp)) {
+        Box(Modifier.requiredSize(windowWidth / 2)) {
             TopScreen(Modifier) {}
         }
     }

@@ -36,10 +36,11 @@ fun FlipTile(
         onSelectRequest
     ) {
         if (isFlipped) {
+            // technically this should carry both a flip and explode animation
             Icon(
                 painter = painterResource("pixel_$value.svg"),
                 contentDescription = "$FLIPPED_DESCR$value",
-                modifier = Modifier.requiredSize(if (value == 0) 23.dp else 15.dp),
+                modifier = Modifier.requiredSize(if (value == 0) zeroIconSize else pixelNumSize),
                 tint = Color.Unspecified
             )
         } else {
@@ -50,11 +51,11 @@ fun FlipTile(
             if (memo[0]) {
                 Canvas(Modifier
                     .testTag(ZERO_TAG)
-                    .requiredSize(10.dp)
+                    .requiredSize(memoZeroSize)
                     .align(alignments[0])
-                    .offset(x = 5.dp, y = 5.dp)
+                    .offset(memoZeroSize / 2, memoZeroSize / 2)
                 ) {
-                    drawCircle(memoBrightYellow, 5.dp.toPx())
+                    drawCircle(memoBrightYellow, (memoZeroSize / 2).toPx())
                 }
             }
             for (i in 1..3) {
@@ -73,7 +74,7 @@ fun FlipTile(
             Icon(
                 painter = painterResource(MEMO_PENCIL),
                 contentDescription = MEMO_PENCIL_DESCR,
-                modifier = Modifier.requiredSize(16.dp),
+                modifier = Modifier.requiredSize(memoIconSize),
                 tint = Color.Unspecified
             )
         }

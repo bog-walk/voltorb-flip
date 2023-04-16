@@ -15,6 +15,7 @@ import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.style.INFO_ZERO
 import dev.bogwalk.ui.style.INFO_ZERO_DESCR
 import dev.bogwalk.ui.style.VoltorbFlipTheme
+import dev.bogwalk.ui.style.zeroIconSize
 
 @Composable
 fun InfoTile(
@@ -23,9 +24,9 @@ fun InfoTile(
     mines: Int
 ) {
     Tile(
-        Screen.IN_GAME,
-        rowIndex to -1,
-        TileState.STATIC_INFO
+        screen = Screen.IN_GAME,
+        position = rowIndex to -1,
+        tileState = TileState.STATIC_INFO
     ) {
         Text(
             text = points.toString().padStart(2, '0'),
@@ -38,13 +39,13 @@ fun InfoTile(
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .fillMaxWidth()
-                .padding(start = 2.dp, end = 3.dp, bottom = 2.dp),
+                .padding(start = 2.dp, end = 3.dp, bottom = 1.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Icon(
                 painter = painterResource(INFO_ZERO),
                 contentDescription = INFO_ZERO_DESCR,
-                modifier = Modifier.requiredSize(23.dp),
+                modifier = Modifier.requiredSize(zeroIconSize),
                 tint = Color.Unspecified
             )
             Text(

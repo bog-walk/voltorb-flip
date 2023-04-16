@@ -96,14 +96,14 @@ fun QuitOption(
             .requiredSize(80.dp, 50.dp)
             .background(Brush.verticalGradient(
                 .50f to offWhite, .55f to lightGrey1, .6f to lightGrey2
-            ), RoundedCornerShape(6.dp))
+            ), RoundedCornerShape(standardPadding))
             .drawBehind {
                 drawRoundRect(
                     if (isInFocus) brightRed else darkGrey,
                     Offset(5.dp.toPx(), 5.dp.toPx()),
-                    Size(size.width - 10.dp.toPx(), size.height - 10.dp.toPx()),
-                    CornerRadius(4.dp.toPx()),
-                    Stroke(4.dp.toPx())
+                    Size(size.width - thickerPadding.toPx(), size.height - thickerPadding.toPx()),
+                    CornerRadius(thickBorder.toPx()),
+                    Stroke(thickBorder.toPx())
                 )
             }
             .wrapContentHeight(Alignment.CenterVertically)

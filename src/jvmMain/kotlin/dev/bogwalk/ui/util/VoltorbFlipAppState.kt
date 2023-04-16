@@ -10,7 +10,7 @@ class VoltorbFlipAppState(
     private val grid: GameGrid = GameGrid()
 ) {
     var currentLevel by mutableStateOf(1)
-    var screenState by mutableStateOf(Screen.PRE_GAME) // should this be hoisted?
+    var screenState by mutableStateOf(Screen.PRE_GAME)
     var totalCoins by mutableStateOf(0)
     var currentCoins by mutableStateOf(0)
     var newCoin: Int? by mutableStateOf(null)
@@ -28,28 +28,29 @@ class VoltorbFlipAppState(
         if (!isMemoOpen) {
             when (val v = grid.select(position)) {
                 0 -> {
-                    winningStreak = 0
-                    newCoin = 0
-                    currentCoins = 0
                     screenState = Screen.REVEAL
+                    currentCoins = 0
+                    newCoin = 0
+                    winningStreak = 0
                     shouldAdvance = false
                 }
                 1 -> if (currentCoins == 0) currentCoins = 1
                 2, 3 -> {
+                    // multiplier speech box displayed every time these tiles are selected
+                    screenState = Screen.REVEAL
                     currentCoins = if (currentCoins == 0) v else currentCoins * v
                     newCoin = v
-                    screenState = Screen.REVEAL
                 }
             }
             if (currentCoins == maxLevelCoins) {
                 screenState = Screen.GAME_WON
+                newCoin = null // game won takes precedence
                 winningStreak++
                 shouldAdvance = true
-                newCoin = null // game won takes precedence
             }
         }
-        currentPosition = position
         gameTiles = grid.tiles
+        currentPosition = position
     }
 
     fun editCurrentTile(memoToEdit: Int) {
@@ -57,18 +58,61 @@ class VoltorbFlipAppState(
         gameTiles = grid.tiles
     }
 
-    fun endGame() {  // should this be placed in changeLevel?
-        screenState = Screen.REVEAL
-        grid.reveal()
+    /**
+     * Assigns new level data into a new grid and enables screen for a new game.
+     *
+     * This should only be callable from a screen state that has a game grid cleared of data.
+     */
+    fun resetGame() {
+        screenState = Screen.IN_GAME
+        newCoin = null
+        currentPosition = 0 to 0
+        isMemoOpen = false
+
+        maxLevelCoins = grid.reset(currentLevel)
         gameTiles = grid.tiles
+        infoSummary = grid.getSummary()
+    }
+
+    /**
+     * Ends current game round by flipping over any unflipped tiles and moving all gained coins
+     * to the overall total.
+     */
+    fun endGame() {
+        screenState = Screen.REVEAL
         totalCoins += currentCoins
         currentCoins = 0
         newCoin = null
+
+        grid.reveal()
+        gameTiles = grid.tiles
     }
 
-    // can this be consolidated with resetGame()?
+    /**
+     * Sets up intermediate screen after a round is lost/won and revealed, by generating a disabled
+     * grid without any level data.
+     */
     fun clearGame() {
-        screenState = if (shouldAdvance) {
+        screenState = advanceOrDrop()
+        newCoin = null
+        currentPosition = -2 to -2
+        isMemoOpen = false
+
+        maxLevelCoins = grid.reset(currentLevel, toEmpty = true)
+        gameTiles = grid.tiles
+        infoSummary = grid.getSummary(isEmpty = true)
+    }
+
+    /**
+     * Winning a round causes level to advance by 1 (or jump to level 7 if 5 games won in a row).
+     * Losing a round causes level to drop by 1, unless fewer tiles were flipped than the current
+     * level number. In the latter case, the level is dropped to the amount of tiles flipped.
+     *
+     * If a game is lost while on level 1, for example, no speech box text will display as level
+     * remains unchanged.
+     */
+    private fun advanceOrDrop(): Screen {
+        return if (shouldAdvance) {
             currentLevel = if (winningStreak >= 5) 7 else (currentLevel + 1).coerceAtMost(7)
             shouldAdvance = false
             Screen.ADVANCING
@@ -80,38 +124,5 @@ class VoltorbFlipAppState(
             shouldAdvance = true
             if (currentLevel < prevLevel) Screen.DROPPING else Screen.PRE_GAME
         }
-        currentPosition = -2 to -2
-        isMemoOpen = false
-        newCoin = null
-
-        maxLevelCoins = grid.reset(currentLevel, toEmpty = true)
-        gameTiles = grid.tiles
-        infoSummary = grid.getSummary(isEmpty = true)
-    }
-
-    fun resetGame() {
-        screenState = Screen.IN_GAME
-        currentPosition = 0 to 0
-        isMemoOpen = false
-        newCoin = null
-
-        maxLevelCoins = grid.reset(currentLevel)
-        gameTiles = grid.tiles
-        infoSummary = grid.getSummary()
-    }
-
-    private fun changeLevel(isAWin: Boolean) {
-        if (isAWin) {
-            winningStreak++
-
-        } else {
-            winningStreak = 0
-
-        }
-        totalCoins += currentCoins
-        currentCoins = 0
-        screenState = Screen.REVEAL
-        grid.reveal()
-        gameTiles = grid.tiles
     }
 }

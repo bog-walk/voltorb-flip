@@ -31,20 +31,20 @@ fun MemoButton(
     isMemoOpen: Boolean,
     onSelectRequest: () -> Unit = {}
 ) {
-    Box(  // slightly too large clickable bounds; play with padding?
+    Box(
         modifier = Modifier
             .semantics {
                 if (screen != Screen.IN_GAME) disabled()
             }
             .testTag(MEMO_TAG)
-            .padding(vertical = 12.dp, horizontal = 10.dp)
-            .requiredSize(90.dp, 100.dp)
+            .padding(vertical = 12.dp, horizontal = thickerPadding)
+            .requiredSize(memoButtonWidth, 100.dp)
             .background(lightGreen)
             .drawBehind {
                 drawLineBorder(outerColor = darkGrey)
                 drawLineBorder(innerColor = darkGreen)
             }
-            .offset(y = 10.dp)
+            .offset(y = thickerPadding)
             .clickable(
                 interactionSource = MutableInteractionSource(),
                 indication = null,  // this prevents mouse hover effect
@@ -62,7 +62,7 @@ fun MemoButton(
                     .57f to offWhite, .6f to lightGrey1,
                     .63f to lightGrey2, .66f to lightGrey3
                 ), RoundedCornerShape(2.dp))
-                .padding(top = 10.dp),
+                .padding(top = thickerPadding),
             contentAlignment = Alignment.Center
         ) {
             // drawStyle removes fill colour, so only option for outlined text?
@@ -81,7 +81,7 @@ fun MemoButton(
         Icon(
             painter = painterResource(MEMO_X),
             contentDescription = MEMO_X_DESCR,
-            modifier = Modifier.requiredSize(23.dp),
+            modifier = Modifier.requiredSize(zeroIconSize),
             tint = Color.Unspecified
         )
     }

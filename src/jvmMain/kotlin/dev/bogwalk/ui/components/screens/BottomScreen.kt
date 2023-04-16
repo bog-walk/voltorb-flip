@@ -10,9 +10,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.dp
-import dev.bogwalk.ui.style.VoltorbFlipTheme
-import dev.bogwalk.ui.style.darkGreen
-import dev.bogwalk.ui.style.lightGreen
+import dev.bogwalk.ui.style.*
 
 @Composable
 fun BottomScreen(
@@ -25,8 +23,9 @@ fun BottomScreen(
             .drawBehind {
                 drawRoundRect(
                     lightGreen,
-                    Offset(6.dp.toPx(), 6.dp.toPx()),
-                    Size(size.width - 12.dp.toPx(), size.height - 12.dp.toPx()),
+                    Offset(standardPadding.toPx(), standardPadding.toPx()),
+                    Size(size.width - (standardPadding * 2).toPx(),
+                        size.height - (standardPadding * 2).toPx()),
                     CornerRadius(5.dp.toPx())
                 )
             },
@@ -38,7 +37,7 @@ fun BottomScreen(
 @Composable
 private fun BottomScreenPreview() {
     VoltorbFlipTheme {
-        Box(Modifier.requiredSize(450.dp)) {
+        Box(Modifier.requiredSize(windowWidth / 2)) {
             BottomScreen(Modifier.fillMaxSize()) {}
         }
     }

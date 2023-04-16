@@ -3,12 +3,13 @@ package dev.bogwalk
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.VoltorbFlipApp
 import dev.bogwalk.ui.style.INFO_ZERO
 import dev.bogwalk.ui.style.VoltorbFlipTheme
+import dev.bogwalk.ui.style.windowHeight
+import dev.bogwalk.ui.style.windowWidth
 import dev.bogwalk.ui.util.VoltorbFlipAppState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -28,10 +29,10 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         state = rememberWindowState(
             position = WindowPosition(Alignment.Center),
-            width = 920.dp, height = 370.dp
+            width = windowWidth, height = windowHeight
         ),
         icon = painterResource(INFO_ZERO),
-        undecorated = true,  // window no longer moveable by user?
+        undecorated = true,
         resizable = false
     ) {
         VoltorbFlipTheme {

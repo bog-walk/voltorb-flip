@@ -10,13 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.*
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.inset
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.style.*
 import dev.bogwalk.ui.util.drawInFocusBorders
-import dev.bogwalk.ui.util.drawInsetBackground
 import dev.bogwalk.ui.util.drawLineBorder
 
 enum class TileState {
@@ -41,7 +41,7 @@ fun Tile(
             }
             .testTag(TILE_TAG)
             .padding(7.dp)
-            .requiredSize(42.dp)
+            .requiredSize(tileSize)
             .background(color = when (tileState) {
                 TileState.STATIC_INFO -> rowColors[position.first]
                 TileState.NOT_FLIPPED -> darkGreen
@@ -54,7 +54,7 @@ fun Tile(
                         drawLine(greenWhite,
                             Offset(0f, size.height / 3 + 2),
                             Offset(size.width, size.height / 3 + 2),
-                            4.dp.toPx())
+                            thickBorder.toPx())
                     }
                     else -> {
                         if (isInFocus) {
@@ -62,8 +62,8 @@ fun Tile(
                             drawInFocusBorders(isMemoOpen)
                         } else {
                             drawLineBorder(outerColor = greenWhite)
-                            if (position != Pair(-1, -1)) drawConnectors(position)
-                            drawLineBorder(innerColor = slateGrey2)
+                            if (position != -1 to -1) drawConnectors(position)
+                            drawLineBorder(innerColor = slateGrey1)
                         }
                         if (tileState == TileState.NOT_FLIPPED) {
                             drawInsetBackground()
@@ -84,34 +84,65 @@ fun Tile(
     )
 }
 
-// these should be drawn on top of everything but an in-focus border
-// currently only behaves correctly at the point of origin, but will always
-// be drawn below the next composed tile
-// Draw after all tiles composed??? OR
-// Draw on top of all tiles, but then in-focus border drawn over top of normal border???
+/**
+ * Draws the internal checker pattern used for unflipped tiles.
+ */
+private fun DrawScope.drawInsetBackground() {
+    inset(5.5.dp.toPx()) {
+        val xThird = size.width / 3
+        val yThird = size.height / 3
+
+        drawRect(lightGreen,
+            Offset(xThird,0f),
+            Size(xThird, yThird)
+        )
+        drawRect(lightGreen,
+            Offset(xThird, yThird * 2),
+            Size(xThird, yThird)
+        )
+        drawRect(lightGreen,
+            Offset(0f, yThird),
+            Size(yThird, xThird)
+        )
+        drawRect(lightGreen,
+            Offset(xThird * 2, yThird),
+            Size(yThird, xThird)
+        )
+    }
+}
+
+/**
+ * Draws the left (row) and bottom (column) grid connectors based on [position].
+ *
+ * Technically, these should be drawn on top of everything but an in-focus border currently only
+ * behaves correctly at the point of origin, and will always be drawn below the next composed tile.
+ * Consider alternatives: draw after all tiles composed? draw on top of all tiles then draw
+ * in-focus border on top of default border?
+ */
 private fun DrawScope.drawConnectors(position: Pair<Int, Int>) {
     val colorSize = 3.5.dp.toPx()
+    val xThird = size.width / 3
+    val yThird = size.height / 3
 
     if (position.first != -1) {
         drawRect(greenWhite,
-            Offset(x = size.width, y = size.height / 3),
-            Size(size.width / 3, size.height / 3)
+            Offset(size.width, yThird),
+            Size(xThird, yThird)
         )
-        drawRect(
-            rowColors[position.first],
-            Offset(x = size.width, y = size.height / 2 - colorSize),
-            Size(size.width / 3, colorSize * 2)
+        drawRect(rowColors[position.first],
+            Offset(size.width, size.height / 2 - colorSize),
+            Size(xThird, colorSize * 2)
         )
     }
     if (position.second != -1) {
         drawRect(greenWhite,
-            Offset(x = size.width / 3, y = size.height),
-            Size(size.width / 3, size.height / 3)
+            Offset(xThird, size.height),
+            Size(xThird, yThird)
         )
         drawRect(
             rowColors[position.second],
-            Offset(x = size.width / 2 - colorSize, y = size.height),
-            Size(colorSize * 2, size.height / 3)
+            Offset(size.width / 2 - colorSize, size.height),
+            Size(colorSize * 2, yThird)
         )
     }
 }

@@ -12,11 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.bogwalk.ui.style.FLIPPED_DESCR
-import dev.bogwalk.ui.style.THANKS
-import dev.bogwalk.ui.style.VoltorbFlipTheme
+import dev.bogwalk.ui.style.*
 
 @Composable
 fun ThanksTopScreen() {
@@ -36,7 +33,7 @@ fun ThanksBottomScreen() {
         contentDescription = "$FLIPPED_DESCR$0",
         modifier = Modifier
             .fillMaxSize()
-            .requiredSize(69.dp)
+            .requiredSize(tileSize * 2)
             .wrapContentSize(Alignment.Center),
         tint = Color.Unspecified
     )
@@ -46,7 +43,7 @@ fun ThanksBottomScreen() {
 @Composable
 private fun ThanksTopScreenPreview() {
     VoltorbFlipTheme {
-        TopScreen(Modifier.requiredSize(450.dp, 360.dp)) {
+        TopScreen(Modifier.requiredSize(windowWidth / 2, windowHeight)) {
             ThanksTopScreen()
         }
     }
@@ -56,7 +53,7 @@ private fun ThanksTopScreenPreview() {
 @Composable
 private fun ThanksBottomScreenPreview() {
     VoltorbFlipTheme {
-        BottomScreen(Modifier.requiredSize(450.dp, 360.dp)) {
+        BottomScreen(Modifier.requiredSize(windowWidth / 2, windowHeight)) {
             ThanksBottomScreen()
         }
     }

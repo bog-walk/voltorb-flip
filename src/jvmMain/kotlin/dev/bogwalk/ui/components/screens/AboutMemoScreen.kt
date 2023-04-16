@@ -37,7 +37,7 @@ fun AboutMemoScreen() {
         Icon(
             painter = painterResource(INFO_ARROW),
             contentDescription = INFO_ARROW_DESCR,
-            modifier = Modifier.requiredSize(26.dp),
+            modifier = Modifier.requiredSize(infoArrowSize),
             tint = Color.Unspecified
         )
         Box {
@@ -47,7 +47,7 @@ fun AboutMemoScreen() {
         Icon(
             painter = painterResource(INFO_ARROW),
             contentDescription = INFO_ARROW_DESCR,
-            modifier = Modifier.requiredSize(26.dp),
+            modifier = Modifier.requiredSize(infoArrowSize),
             tint = Color.Unspecified
         )
         FlipTile(Screen.ABOUT_MEMO, -1 to -1, 1,
@@ -59,7 +59,7 @@ fun AboutMemoScreen() {
     ) {
         Text(
             text = ABOUT_INFO,
-            modifier = Modifier.padding(vertical = 10.dp),
+            modifier = Modifier.padding(vertical = thickerPadding),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium
         )
@@ -92,7 +92,7 @@ private fun AnimatedStylus(
     Icon(
         painter = painterResource(INFO_STYLUS),
         contentDescription = INFO_STYLUS_DESCR,
-        modifier = modifier.requiredSize(52.dp).offset(xOffset, yOffset),
+        modifier = modifier.requiredSize(stylusIconSize).offset(xOffset, yOffset),
         tint = Color.Unspecified
     )
 }
@@ -101,7 +101,7 @@ private fun AnimatedStylus(
 @Composable
 private fun AboutMemoScreenPreview() {
     VoltorbFlipTheme {
-        TopScreen(Modifier.requiredSize(450.dp, 360.dp)) {
+        TopScreen(Modifier.requiredSize(windowWidth / 2, windowHeight)) {
             AboutMemoScreen()
         }
     }

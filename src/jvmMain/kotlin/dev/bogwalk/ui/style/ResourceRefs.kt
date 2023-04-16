@@ -1,5 +1,29 @@
 package dev.bogwalk.ui.style
 
+import androidx.compose.ui.unit.dp
+
+// General Window
+val windowWidth = 920.dp
+val windowHeight = 370.dp
+
+// Tile
+const val TILE_TAG = "Game tile"
+const val GRID_TAG = "Game grid"
+const val MEMO_PENCIL = "memo_pencil.svg"
+const val MEMO_PENCIL_DESCR = "Pixelated pencil"
+const val ZERO_TAG = "Zero mark"
+const val INFO_ZERO = "zero.svg"
+const val INFO_ZERO_DESCR = "Zero without halo"
+const val FLIPPED_DESCR = "Pixelated number "
+val tileSize = 42.dp
+val zeroIconSize = 24.dp
+val pixelNumSize = 15.dp
+val memoZeroSize = 10.dp
+val memoIconSize = 17.dp
+val thinBorder = 2.dp
+val thickBorder = 4.dp
+val standardPadding = 6.dp
+
 // Quit buttons
 const val QUIT = "Quit"
 const val YES = "YES"
@@ -20,6 +44,9 @@ const val MEMO_ZERO_INACTIVE_DESCR = "Inactive zero"
 const val MEMO_ZERO_DISABLED = "memo_zero_disabled.svg"
 const val MEMO_ZERO_DISABLED_DESCR = "Disabled zero"
 const val MEMO_PAD_TAG = "Memo pad button"
+val memoButtonWidth = 90.dp
+val memoArrowSize = 32.dp
+val thickerPadding = 10.dp
 
 // Options panel
 const val PLAY = "Play"
@@ -30,46 +57,12 @@ const val ABOUT = "About Memos"
 const val RETURN = "Return"
 const val OPTIONS_TAG = "Options panel button"
 
+// Overlay screen
+const val OVERLAY_TAG = "Overlay screen"
+
 // Speech box
 const val NEXT_ARROW = "next_arrow.svg"
 const val NEXT_ARROW_DESCR = "Show more text"
-
-// Tile
-const val TILE_TAG = "Game tile"
-const val GRID_TAG = "Game grid"
-const val MEMO_PENCIL = "memo_pencil.svg"
-const val MEMO_PENCIL_DESCR = "Pixelated pencil"
-const val ZERO_TAG = "Zero mark"
-const val INFO_ZERO = "zero.svg"
-const val INFO_ZERO_DESCR = "Zero without halo"
-const val FLIPPED_DESCR = "Pixelated number "
-
-// Info screens
-const val PLAYER_COINS = "Player's\nCollected Coins"
-const val CURRENT_COINS = "Coins Collected in\nCurrent Game"
-const val HEADER_START = "VOLTORB Flip Lv. "
-const val HEADER_END = "\nFlip the Cards and Collect Coins!"
-const val GAME_OVER = "Game Over! 0!"
-const val INFO_POINTS = "...x1! ...x2! ...x3!"
-const val COIN_TAG = "Coins box"
-const val INFO_ARROW = "info_arrow.svg"
-const val INFO_ARROW_DESCR = "Pixelated block arrow"
-const val INFO_STYLUS = "info_stylus.svg"
-const val INFO_STYLUS_DESCR = "Pixelated stylus"
-const val HOW_TO_INFO_1 = "If you flip the cards in this order,\n" +
-        "you'll collect: 3 x 1 x 2 x 1 x 3...\n" +
-        "A total of 18 Coins! And then..."
-const val HOW_TO_INFO_2 = "If you select \"Quit,\"\nyou'll keep those 18 Coins."
-const val HOW_TO_INFO_3 = "But if you find VOLTORB\nyou'll lose all your Coins!"
-const val HINT_INFO = "By looking at the numbers on the sides of\n" +
-        "the cards, you can see the hidden number\n" +
-        "and VOLTORB totals."
-const val ABOUT_INFO = "Touch \"Open Memo\" to open the Memo Window.\n" +
-        "Touch the cards to add and remove marks.\n\n"
-const val THANKS = "Thanks for playing!"
-
-// Overlay screen
-const val OVERLAY_TAG = "Overlay screen"
 const val SPEECH_TAG = "Speech text box"
 const val START_GAME_START = "Play VOLTORB Flip Lv. "
 const val START_GAME_END = "?\n"
@@ -116,3 +109,29 @@ const val HOW_TO_TEXT = "VOLTORB Flip is a game in which you flip\n" +
         "Once you've found all the hidden\n2 and 3 cards, you've cleared\nthe game.|" +
         "Once you've flipped over all these\ncards, then you'll advance to the\nnext level.|" +
         "As you move up in levels, you will be\nable to receive more Coins.\nDo your best!"
+
+// Info screens
+const val PLAYER_COINS = "Player's\nCollected Coins"
+const val CURRENT_COINS = "Coins Collected in\nCurrent Game"
+const val HEADER_START = "VOLTORB Flip Lv. "
+const val HEADER_END = "\nFlip the Cards and Collect Coins!"
+const val GAME_OVER = "Game Over! 0!"
+const val INFO_POINTS = "...x1! ...x2! ...x3!"
+const val COIN_TAG = "Coins box"
+const val INFO_ARROW = "info_arrow.svg"
+const val INFO_ARROW_DESCR = "Pixelated block arrow"
+const val INFO_STYLUS = "info_stylus.svg"
+const val INFO_STYLUS_DESCR = "Pixelated stylus"
+const val HOW_TO_INFO_1 = "If you flip the cards in this order,\n" +
+        "you'll collect: 3 x 1 x 2 x 1 x 3...\n" +
+        "A total of 18 Coins! And then..."
+const val HOW_TO_INFO_2 = "If you select \"Quit,\"\nyou'll keep those 18 Coins."
+const val HOW_TO_INFO_3 = "But if you find VOLTORB\nyou'll lose all your Coins!"
+const val HINT_INFO = "By looking at the numbers on the sides of\n" +
+        "the cards, you can see the hidden number\n" +
+        "and VOLTORB totals."
+const val ABOUT_INFO = "Touch \"Open Memo\" to open the Memo Window.\n" +
+        "Touch the cards to add and remove marks.\n\n"
+const val THANKS = "Thanks for playing!"
+val infoArrowSize = 26.dp
+val stylusIconSize = 52.dp

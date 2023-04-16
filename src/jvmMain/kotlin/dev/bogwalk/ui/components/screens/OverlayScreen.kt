@@ -10,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.unit.dp
 import dev.bogwalk.ui.Screen
 import dev.bogwalk.ui.components.buttons.OptionsPanel
 import dev.bogwalk.ui.components.buttons.QuitOption
@@ -98,7 +97,7 @@ fun OverlayScreen(
 @Composable
 private fun OverlayScreenPreGamePreview() {
     VoltorbFlipTheme {
-        BottomScreen(Modifier.requiredSize(450.dp, 360.dp)) {
+        BottomScreen(Modifier.requiredSize(windowWidth / 2, windowHeight)) {
             OverlayScreen(Screen.PRE_GAME, 1, 0, {}, {}, {}, {}, {}, {}, {})
         }
     }
@@ -108,7 +107,7 @@ private fun OverlayScreenPreGamePreview() {
 @Composable
 private fun OverlayScreenPreInfoPreview() {
     VoltorbFlipTheme {
-        BottomScreen(Modifier.requiredSize(450.dp, 360.dp)) {
+        BottomScreen(Modifier.requiredSize(windowWidth / 2, windowHeight)) {
             OverlayScreen(Screen.PRE_INFO, 1, 0, {}, {}, {}, {}, {}, {}, {})
         }
     }
@@ -118,7 +117,7 @@ private fun OverlayScreenPreInfoPreview() {
 @Composable
 private fun OverlayScreenQuittingPreview() {
     VoltorbFlipTheme {
-        BottomScreen(Modifier.requiredSize(450.dp, 360.dp)) {
+        BottomScreen(Modifier.requiredSize(windowWidth / 2, windowHeight)) {
             OverlayScreen(Screen.QUITTING, 1, 6, {}, {}, {}, {}, {}, {}, {})
         }
     }
@@ -128,7 +127,7 @@ private fun OverlayScreenQuittingPreview() {
 @Composable
 private fun OverlayScreenQuittingWithNoCoinsPreview() {
     VoltorbFlipTheme {
-        BottomScreen(Modifier.requiredSize(450.dp, 360.dp)) {
+        BottomScreen(Modifier.requiredSize(windowWidth / 2, windowHeight)) {
             OverlayScreen(Screen.QUITTING, 1, 0,  {}, {}, {}, {}, {}, {}, {})
         }
     }
@@ -138,7 +137,7 @@ private fun OverlayScreenQuittingWithNoCoinsPreview() {
 @Composable
 private fun OverlayScreenInInfoPreview() {
     VoltorbFlipTheme {
-        BottomScreen(Modifier.requiredSize(450.dp, 360.dp)) {
+        BottomScreen(Modifier.requiredSize(windowWidth / 2, windowHeight)) {
             OverlayScreen(Screen.ABOUT_GAME, 1, 0, {}, {}, {}, {}, {}, {}, {})
         }
     }

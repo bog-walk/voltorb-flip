@@ -38,7 +38,7 @@ fun HintScreen() {
         painter = painterResource(INFO_ARROW),
         contentDescription = INFO_ARROW_DESCR,
         modifier = Modifier
-            .requiredSize(26.dp)
+            .requiredSize(infoArrowSize)
             .rotate(90f),
         tint = Color.Unspecified
     )
@@ -63,48 +63,53 @@ fun HintScreen() {
     ) {
         Text(
             text = HINT_INFO,
-            modifier = Modifier.padding(vertical = 10.dp),
+            modifier = Modifier.padding(vertical = thickerPadding),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium
         )
     }
 }
 
-// a better way to draw a single line with different fill vs stroke?
-// there should also technically be arrows at the rightmost terminus...
+/**
+ * Draws lines on a path that simulates a single line with different coloured fill and thick
+ * outline stroke.
+ *
+ * Technically the rightmost terminus should have arrows pointing towards the info tile.
+ */
 private fun DrawScope.drawOutlinedLine(isOutline: Boolean) {
-    val depth = 10.dp.toPx()
-    val outer = 6.dp.toPx()
+    val depth = thickerPadding.toPx()
+    val outer = standardPadding.toPx()
     val stroke = if (isOutline) outer else outer / 2
     val color = if (isOutline) greenWhite else darkGrey
+    val twelfth = size.width / 12
 
-    drawLine(color, Offset(size.width / 12, -(depth + outer)),
-        Offset(size.width / 12, depth),
+    drawLine(color, Offset(twelfth, -(depth + outer)),
+        Offset(twelfth, depth),
         stroke, StrokeCap.Round)
-    drawLine(color, Offset(size.width / 12 * 5, -(depth + outer)),
-        Offset(size.width / 12 * 5, depth),
+    drawLine(color, Offset(twelfth * 5, -(depth + outer)),
+        Offset(twelfth * 5, depth),
         stroke, StrokeCap.Round)
     drawLine(color, Offset(size.width / 4 * 3, -(depth + outer)),
         Offset(size.width / 4 * 3, depth),
         stroke, StrokeCap.Round)
-    drawLine(color, Offset(size.width / 12, -(depth + outer)),
-        Offset(size.width / 12 * 11, -(depth + outer)),
+    drawLine(color, Offset(twelfth, -(depth + outer)),
+        Offset(twelfth * 11, -(depth + outer)),
         stroke, StrokeCap.Round)
-    drawLine(color, Offset(size.width / 12 * 11, -(depth + outer)),
-        Offset(size.width / 12 * 11, depth - outer),
+    drawLine(color, Offset(twelfth * 11, -(depth + outer)),
+        Offset(twelfth * 11, depth - outer),
         stroke, StrokeCap.Round)
 
     drawLine(color, Offset(size.width / 4, size.height - depth),
         Offset(size.width / 4, size.height + depth + outer),
         stroke, StrokeCap.Round)
-    drawLine(color, Offset(size.width / 12 * 7, size.height - depth),
-        Offset(size.width / 12 * 7, size.height + depth + outer),
+    drawLine(color, Offset(twelfth * 7, size.height - depth),
+        Offset(twelfth * 7, size.height + depth + outer),
         stroke, StrokeCap.Round)
     drawLine(color, Offset(size.width / 4, size.height + depth + outer),
-        Offset(size.width / 12 * 11, size.height + depth + outer),
+        Offset(twelfth * 11, size.height + depth + outer),
         stroke, StrokeCap.Round)
-    drawLine(color, Offset(size.width / 12 * 11, size.height - depth + outer),
-        Offset(size.width / 12 * 11, size.height + depth + outer),
+    drawLine(color, Offset(twelfth * 11, size.height - depth + outer),
+        Offset(twelfth * 11, size.height + depth + outer),
         stroke, StrokeCap.Round)
 }
 
@@ -112,7 +117,7 @@ private fun DrawScope.drawOutlinedLine(isOutline: Boolean) {
 @Composable
 private fun HintScreenPreview() {
     VoltorbFlipTheme {
-        TopScreen(Modifier.requiredSize(450.dp, 360.dp)) {
+        TopScreen(Modifier.requiredSize(windowWidth / 2, windowHeight)) {
             HintScreen()
         }
     }

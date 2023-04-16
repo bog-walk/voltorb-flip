@@ -3,7 +3,6 @@ package dev.bogwalk.ui.style
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Typography
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -27,8 +26,7 @@ val darkRed = Color(0xff683028)
 val brightRed = Color(0xfff84030)
 
 val darkGrey = Color(0xff404040)
-val slateGrey1 = Color(0xff383838)
-val slateGrey2 = Color(0xff282828)
+val slateGrey1 = Color(0xff282828)
 
 val mediumGrey = Color(0xff585850)
 val blueGrey = Color(0xffa8b8b8)
@@ -37,10 +35,12 @@ val offWhite = Color(0xfff8f8f8)
 val lightGrey1 = Color(0xffe0e0e0)
 val lightGrey2 = Color(0xffc8c8c8)
 val lightGrey3 = Color(0xffa8a8a8)
+val lightGrey4 = Color(0xff888888)
 
 val greenWhite = Color(0xffd0e8e0)
 val greenWhite2 = Color(0xffa0c0b0)
 
+val blueGreen = Color(0xff78c0b0)
 val lightBlue1 = Color(0xff68a8f8)
 val lightBlue2 = Color(0xff4888f0)
 val lightBlue3 = Color(0xff3068e0)
@@ -62,11 +62,6 @@ val rowColors = listOf(
     Color(0xffe8a038), // yellow
     Color(0xff3090f8), // blue
     Color(0xffc060e0)  // purple
-)
-
-private val VoltorbFlipColorScheme = lightColorScheme(
-    background = darkGreen,
-    surface = lightGreen
 )
 
 @OptIn(ExperimentalTextApi::class)
@@ -131,7 +126,6 @@ fun VoltorbFlipTheme(
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
-        colorScheme = VoltorbFlipColorScheme,
         typography = VoltorbFlipTypography
     ) {
         Surface(

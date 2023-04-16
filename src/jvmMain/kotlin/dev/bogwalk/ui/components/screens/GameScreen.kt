@@ -17,6 +17,7 @@ import dev.bogwalk.ui.components.buttons.MemoPad
 import dev.bogwalk.ui.components.buttons.QuitButton
 import dev.bogwalk.ui.components.tiles.TileGrid
 import dev.bogwalk.ui.style.VoltorbFlipTheme
+import dev.bogwalk.ui.style.windowWidth
 
 @Composable
 fun GameScreen(
@@ -77,7 +78,7 @@ fun GameScreen(
 @Composable
 private fun GameScreenPreview() {
     VoltorbFlipTheme {
-        BottomScreen(Modifier.requiredWidth(450.dp)) {
+        BottomScreen(Modifier.requiredWidth(windowWidth / 2)) {
             GameScreen(
                 Screen.IN_GAME,
                 List(5) { r -> List(5) { c -> GameTile(r to c, 1) } }.flatten(),
@@ -92,7 +93,7 @@ private fun GameScreenPreview() {
 @Composable
 private fun GameScreenWithMemoPreview() {
     VoltorbFlipTheme {
-        BottomScreen(Modifier.requiredWidth(450.dp)) {
+        BottomScreen(Modifier.requiredWidth(windowWidth / 2)) {
             GameScreen(
                 Screen.IN_GAME,
                 List(5) { r -> List(5) { c -> GameTile(r to c, 1) } }.flatten(),
