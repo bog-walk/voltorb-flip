@@ -75,7 +75,7 @@ fun OverlayScreen(
             }
             Screen.REVEAL -> {
                 newCoin?.let { SpeechBox(
-                    if (it == 0) NO_COINS else "$NEW_1$it$NEW_2$it$NEW_3")
+                    if (it == 0) NO_COINS else "$NEW_1$it$NEW_2$coins$NEW_3")
                 }
             }
             Screen.GAME_WON -> {

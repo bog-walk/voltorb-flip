@@ -168,7 +168,7 @@ class GamePlayTest {
             .filterToOne(hasContentDescriptionExactly("${FLIPPED_DESCR}3"))
         composeTestRule.onNodeWithTag(SPEECH_TAG, useUnmergedTree = true)
             .onChildren()
-            .assertAny(hasTextExactly("${NEW_1}3${NEW_2}3$NEW_3"))
+            .assertAny(hasTextExactly("${NEW_1}3${NEW_2}6$NEW_3"))
         composeTestRule.assertGameScreenDisabled()
 
         composeTestRule.onNodeWithTag(OVERLAY_TAG)
@@ -204,7 +204,7 @@ class GamePlayTest {
             .assertCountEquals(2)
         composeTestRule.onNodeWithTag(SPEECH_TAG, useUnmergedTree = true)
             .onChildren()
-            .assertAny(hasTextExactly("${NEW_1}2${NEW_2}2$NEW_3"))
+            .assertAny(hasTextExactly("${NEW_1}2${NEW_2}12$NEW_3"))
         composeTestRule.assertGameScreenDisabled()
         composeTestRule.onNodeWithTag(OVERLAY_TAG)
             .assertIsEnabled()

@@ -113,7 +113,7 @@ class VoltorbFlipAppState(
      */
     private fun advanceOrDrop(): Screen {
         return if (shouldAdvance) {
-            currentLevel = if (winningStreak >= 5) 7 else (currentLevel + 1).coerceAtMost(7)
+            currentLevel = if (winningStreak >= 5) 8 else (currentLevel + 1).coerceAtMost(8)
             shouldAdvance = false
             Screen.ADVANCING
         } else {
