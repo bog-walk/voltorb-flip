@@ -23,11 +23,11 @@ In addition to the game screen, the three information screens have also been inc
 
 Clone the repository then pick an option:
 
-- Open the project in IntelliJ IDEA then choose specific tests using gutter icons or right-click the `src/jvmTest` folder and
-  select `Run 'Tests in 'voltorb-flip.jvmTest''`
+- Open the project in IntelliJ IDEA then choose specific tests using gutter icons or right-click the `desktop/src/jvmTest` folder and
+  select `Run 'Tests in 'voltorb-flip.desktop.jvmTest''`
 
 - Open the Gradle toolbar and select `voltorb-flip/Tasks/verification/jvmTest`
 
 ## :computer: Run desktop application
 
-Clone the repository then open the project in IntelliJ IDEA and run `Main.kt`
+Clone the repository then open the project in IntelliJ IDEA and run `Main.kt` from the `desktop/jvmMain` folder
